@@ -7,6 +7,8 @@ public partial class Usuario
 {
     public byte UsEmpresa { get; set; }
 
+    public int UsId { get; set; }
+
     public string UsLogin { get; set; } = null!;
 
     public byte[] UsContrasenia { get; set; } = null!;

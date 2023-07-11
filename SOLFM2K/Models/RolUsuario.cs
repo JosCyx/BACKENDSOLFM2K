@@ -5,9 +5,11 @@ namespace SOLFM2K.Models;
 
 public partial class RolUsuario
 {
-    public byte RuEmpresa { get; set; }
+    public int RuId { get; set; }
 
-    public short RuRol { get; set; }
+    public int RuEmpresa { get; set; }
+
+    public int RuRol { get; set; }
 
     public string RuLogin { get; set; } = null!;
 

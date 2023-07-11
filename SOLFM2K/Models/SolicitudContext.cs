@@ -72,12 +72,12 @@ public partial class SolicitudContext : DbContext
     {
         modelBuilder.Entity<Aplicacione>(entity =>
         {
-            entity.HasKey(e => new { e.ApEmpresa, e.ApCodigo });
+            entity.HasKey(e => e.ApCodigo);
 
             entity.ToTable("aplicaciones");
 
-            entity.Property(e => e.ApEmpresa).HasColumnName("ap_empresa");
             entity.Property(e => e.ApCodigo).HasColumnName("ap_codigo");
+            entity.Property(e => e.ApEmpresa).HasColumnName("ap_empresa");
             entity.Property(e => e.ApEstado)
                 .HasMaxLength(1)
                 .HasColumnName("ap_estado");
@@ -488,13 +488,13 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Funcione>(entity =>
         {
-            entity.HasKey(e => new { e.FuEmpresa, e.FuAplicacion, e.FuCodigo });
+            entity.HasKey(e => e.FuCodigo);
 
             entity.ToTable("funciones");
 
-            entity.Property(e => e.FuEmpresa).HasColumnName("fu_empresa");
-            entity.Property(e => e.FuAplicacion).HasColumnName("fu_aplicacion");
             entity.Property(e => e.FuCodigo).HasColumnName("fu_codigo");
+            entity.Property(e => e.FuAplicacion).HasColumnName("fu_aplicacion");
+            entity.Property(e => e.FuEmpresa).HasColumnName("fu_empresa");
             entity.Property(e => e.FuEstado)
                 .HasMaxLength(1)
                 .HasColumnName("fu_estado");
@@ -569,14 +569,12 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Prueba>(entity =>
         {
-            entity.HasKey(e => e.Id);
+            entity.ToTable("prueba");
 
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Apellido)
                 .HasMaxLength(50)
                 .HasColumnName("apellido");
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
                 .HasColumnName("nombre");
@@ -584,15 +582,13 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Rol>(entity =>
         {
-            entity.HasKey(e => new { e.RoEmpresa, e.RoCodigo }).HasName("PK_tb_rol");
+            entity.HasKey(e => e.RoCodigo).HasName("PK_tb_rol");
 
             entity.ToTable("rol");
 
-            entity.Property(e => e.RoEmpresa).HasColumnName("ro_empresa");
-            entity.Property(e => e.RoCodigo)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("ro_codigo");
+            entity.Property(e => e.RoCodigo).HasColumnName("ro_codigo");
             entity.Property(e => e.RoAplicacion).HasColumnName("ro_aplicacion");
+            entity.Property(e => e.RoEmpresa).HasColumnName("ro_empresa");
             entity.Property(e => e.RoEstado)
                 .HasMaxLength(1)
                 .HasColumnName("ro_estado");
@@ -603,18 +599,19 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<RolUsuario>(entity =>
         {
-            entity.HasKey(e => new { e.RuEmpresa, e.RuRol, e.RuLogin }).HasName("PK_tb_rol_usuario");
+            entity.HasKey(e => e.RuId).HasName("PK_tb_rol_usuario");
 
             entity.ToTable("rol_usuario");
 
+            entity.Property(e => e.RuId).HasColumnName("ru_id");
             entity.Property(e => e.RuEmpresa).HasColumnName("ru_empresa");
-            entity.Property(e => e.RuRol).HasColumnName("ru_rol");
-            entity.Property(e => e.RuLogin)
-                .HasMaxLength(20)
-                .HasColumnName("ru_login");
             entity.Property(e => e.RuEstado)
                 .HasMaxLength(1)
                 .HasColumnName("ru_estado");
+            entity.Property(e => e.RuLogin)
+                .HasMaxLength(20)
+                .HasColumnName("ru_login");
+            entity.Property(e => e.RuRol).HasColumnName("ru_rol");
         });
 
         modelBuilder.Entity<RuteoArea>(entity =>
@@ -880,17 +877,17 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Transaccione>(entity =>
         {
-            entity.HasKey(e => new { e.TrEmpresa, e.TrAplicacion, e.TrFuncion, e.TrCodigo });
+            entity.HasKey(e => e.TrCodigo);
 
             entity.ToTable("transacciones");
 
-            entity.Property(e => e.TrEmpresa).HasColumnName("tr_empresa");
-            entity.Property(e => e.TrAplicacion).HasColumnName("tr_aplicacion");
-            entity.Property(e => e.TrFuncion).HasColumnName("tr_funcion");
             entity.Property(e => e.TrCodigo).HasColumnName("tr_codigo");
+            entity.Property(e => e.TrAplicacion).HasColumnName("tr_aplicacion");
+            entity.Property(e => e.TrEmpresa).HasColumnName("tr_empresa");
             entity.Property(e => e.TrEstado)
                 .HasMaxLength(1)
                 .HasColumnName("tr_estado");
+            entity.Property(e => e.TrFuncion).HasColumnName("tr_funcion");
             entity.Property(e => e.TrNombre)
                 .HasMaxLength(40)
                 .HasColumnName("tr_nombre");
@@ -898,15 +895,11 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => new { e.UsEmpresa, e.UsLogin }).HasName("PK_tb_usuario");
+            entity.HasKey(e => e.UsId);
 
             entity.ToTable("usuario");
 
-            entity.Property(e => e.UsEmpresa).HasColumnName("us_empresa");
-            entity.Property(e => e.UsLogin)
-                .HasMaxLength(25)
-                .IsUnicode(false)
-                .HasColumnName("us_login");
+            entity.Property(e => e.UsId).HasColumnName("us_id");
             entity.Property(e => e.AudEvento)
                 .HasMaxLength(50)
                 .HasColumnName("aud_evento");
@@ -926,6 +919,7 @@ public partial class SolicitudContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("us_ban_user_data");
             entity.Property(e => e.UsContrasenia).HasColumnName("us_contrasenia");
+            entity.Property(e => e.UsEmpresa).HasColumnName("us_empresa");
             entity.Property(e => e.UsEstado)
                 .HasMaxLength(1)
                 .HasColumnName("us_estado");
@@ -935,6 +929,10 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.UsFechaInicio)
                 .HasColumnType("datetime")
                 .HasColumnName("us_fecha_inicio");
+            entity.Property(e => e.UsLogin)
+                .HasMaxLength(25)
+                .IsUnicode(false)
+                .HasColumnName("us_login");
             entity.Property(e => e.UsNombre)
                 .HasMaxLength(100)
                 .HasColumnName("us_nombre");

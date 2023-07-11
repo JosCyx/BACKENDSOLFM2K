@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
+using SOLFM2K.services;
 
 namespace SOLFM2K.Controllers
 {
@@ -13,125 +14,147 @@ namespace SOLFM2K.Controllers
     [ApiController]
     public class RolsController : ControllerBase
     {
-        private readonly SolicitudContext _context;
+        private readonly IuService _Iuservice;
 
-        public RolsController(SolicitudContext context)
+        public RolsController(IuService iuService)
         {
-            _context = context;
+            _Iuservice = iuService;
         }
 
         // GET: api/Rols
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Rol>>> GetRols()
+        public async Task<ActionResult<List<Rol>>> GetRols()
         {
-          if (_context.Rols == null)
-          {
-              return NotFound();
-          }
-            return await _context.Rols.ToListAsync();
-        }
-
-        // GET: api/Rols/5
-        [HttpGet("{RoCodigo}")]
-        public async Task<ActionResult<Rol>> GetRol(byte RoEmpresa, short RoCodigo)
-        {
-          if (_context.Rols == null)
-          {
-              return NotFound();
-          }
-            var rol = await _context.Rols.FindAsync(RoEmpresa,RoCodigo);
-
-            if (rol == null)
-            {
-                return NotFound();
-            }
-
-            return rol;
-        }
-
-        // PUT: api/Rols/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutRol(byte id, Rol rol)
-        {
-            if (id != rol.RoEmpresa)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(rol).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                var rols = await _Iuservice.GetRolAsync();
+                return Ok(rols);
             }
-            catch (DbUpdateConcurrencyException)
+            catch(Exception ex) 
             {
-                if (!RolExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
-
-            return NoContent();
         }
-
-        // POST: api/Rols
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task <ActionResult<List<Rol>>> Put(Rol rol)
+        {
+            try
+            {
+                var rols = await _Iuservice.UpdateRolAsync(rol);
+                return Ok(rols);
+            }catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
-        public async Task<ActionResult<Rol>> PostRol(Rol rol)
+        public async Task<ActionResult<List<Rol>>> Add(Rol rol)
         {
-          if (_context.Rols == null)
-          {
-              return Problem("Entity set 'SolicitudContext.Rols'  is null.");
-          }
-            _context.Rols.Add(rol);
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
+                var rols = await _Iuservice.AddRolAsync(rol);
+                return Ok(rols);
+            }catch (Exception ex)
             {
-                if (RolExists(rol.RoEmpresa))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
-
-            return CreatedAtAction(nameof(PostRol), new { id = rol.RoEmpresa }, rol);
         }
+            //    public async Task<ActionResult<IEnumerable<Rol>>> GetRols()
+            //    {
+            //      if (_context.Rols == null)
+            //      {
+            //          return NotFound();
+            //      }
+            //        return await _context.Rols.ToListAsync();
+            //    }
 
-        // DELETE: api/Rols/5
-        [HttpDelete("{RoEmpresa}, {RoCodigo}")]
-        public async Task<IActionResult> DeleteRol(byte RoEmpresa, short RoCodigo)
-        {
-            if (_context.Rols == null)
-            {
-                return NotFound();
-            }
-            var rol = await _context.Rols.FindAsync(RoEmpresa,RoCodigo);
-            if (rol == null)
-            {
-                return NotFound();
-            }
+            //    // GET: api/Rols/5
+            //    [HttpGet("{RoCodigo}")]
+            //    public async Task<ActionResult<Rol>> GetRol(short RoCodigo)
+            //    {
+            //      if (_context.Rols == null)
+            //      {
+            //          return NotFound();
+            //      }
+            //        var rol = await _context.Rols.FindAsync(RoCodigo);
 
-            _context.Rols.Remove(rol);
-            await _context.SaveChangesAsync();
+            //        if (rol == null)
+            //        {
+            //            return NotFound();
+            //        }
 
-            return NoContent();
+            //        return rol;
+            //    }
+
+            //    // PUT: api/Rols/5
+            //    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            //    [HttpPut("{RoEmpresa}")]
+            //    public async Task<IActionResult> PutRol(byte RoEmpresa, Rol rol)
+            //    {
+            //        if (RoEmpresa != rol.RoEmpresa)
+            //        {
+            //            return BadRequest();
+            //        }
+
+            //        _context.Entry(rol).State = EntityState.Modified;
+
+            //        try
+            //        {
+            //            await _context.SaveChangesAsync();
+            //        }
+            //        catch (DbUpdateConcurrencyException)
+            //        {
+            //            if (!RolExists(RoEmpresa))
+            //            {
+            //                return NotFound();
+            //            }
+            //            else
+            //            {
+            //                throw;
+            //            }
+            //        }
+
+            //        return NoContent();
+            //    }
+
+            //    // POST: api/Rols
+            //    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+            //    [HttpPost]
+            //    public async Task<ActionResult<Rol>> PostRol(Rol rol)
+            //    {
+            //      if (_context.Rols == null)
+            //      {
+            //          return Problem("Entity set 'SolicitudContext.Rols'  is null.");
+            //      }
+            //        _context.Rols.Add(rol);
+            //        await _context.SaveChangesAsync();
+
+            //        return CreatedAtAction("GetRol", new { id = rol.RoCodigo }, rol);
+            //    }
+
+            //    // DELETE: api/Rols/5
+            //    [HttpDelete("{RoCodigo}")]
+            //    public async Task<IActionResult> DeleteRol(short RoCodigo)
+            //    {
+            //        if (_context.Rols == null)
+            //        {
+            //            return NotFound();
+            //        }
+            //        var rol = await _context.Rols.FindAsync(RoCodigo);
+            //        if (rol == null)
+            //        {
+            //            return NotFound();
+            //        }
+
+            //        _context.Rols.Remove(rol);
+            //        await _context.SaveChangesAsync();
+
+            //        return NoContent();
+            //    }
+
+            //    private bool RolExists(short RoCodigo)
+            //    {
+            //        return (_context.Rols?.Any(e => e.RoCodigo == RoCodigo)).GetValueOrDefault();
+            //    }
+            //}
         }
-
-        private bool RolExists(byte id)
-        {
-            return (_context.Rols?.Any(e => e.RoEmpresa == id)).GetValueOrDefault();
-        }
-    }
-}
