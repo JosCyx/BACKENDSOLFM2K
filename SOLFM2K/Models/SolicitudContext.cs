@@ -65,6 +65,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
+    public virtual DbSet<TipoSolicitud> TipoSolicituds { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
@@ -522,9 +524,8 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<NivelesRuteo>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("niveles_ruteo");
+            entity.HasKey(e => e.CodRuteo);
+            
 
             entity.Property(e => e.CodRuteo).HasColumnName("cod_ruteo");
             entity.Property(e => e.DescRuteo)
@@ -873,6 +874,23 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.TipoDocNombre)
                 .HasMaxLength(50)
                 .HasColumnName("tipo_doc_nombre");
+        });
+
+        modelBuilder.Entity<TipoSolicitud>(entity =>
+        {
+            entity.HasKey(e => e.TipoSolId);
+
+            entity.ToTable("tipo_solic");
+
+            entity.Property(e => e.TipoSolId).HasColumnName("tipo_sol_id");
+            entity.Property(e => e.TipoSolInicial)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("tipo_sol_inicial");
+            entity.Property(e => e.TipoSolNombre)
+                .HasMaxLength(50)
+                .HasColumnName("tipo_sol_nombre");
         });
 
         modelBuilder.Entity<Transaccione>(entity =>
