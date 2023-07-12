@@ -54,31 +54,29 @@ namespace SOLFM2K.Controllers
         [HttpPut("{RoCodigo}")]
         public async Task<IActionResult> PutRol(short RoCodigo, Rol rol)
         {
-            if (RoCodigo == 0)
-            {
-                return BadRequest();
-            }
-            
-
-            _context.Entry(rol).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!RolExists(RoCodigo))
+                if(RoCodigo != rol.RoCodigo)
+                {
+                    return BadRequest();
+                }
+                var rolItem = await _context.Rols.FindAsync(RoCodigo);
+                if (rolItem == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                rolItem.RoNombre = rol.RoNombre;
+                rolItem.RoEstado = rol.RoEstado;
+
+
+
+                await _context.SaveChangesAsync();  
+                return NotFound();
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message); 
             }
 
-            return NoContent();
         }
 
         // POST: api/Rols
