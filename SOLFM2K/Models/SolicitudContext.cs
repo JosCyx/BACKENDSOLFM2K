@@ -67,6 +67,10 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<TipoSolicitud> TipoSolicituds { get; set; }
 
+
+    public virtual DbSet<Ruteo> Ruteos { get; set; }
+
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
@@ -596,6 +600,22 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.RoNombre)
                 .HasMaxLength(40)
                 .HasColumnName("ro_nombre");
+        });
+
+        modelBuilder.Entity<Ruteo>(entity =>
+        {
+            entity.HasKey(e => e.RutCodigo).HasName("PK_tb_rut");
+
+            entity.ToTable("ruteo");
+
+            entity.Property(e => e.RutCodigo).HasColumnName("rut_cod");
+            entity.Property(e => e.RutArea).HasColumnName("rut_area");
+            entity.Property(e => e.RutEstado)
+                .HasMaxLength(1)
+                .HasColumnName("rut_estado");
+            entity.Property(e => e.RutNombre)
+                .HasMaxLength(40)
+                .HasColumnName("rut_nombre");
         });
 
         modelBuilder.Entity<RolUsuario>(entity =>
