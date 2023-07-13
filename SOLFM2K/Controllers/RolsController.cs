@@ -67,6 +67,8 @@ namespace SOLFM2K.Controllers
                 }
                 rolItem.RoNombre = rol.RoNombre;
                 rolItem.RoEstado = rol.RoEstado;
+                rolItem.RoAplicacion = rol.RoAplicacion;
+                rolItem.RoEmpresa = rol.RoEmpresa;
 
 
 
