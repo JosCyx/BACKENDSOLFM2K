@@ -32,14 +32,14 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/Rols/5
-        [HttpGet("{Rocodigo}")]
-        public async Task<ActionResult<Rol>> GetRol(short Rocodigo)
+        [HttpGet("{RoCodigo}")]
+        public async Task<ActionResult<Rol>> GetRol(int RoCodigo)
         {
           if (_context.Rols == null)
           {
               return NotFound();
           }
-            var rol = await _context.Rols.FindAsync(Rocodigo);
+            var rol = await _context.Rols.FindAsync(RoCodigo);
 
             if (rol == null)
             {
@@ -54,31 +54,30 @@ namespace SOLFM2K.Controllers
         [HttpPut("{RoCodigo}")]
         public async Task<IActionResult> PutRol(short RoCodigo, Rol rol)
         {
+            if (RoCodigo != rol.RoCodigo)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(rol).State = EntityState.Modified;
+
             try
             {
-                if(RoCodigo != rol.RoCodigo)
-                {
-                    return BadRequest();
-                }
-                var rolItem = await _context.Rols.FindAsync(RoCodigo);
-                if (rolItem == null)
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RolExists(RoCodigo))
                 {
                     return NotFound();
                 }
-                rolItem.RoNombre = rol.RoNombre;
-                rolItem.RoEstado = rol.RoEstado;
-                rolItem.RoAplicacion = rol.RoAplicacion;
-                rolItem.RoEmpresa = rol.RoEmpresa;
-
-
-
-                await _context.SaveChangesAsync();  
-                return NotFound();
-            }catch (Exception ex)
-            {
-                return BadRequest(ex.Message); 
+                else
+                {
+                    throw;
+                }
             }
 
+            return NoContent();
         }
 
         // POST: api/Rols
@@ -97,14 +96,14 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/Rols/5
-        [HttpDelete("{Rocodigo}")]
-        public async Task<IActionResult> DeleteRol(short Rocodigo)
+        [HttpDelete("{RoCodigo}")]
+        public async Task<IActionResult> DeleteRol(int RoCodigo)
         {
             if (_context.Rols == null)
             {
                 return NotFound();
             }
-            var rol = await _context.Rols.FindAsync(Rocodigo);
+            var rol = await _context.Rols.FindAsync(RoCodigo);
             if (rol == null)
             {
                 return NotFound();
@@ -116,9 +115,9 @@ namespace SOLFM2K.Controllers
             return NoContent();
         }
 
-        private bool RolExists(short id)
+        private bool RolExists(int RoCodigo)
         {
-            return (_context.Rols?.Any(e => e.RoCodigo == id)).GetValueOrDefault();
+            return (_context.Rols?.Any(e => e.RoCodigo == RoCodigo)).GetValueOrDefault();
         }
     }
 }
