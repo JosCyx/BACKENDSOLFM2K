@@ -25,13 +25,13 @@ public partial class Empleado
 
     public string? EmpleadoCorreo { get; set; }
 
-    public virtual ICollection<CabSolCotizacion> CabSolCotizacions { get; set; } = new List<CabSolCotizacion>();
+    //public virtual ICollection<CabSolCotizacion> CabSolCotizacions { get; set; } = new List<CabSolCotizacion>();
 
-    public virtual ICollection<CabSolOrdenCompra> CabSolOrdenCompras { get; set; } = new List<CabSolOrdenCompra>();
+    //public virtual ICollection<CabSolOrdenCompra> CabSolOrdenCompras { get; set; } = new List<CabSolOrdenCompra>();
 
-    public virtual ICollection<CabSolPago> CabSolPagos { get; set; } = new List<CabSolPago>();
+    //public virtual ICollection<CabSolPago> CabSolPagos { get; set; } = new List<CabSolPago>();
 
-    public virtual Departamento EmpleadoIdDptoNavigation { get; set; } = null!;
+    //public virtual Departamento EmpleadoIdDptoNavigation { get; set; } = null!;
 
-    public virtual TipoIdentificacion EmpleadoTipo { get; set; } = null!;
+    //public virtual TipoIdentificacion EmpleadoTipo { get; set; } = null!;
 }

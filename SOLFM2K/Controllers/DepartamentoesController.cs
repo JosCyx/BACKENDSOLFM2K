@@ -32,14 +32,14 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/Departamentoes/5
-        [HttpGet("{CodDep}")]
-        public async Task<ActionResult<Departamento>> GetDepartamento(int CodDep)
+        [HttpGet("{DepId}")]
+        public async Task<ActionResult<Departamento>> GetDepartamento(int DepId)
         {
           if (_context.Departamentos == null)
           {
               return NotFound();
           }
-            var departamento = await _context.Departamentos.FindAsync(CodDep);
+            var departamento = await _context.Departamentos.FindAsync(DepId);
 
             if (departamento == null)
             {
@@ -51,10 +51,10 @@ namespace SOLFM2K.Controllers
 
         // PUT: api/Departamentoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{CodDep}")]
-        public async Task<IActionResult> PutDepartamento(int CodDep, Departamento departamento)
+        [HttpPut("{DepId}")]
+        public async Task<IActionResult> PutDepartamento(int DepId, Departamento departamento)
         {
-            if (CodDep != departamento.CodDep)
+            if (DepId != departamento.DepId)
             {
                 return BadRequest();
             }
@@ -67,7 +67,7 @@ namespace SOLFM2K.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DepartamentoExists(CodDep))
+                if (!DepartamentoExists(DepId))
                 {
                     return NotFound();
                 }
@@ -96,7 +96,7 @@ namespace SOLFM2K.Controllers
             }
             catch (DbUpdateException)
             {
-                if (DepartamentoExists(departamento.CodDep))
+                if (DepartamentoExists(departamento.DepId))
                 {
                     return Conflict();
                 }
@@ -106,18 +106,18 @@ namespace SOLFM2K.Controllers
                 }
             }
 
-            return CreatedAtAction("GetDepartamento", new { CodDep = departamento.CodDep }, departamento);
+            return CreatedAtAction(nameof(PostDepartamento), new { CodDep = departamento.DepId }, departamento);
         }
 
         // DELETE: api/Departamentoes/5
-        [HttpDelete("{CodDep}")]
-        public async Task<IActionResult> DeleteDepartamento(int CodDep)
+        [HttpDelete("{DepId}")]
+        public async Task<IActionResult> DeleteDepartamento(int DepId)
         {
             if (_context.Departamentos == null)
             {
                 return NotFound();
             }
-            var departamento = await _context.Departamentos.FindAsync(CodDep);
+            var departamento = await _context.Departamentos.FindAsync(DepId);
             if (departamento == null)
             {
                 return NotFound();
@@ -129,9 +129,9 @@ namespace SOLFM2K.Controllers
             return NoContent();
         }
 
-        private bool DepartamentoExists(int CodDep)
+        private bool DepartamentoExists(int DepId)
         {
-            return (_context.Departamentos?.Any(e => e.CodDep == CodDep)).GetValueOrDefault();
+            return (_context.Departamentos?.Any(e => e.DepId == DepId)).GetValueOrDefault();
         }
     }
 }

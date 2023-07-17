@@ -13,5 +13,5 @@ public partial class Rol
 
     public string? RoEstado { get; set; }
 
-    public int? RoAplicacion { get; set; }
+    public int? RoAplicacion  { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using SOLFM2K.Models;
 
 namespace SOLFM2K.Models;
 
@@ -76,6 +77,22 @@ public partial class SolicitudContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        modelBuilder.Entity<Area>(entity =>
+        {
+            entity.HasKey(e => e.AreaId);
+
+            entity.ToTable("area");
+
+            entity.Property(e => e.AreaId).HasColumnName("area_id");
+            entity.Property(e => e.AreaEstado)
+                .HasMaxLength(1)
+                .HasColumnName("area_estado");
+            entity.Property(e => e.AreaDescp)
+                .HasMaxLength(50)
+                .HasColumnName("area_decp");
+        });
+
         modelBuilder.Entity<Aplicacione>(entity =>
         {
             entity.HasKey(e => e.ApCodigo);
@@ -120,10 +137,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_sol_cot_fecha");
             entity.Property(e => e.CabSolCotSolicitante).HasColumnName("cab_sol_cot_solicitante");
 
-            entity.HasOne(d => d.CabSolCotSolicitanteNavigation).WithMany(p => p.CabSolCotizacions)
-                .HasForeignKey(d => d.CabSolCotSolicitante)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_cotizacion_empleado");
+            //entity.HasOne(d => d.CabSolCotSolicitanteNavigation).WithMany(p => p.CabSolCotizacions)
+            //    .HasForeignKey(d => d.CabSolCotSolicitante)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_cab_sol_cotizacion_empleado");
         });
 
         modelBuilder.Entity<CabSolOrdenCompra>(entity =>
@@ -157,10 +174,10 @@ public partial class SolicitudContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_orden_compra_proveedor");
 
-            entity.HasOne(d => d.CabOrdcSolicitanteNavigation).WithMany(p => p.CabSolOrdenCompras)
-                .HasForeignKey(d => d.CabOrdcSolicitante)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_orden_compra_empleado");
+            //entity.HasOne(d => d.CabOrdcSolicitanteNavigation).WithMany(p => p.CabSolOrdenCompras)
+            //    .HasForeignKey(d => d.CabOrdcSolicitante)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_cab_sol_orden_compra_empleado");
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -195,30 +212,31 @@ public partial class SolicitudContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_pago_proveedor");
 
-            entity.HasOne(d => d.CabPagoSolicitanteNavigation).WithMany(p => p.CabSolPagos)
-                .HasForeignKey(d => d.CabPagoSolicitante)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_pago_empleado");
+            //entity.HasOne(d => d.CabPagoSolicitanteNavigation).WithMany(p => p.CabSolPagos)
+            //    .HasForeignKey(d => d.CabPagoSolicitante)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_cab_sol_pago_empleado");
         });
 
         modelBuilder.Entity<Departamento>(entity =>
         {
-            entity.HasKey(e => e.CodDep);
+            entity.HasKey(e => e.DepId);
 
-            entity.ToTable("Departamento");
+            entity.ToTable("departamento");
 
-            entity.Property(e => e.CodDep)
+            entity.Property(e => e.DepArea).HasColumnName("dep_area");
+            entity.Property(e => e.DepId)
                 .ValueGeneratedNever()
-                .HasColumnName("cod_dep");
-            entity.Property(e => e.DescDep)
+                .HasColumnName("dep_id");
+            entity.Property(e => e.DepDescp)
                 .HasMaxLength(50)
                 .IsFixedLength()
-                .HasColumnName("desc_dep");
-            entity.Property(e => e.Estado)
+                .HasColumnName("dep_descp");
+            entity.Property(e => e.DepEstado)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
-                .HasColumnName("estado");
+                .HasColumnName("dep_estado");
         });
 
         modelBuilder.Entity<Documento>(entity =>
@@ -285,15 +303,15 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("empleado_telefono");
             entity.Property(e => e.EmpleadoTipoId).HasColumnName("empleado_tipo_id");
 
-            entity.HasOne(d => d.EmpleadoIdDptoNavigation).WithMany(p => p.Empleados)
-                .HasForeignKey(d => d.EmpleadoIdDpto)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_empleado_Departamento");
+            //entity.HasOne(d => d.EmpleadoIdDptoNavigation).WithMany(p => p.Empleados)
+            //    .HasForeignKey(d => d.EmpleadoIdDpto)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_empleado_Departamento");
 
-            entity.HasOne(d => d.EmpleadoTipo).WithMany(p => p.Empleados)
-                .HasForeignKey(d => d.EmpleadoTipoId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_empleado_tipo_identificacion");
+            //entity.HasOne(d => d.EmpleadoTipo).WithMany(p => p.Empleados)
+            //    .HasForeignKey(d => d.EmpleadoTipoId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_empleado_tipo_identificacion");
         });
 
         modelBuilder.Entity<Empresa>(entity =>
@@ -990,4 +1008,6 @@ public partial class SolicitudContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+    public DbSet<SOLFM2K.Models.Area>? Area { get; set; }
 }
