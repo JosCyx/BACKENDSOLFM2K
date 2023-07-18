@@ -7,11 +7,15 @@ public partial class Empleado
 {
     public int EmpleadoId { get; set; }
 
-    public int EmpleadoIdDpto { get; set; }
-
     public int EmpleadoCompania { get; set; }
 
-    public int EmpleadoTipoId { get; set; }
+    public int EmpleadoIdNomina { get; set; }
+
+    public int EmpleadoIdDpto { get; set; }
+
+    public int EmpleadoIdArea { get; set; }
+
+    public string? EmpleadoTipoId { get; set; }
 
     public string EmpleadoIdentificacion { get; set; } = null!;
 
@@ -21,9 +25,11 @@ public partial class Empleado
 
     public string EmpleadoSexo { get; set; } = null!;
 
-    public string EmpleadoTelefono { get; set; } = null!;
+    public string? EmpleadoTelefono { get; set; } = null!;
 
-    public string? EmpleadoCorreo { get; set; }
+    public string? EmpleadoCorreo { get; set; } = null!;
+
+    public string? EmpleadoEstado { get; set; }
 
     //public virtual ICollection<CabSolCotizacion> CabSolCotizacions { get; set; } = new List<CabSolCotizacion>();
 

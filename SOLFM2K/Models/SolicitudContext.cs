@@ -85,6 +85,7 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("area");
 
             entity.Property(e => e.AreaId).HasColumnName("area_id");
+            entity.Property(e => e.AreaIdNomina).HasColumnName("area_id_nomina");
             entity.Property(e => e.AreaEstado)
                 .HasMaxLength(1)
                 .HasColumnName("area_estado");
@@ -225,6 +226,7 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("departamento");
 
             entity.Property(e => e.DepArea).HasColumnName("dep_area");
+            entity.Property(e => e.DepIdNomina).HasColumnName("dep_id_nomina");
             entity.Property(e => e.DepId)
                 .ValueGeneratedNever()
                 .HasColumnName("dep_id");
@@ -273,19 +275,18 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Empleado>(entity =>
         {
-            entity.ToTable("empleado");
+            entity.ToTable("empleados");
 
             entity.Property(e => e.EmpleadoId)
                 .ValueGeneratedNever()
                 .HasColumnName("empleado_id");
-            entity.Property(e => e.EmpleadoApellidos)
-                .HasMaxLength(250)
-                .HasColumnName("empleado_apellidos");
+            entity.Property(e => e.EmpleadoIdNomina).HasColumnName("empleado_id_NOMINA");
             entity.Property(e => e.EmpleadoCompania).HasColumnName("empleado_compania");
             entity.Property(e => e.EmpleadoCorreo)
                 .HasMaxLength(100)
                 .HasColumnName("empleado_correo");
             entity.Property(e => e.EmpleadoIdDpto).HasColumnName("empleado_id_dpto");
+            entity.Property(e => e.EmpleadoIdArea).HasColumnName("empleado_id_area");
             entity.Property(e => e.EmpleadoIdentificacion)
                 .HasMaxLength(15)
                 .IsUnicode(false)
@@ -293,6 +294,9 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.EmpleadoNombres)
                 .HasMaxLength(250)
                 .HasColumnName("empleado_nombres");
+            entity.Property(e => e.EmpleadoApellidos)
+                .HasMaxLength(250)
+                .HasColumnName("empleado_apellidos");
             entity.Property(e => e.EmpleadoSexo)
                 .HasMaxLength(1)
                 .IsUnicode(false)
@@ -301,7 +305,16 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("empleado_telefono");
-            entity.Property(e => e.EmpleadoTipoId).HasColumnName("empleado_tipo_id");
+            entity.Property(e => e.EmpleadoTipoId)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("empleado_tipo_id");
+            entity.Property(e => e.EmpleadoEstado)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("empleado_estado");
 
             //entity.HasOne(d => d.EmpleadoIdDptoNavigation).WithMany(p => p.Empleados)
             //    .HasForeignKey(d => d.EmpleadoIdDpto)

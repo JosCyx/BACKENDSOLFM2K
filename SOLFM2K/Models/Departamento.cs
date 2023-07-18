@@ -7,6 +7,8 @@ public partial class Departamento
 {
     public int DepId { get; set; }
 
+    public int DepIdNomina { get; set; }
+
     public string? DepDescp { get; set; } 
 
     public string? DepEstado { get; set; } 
