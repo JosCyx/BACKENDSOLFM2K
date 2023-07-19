@@ -15,7 +15,7 @@ public partial class CabSolCotizacion
 
     public string CabSolCotAsunto { get; set; } = null!;
 
-    public virtual Empleado CabSolCotSolicitanteNavigation { get; set; } = null!;
+    public virtual TipoSolic CabSolCotIdCabeceraNavigation { get; set; } = null!;
 
     public virtual ICollection<SolCotizacion> SolCotizacions { get; set; } = new List<SolCotizacion>();
 }

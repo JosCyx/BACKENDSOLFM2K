@@ -54,7 +54,7 @@ namespace SOLFM2K.Controllers
         [HttpPut("{RutCodigo}")]
         public async Task<IActionResult> PutRuteo(int RutCodigo, Ruteo ruteo)
         {
-            if (RutCodigo != ruteo.RutCodigo)
+            if (RutCodigo != ruteo.RutCod)
             {
                 return BadRequest();
             }
@@ -92,7 +92,7 @@ namespace SOLFM2K.Controllers
             _context.Ruteos.Add(ruteo);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRuteo", new { RutCodigo = ruteo.RutCodigo }, ruteo);
+            return CreatedAtAction("GetRuteo", new { RutCodigo = ruteo.RutCod }, ruteo);
         }
 
         // DELETE: api/Ruteos/5
@@ -117,7 +117,7 @@ namespace SOLFM2K.Controllers
 
         private bool RuteoExists(int RutCodigo)
         {
-            return (_context.Ruteos?.Any(e => e.RutCodigo == RutCodigo)).GetValueOrDefault();
+            return (_context.Ruteos?.Any(e => e.RutCod == RutCodigo)).GetValueOrDefault();
         }
     }
 }

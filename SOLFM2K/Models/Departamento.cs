@@ -9,11 +9,11 @@ public partial class Departamento
 
     public int DepIdNomina { get; set; }
 
-    public string? DepDescp { get; set; } 
+    public string DepDescp { get; set; } = null!;
 
-    public string? DepEstado { get; set; } 
+    public string DepEstado { get; set; } = null!;
 
-    public int DepArea { get; set; }
+    public int? DepArea { get; set; }
 
-    //public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
+    //public virtual Area? DepAreaNavigation { get; set; }
 }

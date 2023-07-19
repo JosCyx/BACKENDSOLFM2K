@@ -15,7 +15,7 @@ public partial class Empleado
 
     public int EmpleadoIdArea { get; set; }
 
-    public string? EmpleadoTipoId { get; set; }
+    public string EmpleadoTipoId { get; set; } = null!;
 
     public string EmpleadoIdentificacion { get; set; } = null!;
 
@@ -25,19 +25,9 @@ public partial class Empleado
 
     public string EmpleadoSexo { get; set; } = null!;
 
-    public string? EmpleadoTelefono { get; set; } = null!;
+    public string? EmpleadoTelefono { get; set; }
 
-    public string? EmpleadoCorreo { get; set; } = null!;
+    public string? EmpleadoCorreo { get; set; }
 
-    public string? EmpleadoEstado { get; set; }
-
-    //public virtual ICollection<CabSolCotizacion> CabSolCotizacions { get; set; } = new List<CabSolCotizacion>();
-
-    //public virtual ICollection<CabSolOrdenCompra> CabSolOrdenCompras { get; set; } = new List<CabSolOrdenCompra>();
-
-    //public virtual ICollection<CabSolPago> CabSolPagos { get; set; } = new List<CabSolPago>();
-
-    //public virtual Departamento EmpleadoIdDptoNavigation { get; set; } = null!;
-
-    //public virtual TipoIdentificacion EmpleadoTipo { get; set; } = null!;
+    public string EmpleadoEstado { get; set; } = null!;
 }

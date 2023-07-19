@@ -21,21 +21,21 @@ public partial class Usuario
 
     public DateTime UsFechaCaduca { get; set; }
 
-    public string UsServicioC { get; set; } = null!;
+    public string? UsServicioC { get; set; }
 
-    public string UsUserData { get; set; } = null!;
+    public string? UsUserData { get; set; }
 
-    public string UsBanUserData { get; set; } = null!;
+    public string? UsBanUserData { get; set; }
 
-    public int UsTipoAcceso { get; set; }
+    public int? UsTipoAcceso { get; set; }
 
-    public string AudEvento { get; set; } = null!;
+    public string? AudEvento { get; set; }
 
-    public DateTime AudFecha { get; set; }
+    public DateTime? AudFecha { get; set; }
 
-    public string AudUsuario { get; set; } = null!;
+    public string? AudUsuario { get; set; }
 
-    public string AudObservacion { get; set; } = null!;
+    public string? AudObservacion { get; set; }
 
-    public int AudVeces { get; set; }
+    public int? AudVeces { get; set; }
 }

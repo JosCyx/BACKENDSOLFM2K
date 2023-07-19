@@ -19,9 +19,9 @@ public partial class CabSolOrdenCompra
 
     public string CabOrdcAsunto { get; set; } = null!;
 
-    public virtual Proveedor CabOrdcProveedorNavigation { get; set; } = null!;
+    public virtual TipoSolic CabOrdcIdCabeceraNavigation { get; set; } = null!;
 
-    public virtual Empleado CabOrdcSolicitanteNavigation { get; set; } = null!;
+    public virtual Proveedor CabOrdcProveedorNavigation { get; set; } = null!;
 
     public virtual ICollection<SolOrdenCompra> SolOrdenCompras { get; set; } = new List<SolOrdenCompra>();
 }

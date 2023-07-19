@@ -9,8 +9,9 @@ public partial class Area
 
     public int AreaIdNomina { get; set; }
 
-    public string? AreaDescp { get; set; }
+    public string AreaDecp { get; set; } = null!;
 
-    public string? AreaEstado { get; set; }
+    public string AreaEstado { get; set; } = null!;
+
+    //public virtual ICollection<Departamento> Departamentos { get; set; } = new List<Departamento>();
 }
-

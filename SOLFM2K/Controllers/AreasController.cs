@@ -24,22 +24,22 @@ namespace SOLFM2K.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Area>>> GetArea()
         {
-          if (_context.Area == null)
+          if (_context.Areas == null)
           {
               return NotFound();
           }
-            return await _context.Area.ToListAsync();
+            return await _context.Areas.ToListAsync();
         }
 
         // GET: api/Areas/5
         [HttpGet("{AreaId}")]
         public async Task<ActionResult<Area>> GetArea(int AreaId)
         {
-          if (_context.Area == null)
+          if (_context.Areas == null)
           {
               return NotFound();
           }
-            var area = await _context.Area.FindAsync(AreaId);
+            var area = await _context.Areas.FindAsync(AreaId);
 
             if (area == null)
             {
@@ -85,11 +85,11 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<Area>> PostArea(Area area)
         {
-          if (_context.Area == null)
+          if (_context.Areas == null)
           {
               return Problem("Entity set 'SolicitudContext.Area'  is null.");
           }
-            _context.Area.Add(area);
+            _context.Areas.Add(area);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostArea), new { id = area.AreaId }, area);
@@ -99,17 +99,17 @@ namespace SOLFM2K.Controllers
         [HttpDelete("{AreaId}")]
         public async Task<IActionResult> DeleteArea(int AreaId)
         {
-            if (_context.Area == null)
+            if (_context.Areas == null)
             {
                 return NotFound();
             }
-            var area = await _context.Area.FindAsync(AreaId);
+            var area = await _context.Areas.FindAsync(AreaId);
             if (area == null)
             {
                 return NotFound();
             }
 
-            _context.Area.Remove(area);
+            _context.Areas.Remove(area);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +117,7 @@ namespace SOLFM2K.Controllers
 
         private bool AreaExists(int AreaId)
         {
-            return (_context.Area?.Any(e => e.AreaId == AreaId)).GetValueOrDefault();
+            return (_context.Areas?.Any(e => e.AreaId == AreaId)).GetValueOrDefault();
         }
     }
 }

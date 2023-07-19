@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using SOLFM2K.Models;
 
 namespace SOLFM2K.Models;
 
@@ -17,6 +16,8 @@ public partial class SolicitudContext : DbContext
     }
 
     public virtual DbSet<Aplicacione> Aplicaciones { get; set; }
+
+    public virtual DbSet<Area> Areas { get; set; }
 
     public virtual DbSet<CabSolCotizacion> CabSolCotizacions { get; set; }
 
@@ -48,6 +49,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<RolUsuario> RolUsuarios { get; set; }
 
+    public virtual DbSet<Ruteo> Ruteos { get; set; }
+
     public virtual DbSet<RuteoArea> RuteoAreas { get; set; }
 
     public virtual DbSet<Sector> Sectors { get; set; }
@@ -62,38 +65,17 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<TipoIdentificacion> TipoIdentificacions { get; set; }
 
+    public virtual DbSet<TipoSolic> TipoSolics { get; set; }
+
     public virtual DbSet<Transaccione> Transacciones { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
-    public virtual DbSet<TipoSolicitud> TipoSolicituds { get; set; }
-
-
-    public virtual DbSet<Ruteo> Ruteos { get; set; }
-
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-        modelBuilder.Entity<Area>(entity =>
-        {
-            entity.HasKey(e => e.AreaId);
-
-            entity.ToTable("area");
-
-            entity.Property(e => e.AreaId).HasColumnName("area_id");
-            entity.Property(e => e.AreaIdNomina).HasColumnName("area_id_nomina");
-            entity.Property(e => e.AreaEstado)
-                .HasMaxLength(1)
-                .HasColumnName("area_estado");
-            entity.Property(e => e.AreaDescp)
-                .HasMaxLength(50)
-                .HasColumnName("area_decp");
-        });
-
         modelBuilder.Entity<Aplicacione>(entity =>
         {
             entity.HasKey(e => e.ApCodigo);
@@ -117,6 +99,23 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("ap_version");
         });
 
+        modelBuilder.Entity<Area>(entity =>
+        {
+            entity.ToTable("area");
+
+            entity.Property(e => e.AreaId).HasColumnName("area_id");
+            entity.Property(e => e.AreaDecp)
+                .HasMaxLength(50)
+                .IsFixedLength()
+                .HasColumnName("area_decp");
+            entity.Property(e => e.AreaEstado)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("area_estado");
+            entity.Property(e => e.AreaIdNomina).HasColumnName("area_id_nomina");
+        });
+
         modelBuilder.Entity<CabSolCotizacion>(entity =>
         {
             entity.HasKey(e => e.CabSolCotIdCabecera);
@@ -138,10 +137,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_sol_cot_fecha");
             entity.Property(e => e.CabSolCotSolicitante).HasColumnName("cab_sol_cot_solicitante");
 
-            //entity.HasOne(d => d.CabSolCotSolicitanteNavigation).WithMany(p => p.CabSolCotizacions)
-            //    .HasForeignKey(d => d.CabSolCotSolicitante)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_cab_sol_cotizacion_empleado");
+            entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
+                .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_cab_sol_cotizacion_tipo_solic");
         });
 
         modelBuilder.Entity<CabSolOrdenCompra>(entity =>
@@ -170,15 +169,15 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_ruc");
             entity.Property(e => e.CabOrdcSolicitante).HasColumnName("cab_ordc_solicitante");
 
+            entity.HasOne(d => d.CabOrdcIdCabeceraNavigation).WithOne(p => p.CabSolOrdenCompra)
+                .HasForeignKey<CabSolOrdenCompra>(d => d.CabOrdcIdCabecera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_cab_sol_orden_compra_tipo_solic");
+
             entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
                 .HasForeignKey(d => d.CabOrdcProveedor)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_orden_compra_proveedor");
-
-            //entity.HasOne(d => d.CabOrdcSolicitanteNavigation).WithMany(p => p.CabSolOrdenCompras)
-            //    .HasForeignKey(d => d.CabOrdcSolicitante)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_cab_sol_orden_compra_empleado");
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -208,28 +207,25 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_ruc");
             entity.Property(e => e.CabPagoSolicitante).HasColumnName("cab_pago_solicitante");
 
+            entity.HasOne(d => d.CabPagoIdCabeceraNavigation).WithOne(p => p.CabSolPago)
+                .HasForeignKey<CabSolPago>(d => d.CabPagoIdCabecera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_cab_sol_pago_tipo_solic");
+
             entity.HasOne(d => d.CabPagoProveedorNavigation).WithMany(p => p.CabSolPagos)
                 .HasForeignKey(d => d.CabPagoProveedor)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_pago_proveedor");
-
-            //entity.HasOne(d => d.CabPagoSolicitanteNavigation).WithMany(p => p.CabSolPagos)
-            //    .HasForeignKey(d => d.CabPagoSolicitante)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_cab_sol_pago_empleado");
         });
 
         modelBuilder.Entity<Departamento>(entity =>
         {
-            entity.HasKey(e => e.DepId);
+            entity.HasKey(e => e.DepId).HasName("PK_Departamento");
 
             entity.ToTable("departamento");
 
+            entity.Property(e => e.DepId).HasColumnName("dep_id");
             entity.Property(e => e.DepArea).HasColumnName("dep_area");
-            entity.Property(e => e.DepIdNomina).HasColumnName("dep_id_nomina");
-            entity.Property(e => e.DepId)
-                .ValueGeneratedNever()
-                .HasColumnName("dep_id");
             entity.Property(e => e.DepDescp)
                 .HasMaxLength(50)
                 .IsFixedLength()
@@ -239,6 +235,11 @@ public partial class SolicitudContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("dep_estado");
+            entity.Property(e => e.DepIdNomina).HasColumnName("dep_id_nomina");
+
+            //entity.HasOne(d => d.DepAreaNavigation).WithMany(p => p.Departamentos)
+            //    .HasForeignKey(d => d.DepArea)
+            //    .HasConstraintName("FK_departamento_area");
         });
 
         modelBuilder.Entity<Documento>(entity =>
@@ -277,16 +278,22 @@ public partial class SolicitudContext : DbContext
         {
             entity.ToTable("empleados");
 
-            entity.Property(e => e.EmpleadoId)
-                .ValueGeneratedNever()
-                .HasColumnName("empleado_id");
-            entity.Property(e => e.EmpleadoIdNomina).HasColumnName("empleado_id_NOMINA");
+            entity.Property(e => e.EmpleadoId).HasColumnName("empleado_id");
+            entity.Property(e => e.EmpleadoApellidos)
+                .HasMaxLength(250)
+                .HasColumnName("empleado_apellidos");
             entity.Property(e => e.EmpleadoCompania).HasColumnName("empleado_compania");
             entity.Property(e => e.EmpleadoCorreo)
                 .HasMaxLength(100)
                 .HasColumnName("empleado_correo");
-            entity.Property(e => e.EmpleadoIdDpto).HasColumnName("empleado_id_dpto");
+            entity.Property(e => e.EmpleadoEstado)
+                .HasMaxLength(1)
+                .IsUnicode(false)
+                .IsFixedLength()
+                .HasColumnName("empleado_estado");
             entity.Property(e => e.EmpleadoIdArea).HasColumnName("empleado_id_area");
+            entity.Property(e => e.EmpleadoIdDpto).HasColumnName("empleado_id_dpto");
+            entity.Property(e => e.EmpleadoIdNomina).HasColumnName("empleado_id_NOMINA");
             entity.Property(e => e.EmpleadoIdentificacion)
                 .HasMaxLength(15)
                 .IsUnicode(false)
@@ -294,11 +301,8 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.EmpleadoNombres)
                 .HasMaxLength(250)
                 .HasColumnName("empleado_nombres");
-            entity.Property(e => e.EmpleadoApellidos)
-                .HasMaxLength(250)
-                .HasColumnName("empleado_apellidos");
             entity.Property(e => e.EmpleadoSexo)
-                .HasMaxLength(1)
+                .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("empleado_sexo");
             entity.Property(e => e.EmpleadoTelefono)
@@ -310,21 +314,6 @@ public partial class SolicitudContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("empleado_tipo_id");
-            entity.Property(e => e.EmpleadoEstado)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("empleado_estado");
-
-            //entity.HasOne(d => d.EmpleadoIdDptoNavigation).WithMany(p => p.Empleados)
-            //    .HasForeignKey(d => d.EmpleadoIdDpto)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_empleado_Departamento");
-
-            //entity.HasOne(d => d.EmpleadoTipo).WithMany(p => p.Empleados)
-            //    .HasForeignKey(d => d.EmpleadoTipoId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull)
-            //    .HasConstraintName("FK_empleado_tipo_identificacion");
         });
 
         modelBuilder.Entity<Empresa>(entity =>
@@ -559,8 +548,7 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<NivelesRuteo>(entity =>
         {
-            entity.HasKey(e => e.CodRuteo);
-            
+            entity.HasKey(e => e.CodRuteo).HasName("PK_niveles_ruteo");
 
             entity.Property(e => e.CodRuteo).HasColumnName("cod_ruteo");
             entity.Property(e => e.DescRuteo)
@@ -631,22 +619,10 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.RoNombre)
                 .HasMaxLength(40)
                 .HasColumnName("ro_nombre");
-        });
 
-        modelBuilder.Entity<Ruteo>(entity =>
-        {
-            entity.HasKey(e => e.RutCodigo).HasName("PK_tb_rut");
-
-            entity.ToTable("ruteo");
-
-            entity.Property(e => e.RutCodigo).HasColumnName("rut_cod");
-            entity.Property(e => e.RutArea).HasColumnName("rut_area");
-            entity.Property(e => e.RutEstado)
-                .HasMaxLength(1)
-                .HasColumnName("rut_estado");
-            entity.Property(e => e.RutNombre)
-                .HasMaxLength(40)
-                .HasColumnName("rut_nombre");
+            entity.HasOne(d => d.RoAplicacionNavigation).WithMany(p => p.Rols)
+                .HasForeignKey(d => d.RoAplicacion)
+                .HasConstraintName("FK_rol_aplicaciones");
         });
 
         modelBuilder.Entity<RolUsuario>(entity =>
@@ -664,6 +640,22 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("ru_login");
             entity.Property(e => e.RuRol).HasColumnName("ru_rol");
+        });
+
+        modelBuilder.Entity<Ruteo>(entity =>
+        {
+            entity.HasKey(e => e.RutCod);
+
+            entity.ToTable("ruteo");
+
+            entity.Property(e => e.RutCod).HasColumnName("rut_cod");
+            entity.Property(e => e.RutArea).HasColumnName("rut_area");
+            entity.Property(e => e.RutEstado)
+                .HasMaxLength(1)
+                .HasColumnName("rut_estado");
+            entity.Property(e => e.RutNombre)
+                .HasMaxLength(100)
+                .HasColumnName("rut_nombre");
         });
 
         modelBuilder.Entity<RuteoArea>(entity =>
@@ -927,7 +919,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("tipo_doc_nombre");
         });
 
-        modelBuilder.Entity<TipoSolicitud>(entity =>
+        modelBuilder.Entity<TipoSolic>(entity =>
         {
             entity.HasKey(e => e.TipoSolId);
 
@@ -935,8 +927,7 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.TipoSolId).HasColumnName("tipo_sol_id");
             entity.Property(e => e.TipoSolInicial)
-                .HasMaxLength(1)
-                .IsUnicode(false)
+                .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("tipo_sol_inicial");
             entity.Property(e => e.TipoSolNombre)
@@ -1021,6 +1012,4 @@ public partial class SolicitudContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-    public DbSet<SOLFM2K.Models.Area>? Area { get; set; }
 }

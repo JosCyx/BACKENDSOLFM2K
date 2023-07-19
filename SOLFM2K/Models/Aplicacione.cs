@@ -18,4 +18,6 @@ public partial class Aplicacione
     public string? ApEstado { get; set; }
 
     public string? ApVersion { get; set; }
+
+    public virtual ICollection<Rol> Rols { get; set; } = new List<Rol>();
 }

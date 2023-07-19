@@ -10,6 +10,4 @@ public partial class TipoIdentificacion
     public string TipoDocNombre { get; set; } = null!;
 
     public string TipoDocInicial { get; set; } = null!;
-
-    //public virtual ICollection<Empleado> Empleados { get; set; } = new List<Empleado>();
 }
