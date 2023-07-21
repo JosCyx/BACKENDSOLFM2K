@@ -662,18 +662,14 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<RuteoArea>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("ruteo_area");
+            entity.ToTable("ruteo_area");
+            entity.HasKey(e => e.RutareaId);
 
-            entity.Property(e => e.CodDept).HasColumnName("cod_dept");
-            entity.Property(e => e.CodRuteo).HasColumnName("cod_ruteo");
-            entity.Property(e => e.CodTipoSolicitud).HasColumnName("cod_tipo_solicitud");
-            entity.Property(e => e.Estado)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("estado");
+            entity.Property(e => e.RutareaId).HasColumnName("rutar_id");
+            entity.Property(e => e.RutareaTipoSol).HasColumnName("rutar_tipo_sol");
+            entity.Property(e => e.RutareaArea).HasColumnName("rutar_area");
+            entity.Property(e => e.RutareaNivel).HasColumnName("rutar_nivel");
+            
         });
 
         modelBuilder.Entity<Sector>(entity =>
