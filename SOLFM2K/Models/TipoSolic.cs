@@ -11,9 +11,11 @@ public partial class TipoSolic
 
     public string TipoSolInicial { get; set; } = null!;
 
-    public virtual CabSolCotizacion? CabSolCotizacion { get; set; }
+    public string? TipoSolEstado { get; set; }
 
-    public virtual CabSolOrdenCompra? CabSolOrdenCompra { get; set; }
+    //public virtual CabSolCotizacion? CabSolCotizacion { get; set; }
 
-    public virtual CabSolPago? CabSolPago { get; set; }
+    //public virtual CabSolOrdenCompra? CabSolOrdenCompra { get; set; }
+
+    //public virtual CabSolPago? CabSolPago { get; set; }
 }

@@ -15,5 +15,5 @@ public partial class Rol
 
     public int? RoAplicacion { get; set; }
 
-    public virtual Aplicacione? RoAplicacionNavigation { get; set; }
+    //public virtual Aplicacione? RoAplicacionNavigation { get; set; }
 }

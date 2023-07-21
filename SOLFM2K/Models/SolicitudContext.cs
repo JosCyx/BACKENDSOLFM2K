@@ -137,10 +137,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_sol_cot_fecha");
             entity.Property(e => e.CabSolCotSolicitante).HasColumnName("cab_sol_cot_solicitante");
 
-            entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
+            /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_cotizacion_tipo_solic");
+                .HasConstraintName("FK_cab_sol_cotizacion_tipo_solic");*/
         });
 
         modelBuilder.Entity<CabSolOrdenCompra>(entity =>
@@ -169,10 +169,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_ruc");
             entity.Property(e => e.CabOrdcSolicitante).HasColumnName("cab_ordc_solicitante");
 
-            entity.HasOne(d => d.CabOrdcIdCabeceraNavigation).WithOne(p => p.CabSolOrdenCompra)
+            /*entity.HasOne(d => d.CabOrdcIdCabeceraNavigation).WithOne(p => p.CabSolOrdenCompra)
                 .HasForeignKey<CabSolOrdenCompra>(d => d.CabOrdcIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_orden_compra_tipo_solic");
+                .HasConstraintName("FK_cab_sol_orden_compra_tipo_solic");*/
 
             entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
                 .HasForeignKey(d => d.CabOrdcProveedor)
@@ -207,10 +207,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_ruc");
             entity.Property(e => e.CabPagoSolicitante).HasColumnName("cab_pago_solicitante");
 
-            entity.HasOne(d => d.CabPagoIdCabeceraNavigation).WithOne(p => p.CabSolPago)
+            /*entity.HasOne(d => d.CabPagoIdCabeceraNavigation).WithOne(p => p.CabSolPago)
                 .HasForeignKey<CabSolPago>(d => d.CabPagoIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_pago_tipo_solic");
+                .HasConstraintName("FK_cab_sol_pago_tipo_solic");*/
 
             entity.HasOne(d => d.CabPagoProveedorNavigation).WithMany(p => p.CabSolPagos)
                 .HasForeignKey(d => d.CabPagoProveedor)
@@ -550,16 +550,18 @@ public partial class SolicitudContext : DbContext
         {
             entity.HasKey(e => e.CodRuteo).HasName("PK_niveles_ruteo");
 
-            entity.Property(e => e.CodRuteo).HasColumnName("cod_ruteo");
+            entity.ToTable("nivel_ruteo");
+
+            entity.Property(e => e.CodRuteo).HasColumnName("ruteo_id");
             entity.Property(e => e.DescRuteo)
                 .HasMaxLength(50)
-                .HasColumnName("desc_ruteo");
+                .HasColumnName("ruteo_desc");
             entity.Property(e => e.EstadoRuteo)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
-                .HasColumnName("estado_ruteo");
-            entity.Property(e => e.Nivel).HasColumnName("nivel");
+                .HasColumnName("ruteo_estado");
+            entity.Property(e => e.Nivel).HasColumnName("ruteo_nivel");
         });
 
         modelBuilder.Entity<Proveedor>(entity =>
@@ -620,9 +622,9 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(40)
                 .HasColumnName("ro_nombre");
 
-            entity.HasOne(d => d.RoAplicacionNavigation).WithMany(p => p.Rols)
+            /*entity.HasOne(d => d.RoAplicacionNavigation).WithMany(p => p.Rols)
                 .HasForeignKey(d => d.RoAplicacion)
-                .HasConstraintName("FK_rol_aplicaciones");
+                .HasConstraintName("FK_rol_aplicaciones");*/
         });
 
         modelBuilder.Entity<RolUsuario>(entity =>
@@ -933,6 +935,9 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.TipoSolNombre)
                 .HasMaxLength(50)
                 .HasColumnName("tipo_sol_nombre");
+            entity.Property(e => e.TipoSolEstado)
+                .HasMaxLength(1)
+                .HasColumnName("tipo_sol_estado");
         });
 
         modelBuilder.Entity<Transaccione>(entity =>

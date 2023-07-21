@@ -92,7 +92,7 @@ namespace SOLFM2K.Controllers
             _context.NivelesRuteos.Add(nivelesRuteo);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetNivelesRuteo", new { id = nivelesRuteo.CodRuteo }, nivelesRuteo);
+            return CreatedAtAction(nameof(PostNivelesRuteo), new { CodRuteo = nivelesRuteo.CodRuteo }, nivelesRuteo);
         }
 
         // DELETE: api/NivelesRuteos/5
@@ -115,9 +115,9 @@ namespace SOLFM2K.Controllers
             return NoContent();
         }
 
-        private bool NivelesRuteoExists(int id)
+        private bool NivelesRuteoExists(int CodRuteo)
         {
-            return (_context.NivelesRuteos?.Any(e => e.CodRuteo == id)).GetValueOrDefault();
+            return (_context.NivelesRuteos?.Any(e => e.CodRuteo == CodRuteo)).GetValueOrDefault();
         }
     }
 }

@@ -19,5 +19,5 @@ public partial class Aplicacione
 
     public string? ApVersion { get; set; }
 
-    public virtual ICollection<Rol> Rols { get; set; } = new List<Rol>();
+    //public virtual ICollection<Rol> Rols { get; set; } = new List<Rol>();
 }
