@@ -32,6 +32,7 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/RuteoAreas/5
+        //get que busca ruteos segun el area
         [HttpGet("{RutareaArea}")]
         public async Task<ActionResult<IEnumerable<RuteoArea>>> GetRuteoAreasByRutaArea(int RutareaArea)
         {
@@ -135,6 +136,34 @@ namespace SOLFM2K.Controllers
         private bool RuteoAreaExists(int RutareaId)
         {
             return (_context.RuteoAreas?.Any(e => e.RutareaId == RutareaId)).GetValueOrDefault();
+        }
+
+        // GET: api/RuteoAreas/checkRuteoExistence
+        [HttpGet("checkRuteoExistence")]
+        public async Task<ActionResult<bool>> CheckRuteoExistence(int rutTipoSol, int rutArea, int rutNivel)
+        {
+            try
+            {
+                // Busca el ruteo en la base de datos que coincida con los parámetros proporcionados
+                var existingRuteo = await _context.RuteoAreas
+                    .FirstOrDefaultAsync(ra => ra.RutareaTipoSol == rutTipoSol && ra.RutareaArea == rutArea && ra.RutareaNivel == rutNivel);
+
+                if (existingRuteo != null)
+                {
+                    // Si el ruteo ya existe, retornas true
+                    return true;
+                }
+                else
+                {
+                    // Si el ruteo no existe, retornas false
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                // En caso de error, retornas un código de estado 500 y un mensaje de error
+                return StatusCode(500, $"Error al verificar la existencia del ruteo: {ex.Message}");
+            }
         }
     }
 }

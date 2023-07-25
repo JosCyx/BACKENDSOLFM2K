@@ -96,8 +96,31 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/NivelesRuteos/5
-        [HttpDelete("{CodRuteo}")]
-        public async Task<IActionResult> DeleteNivelesRuteo(int CodRuteo)
+        //metodo para eliminar un elemento segun el Nivel
+        [HttpDelete("{Nivel}")]
+        public async Task<IActionResult> DeleteNivelesRuteo(int Nivel)
+        {
+            if (_context.NivelesRuteos == null)
+            {
+                return NotFound();
+            }
+
+            var nivelesRuteo = await _context.NivelesRuteos.FirstOrDefaultAsync(nr => nr.Nivel == Nivel);
+
+            if (nivelesRuteo == null)
+            {
+                return NotFound();
+            }
+
+            _context.NivelesRuteos.Remove(nivelesRuteo);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+
+        /*public async Task<IActionResult> DeleteNivelesRuteo(int CodRuteo)
         {
             if (_context.NivelesRuteos == null)
             {
@@ -113,7 +136,7 @@ namespace SOLFM2K.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
+        }*/
 
         private bool NivelesRuteoExists(int CodRuteo)
         {
