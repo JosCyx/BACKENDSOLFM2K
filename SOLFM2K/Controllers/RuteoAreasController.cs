@@ -114,7 +114,30 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/RuteoAreas/5
-        [HttpDelete("{RutareaId}")]
+        [HttpDelete("{RutareaTipoSol},{RutareaArea},{RutareaNivel}")]
+        public async Task<IActionResult> DeleteRuteoArea(int RutareaTipoSol, int RutareaArea, int RutareaNivel)
+        {
+            if (_context.RuteoAreas == null)
+            {
+                return NotFound();
+            }
+
+            var ruteoArea = await _context.RuteoAreas
+                .FirstOrDefaultAsync(ra => ra.RutareaTipoSol == RutareaTipoSol && ra.RutareaArea == RutareaArea && ra.RutareaNivel == RutareaNivel);
+
+            if (ruteoArea == null)
+            {
+                return NotFound();
+            }
+
+            _context.RuteoAreas.Remove(ruteoArea);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+
+        /*[HttpDelete("{RutareaId}")]
         public async Task<IActionResult> DeleteRuteoArea(int RutareaId)
         {
             if (_context.RuteoAreas == null)
@@ -131,7 +154,7 @@ namespace SOLFM2K.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
+        }*/
 
         private bool RuteoAreaExists(int RutareaId)
         {
