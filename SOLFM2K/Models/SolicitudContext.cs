@@ -27,6 +27,12 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<Departamento> Departamentos { get; set; }
 
+    public virtual DbSet<DetSolCotizacion> DetSolCotizacions { get; set; }
+
+    public virtual DbSet<SolOrdenCompra> SolOrdenCompras { get; set; }//editar
+
+    public virtual DbSet<SolPago> SolPagos { get; set; }//editar
+
     public virtual DbSet<Documento> Documentos { get; set; }
 
     public virtual DbSet<EmplNivel> EmplNivels { get; set; }
@@ -36,8 +42,6 @@ public partial class SolicitudContext : DbContext
     public virtual DbSet<Empresa> Empresas { get; set; }
 
     public virtual DbSet<Funcione> Funciones { get; set; }
-
-    public virtual DbSet<Item> Items { get; set; }
 
     public virtual DbSet<NivelesRuteo> NivelesRuteos { get; set; }
 
@@ -56,12 +60,6 @@ public partial class SolicitudContext : DbContext
     public virtual DbSet<Sector> Sectors { get; set; }
 
     public virtual DbSet<Sectore> Sectores { get; set; }
-
-    public virtual DbSet<SolCotizacion> SolCotizacions { get; set; }
-
-    public virtual DbSet<SolOrdenCompra> SolOrdenCompras { get; set; }
-
-    public virtual DbSet<SolPago> SolPagos { get; set; }
 
     public virtual DbSet<TipoIdentificacion> TipoIdentificacions { get; set; }
 
@@ -118,24 +116,51 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<CabSolCotizacion>(entity =>
         {
-            entity.HasKey(e => e.CabSolCotIdCabecera);
+            entity.HasKey(e => e.CabSolCotNoSolicitud);
 
             entity.ToTable("cab_sol_cotizacion");
 
-            entity.Property(e => e.CabSolCotIdCabecera)
-                .ValueGeneratedNever()
-                .HasColumnName("cab_sol_cot_id_cabecera");
-            entity.Property(e => e.CabSolCotAreaSolicitante)
-                .HasMaxLength(100)
-                .IsUnicode(false)
+            entity.Property(e => e.CabSolCotTipoSolicitud)
+                .HasColumnName("cab_sol_cot_tipo_solicitud");
+
+            entity.Property(e => e.CabSolCotArea)
                 .HasColumnName("cab_sol_cot_area_solicitante");
-            entity.Property(e => e.CabSolCotAsunto)
-                .HasMaxLength(500)
-                .HasColumnName("cab_sol_cot_asunto");
+
+            entity.Property(e => e.CabSolCotNoSolicitud)
+                .HasColumnName("cab_sol_cot_no_solicitud");
+
+            entity.Property(e => e.CabSolCotSolicitante)
+                .HasColumnName("cab_sol_cot_solicitante");
+
             entity.Property(e => e.CabSolCotFecha)
                 .HasColumnType("date")
                 .HasColumnName("cab_sol_cot_fecha");
-            entity.Property(e => e.CabSolCotSolicitante).HasColumnName("cab_sol_cot_solicitante");
+
+            entity.Property(e => e.CabSolCotAsunto)
+                .HasMaxLength(500)
+                .HasColumnName("cab_sol_cot_asunto");
+
+            entity.Property(e => e.CabSolCotProcedimiento)
+                .HasMaxLength(500)
+                .HasColumnName("cab_sol_cot_procedimiento");
+
+            entity.Property(e => e.CabSolCotObervaciones)
+                .HasMaxLength(500)
+                .HasColumnName("cab_sol_cot_observaciones");
+
+            entity.Property(e => e.CabSolCotAdjCot)
+                .HasMaxLength(2)
+                .HasColumnName("cab_sol_cot_adj_cotizacion");
+
+            entity.Property(e => e.CabSolCotNumCotizacion)
+                .HasColumnName("cab_sol_cot_num_cotizaciones");
+
+            entity.Property(e => e.CabSolCotEstado)
+                .HasMaxLength(50)
+                .HasColumnName("cab_sol_cot_estado");
+
+            entity.Property(e => e.CabSolCotEstadoTracking)
+                .HasColumnName("cab_sol_cot_estado_track");
 
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
@@ -240,6 +265,203 @@ public partial class SolicitudContext : DbContext
             //entity.HasOne(d => d.DepAreaNavigation).WithMany(p => p.Departamentos)
             //    .HasForeignKey(d => d.DepArea)
             //    .HasConstraintName("FK_departamento_area");
+        });
+
+        modelBuilder.Entity<DetSolCotizacion>(entity =>
+        {
+            entity.HasKey(e => e.SolCotIdDetalle);
+
+            entity.ToTable("det_sol_cotizacion");
+
+            entity.Property(e => e.SolCotIdCabecera)
+                .HasColumnName("sol_cot_id_cabecera");
+
+            entity.Property(e => e.SolCotIdDetalle)
+                .HasColumnName("sol_cot_id_detalle");
+
+            entity.Property(e => e.SolCotItem)
+                .HasColumnName("sol_cot_item");
+
+            entity.Property(e => e.SolCotDescripcion)
+                .HasMaxLength(500)
+                .HasColumnName("sol_cot_descripcion");
+
+            entity.Property(e => e.SolCotUnidad)
+                .HasMaxLength(25)
+                .IsUnicode(false)
+                .HasColumnName("sol_cot_unidad");
+
+            entity.Property(e => e.SolCotCantidadTotal)
+                .HasColumnName("sol_cot_cantidad_total");
+
+            entity.Property(e => e.SolCotEstado)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("sol_cot_estado");
+
+            entity.Property(e => e.AudEvento)
+                .HasMaxLength(50)
+                .HasColumnName("aud_evento");
+
+            entity.Property(e => e.AudFecha)
+                .HasColumnType("date")
+                .HasColumnName("aud_fecha");
+
+            entity.Property(e => e.AudObservacion)
+                .HasMaxLength(250)
+                .HasColumnName("aud_observacion");
+
+            entity.Property(e => e.AudUsuario)
+                .HasMaxLength(50)
+                .HasColumnName("aud_usuario");
+
+            entity.Property(e => e.AudVeces)
+                .HasColumnName("aud_veces");
+            
+       
+
+            /*entity.HasOne(d => d.SolCotIdCabeceraNavigation).WithMany(p => p.SolCotizacions)
+                .HasForeignKey(d => d.SolCotIdCabecera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_sol_cotizacion_cab_sol_cotizacion");*/
+
+            /*entity.HasOne(d => d.SolCotItemNavigation).WithMany(p => p.SolCotizacions)
+                .HasForeignKey(d => d.SolCotItem)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_sol_cotizacion_item");*/
+        });
+
+        //editar a detsolordcompra
+        modelBuilder.Entity<SolOrdenCompra>(entity =>
+        {
+            entity.HasKey(e => e.SolOrdIdSolicitud);
+
+            entity.ToTable("sol_orden_compra");
+
+            entity.Property(e => e.SolOrdIdSolicitud)
+                .ValueGeneratedNever()
+                .HasColumnName("sol_ord_id_solicitud");
+            entity.Property(e => e.AudEvento)
+                .HasMaxLength(50)
+                .HasColumnName("aud_evento");
+            entity.Property(e => e.AudFecha)
+                .HasColumnType("date")
+                .HasColumnName("aud_fecha");
+            entity.Property(e => e.AudObservacion)
+                .HasMaxLength(250)
+                .HasColumnName("aud_observacion");
+            entity.Property(e => e.AudUsuario)
+                .HasMaxLength(50)
+                .HasColumnName("aud_usuario");
+            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
+            entity.Property(e => e.SolOrdAdjCotizacion)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_adj_cotizacion");
+            entity.Property(e => e.SolOrdCantidad).HasColumnName("sol_ord_cantidad");
+            entity.Property(e => e.SolOrdDescripcion)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_descripcion");
+            entity.Property(e => e.SolOrdEstado)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_estado");
+            entity.Property(e => e.SolOrdIdCabecera).HasColumnName("sol_ord_id_cabecera");
+            entity.Property(e => e.SolOrdInspector)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_inspector");
+            entity.Property(e => e.SolOrdItem).HasColumnName("sol_ord_item");
+            entity.Property(e => e.SolOrdPresupuesto)
+                .HasMaxLength(30)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_presupuesto");
+            entity.Property(e => e.SolOrdProcedimiento)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_procedimiento");
+            entity.Property(e => e.SolOrdTelefono)
+                .HasMaxLength(20)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_telefono");
+            entity.Property(e => e.SolOrdUnidad)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("sol_ord_unidad");
+
+            /*entity.HasOne(d => d.SolOrdIdCabeceraNavigation).WithMany(p => p.SolOrdenCompras)
+                .HasForeignKey(d => d.SolOrdIdCabecera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_sol_orden_compra_cab_sol_orden_compra");*/
+
+            /*entity.HasOne(d => d.SolOrdItemNavigation).WithMany(p => p.SolOrdenCompras)
+                .HasForeignKey(d => d.SolOrdItem)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_sol_orden_compra_item");*/
+        });
+
+        //editar a detsolpago
+        modelBuilder.Entity<SolPago>(entity =>
+        {
+            entity.HasKey(e => e.SolPagoIdSolicitud);
+
+            entity.ToTable("sol_pago");
+
+            entity.Property(e => e.SolPagoIdSolicitud)
+                .ValueGeneratedNever()
+                .HasColumnName("sol_pago_id_solicitud");
+            entity.Property(e => e.AudEvento)
+                .HasMaxLength(50)
+                .HasColumnName("aud_evento");
+            entity.Property(e => e.AudFecha)
+                .HasColumnType("date")
+                .HasColumnName("aud_fecha");
+            entity.Property(e => e.AudObservacion)
+                .HasMaxLength(250)
+                .HasColumnName("aud_observacion");
+            entity.Property(e => e.AudUsuario)
+                .HasMaxLength(50)
+                .HasColumnName("aud_usuario");
+            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
+            entity.Property(e => e.SolPagoAbono)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("sol_pago_abono");
+            entity.Property(e => e.SolPagoAplMulta)
+                .HasMaxLength(500)
+                .HasColumnName("sol_pago_apl_multa");
+            entity.Property(e => e.SolPagoCantContratada).HasColumnName("sol_pago_cant_contratada");
+            entity.Property(e => e.SolPagoCantRecibida).HasColumnName("sol_pago_cant_recibida");
+            entity.Property(e => e.SolPagoCerrarOrden)
+                .HasMaxLength(2)
+                .IsUnicode(false)
+                .HasColumnName("sol_pago_cerrar_orden");
+            entity.Property(e => e.SolPagoEstado)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("sol_pago_estado");
+            entity.Property(e => e.SolPagoIdCabecera).HasColumnName("sol_pago_id_cabecera");
+            entity.Property(e => e.SolPagoItem)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("sol_pago_item");
+            entity.Property(e => e.SolPagoObservaciones)
+                .HasMaxLength(500)
+                .HasColumnName("sol_pago_observaciones");
+            entity.Property(e => e.SolPagoPagoTotal).HasColumnName("sol_pago_pago_total");
+            entity.Property(e => e.SolPagoReceptor)
+                .HasMaxLength(100)
+                .HasColumnName("sol_pago_receptor");
+            entity.Property(e => e.SolPagoSubtotal).HasColumnName("sol_pago_subtotal");
+            entity.Property(e => e.SolPagoTotal).HasColumnName("sol_pago_total");
+            entity.Property(e => e.SolPagoValDescontar).HasColumnName("sol_pago_val_descontar");
+            entity.Property(e => e.SolPagoValUnitario).HasColumnName("sol_pago_val_unitario");
+
+            entity.HasOne(d => d.SolPagoIdCabeceraNavigation).WithMany(p => p.SolPagos)
+                .HasForeignKey(d => d.SolPagoIdCabecera)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_sol_pago_cab_sol_pago");
         });
 
         modelBuilder.Entity<Documento>(entity =>
@@ -530,22 +752,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.FuTransaccion).HasColumnName("fu_transaccion");
         });
 
-        modelBuilder.Entity<Item>(entity =>
-        {
-            entity.HasKey(e => e.ItmId);
-
-            entity.ToTable("item");
-
-            entity.Property(e => e.ItmId)
-                .ValueGeneratedNever()
-                .HasColumnName("itm_id");
-            entity.Property(e => e.ItmCantidad).HasColumnName("itm_cantidad");
-            entity.Property(e => e.ItmDescripcion)
-                .HasMaxLength(500)
-                .HasColumnName("itm_descripcion");
-            entity.Property(e => e.ItmValorUnitario).HasColumnName("itm_valor_unitario");
-        });
-
         modelBuilder.Entity<NivelesRuteo>(entity =>
         {
             entity.HasKey(e => e.CodRuteo).HasName("PK_niveles_ruteo");
@@ -706,199 +912,9 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("sec_estado");
         });
 
-        modelBuilder.Entity<SolCotizacion>(entity =>
-        {
-            entity.HasKey(e => e.SolCotIdSolicitud);
+        
 
-            entity.ToTable("sol_cotizacion");
-
-            entity.Property(e => e.SolCotIdSolicitud)
-                .ValueGeneratedNever()
-                .HasColumnName("sol_cot_id_solicitud");
-            entity.Property(e => e.AudEvento)
-                .HasMaxLength(50)
-                .HasColumnName("aud_evento");
-            entity.Property(e => e.AudFecha)
-                .HasColumnType("date")
-                .HasColumnName("aud_fecha");
-            entity.Property(e => e.AudObservacion)
-                .HasMaxLength(250)
-                .HasColumnName("aud_observacion");
-            entity.Property(e => e.AudUsuario)
-                .HasMaxLength(50)
-                .HasColumnName("aud_usuario");
-            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
-            entity.Property(e => e.SolCotAdjCotizacion)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_cot_adj_cotizacion");
-            entity.Property(e => e.SolCotCantidad).HasColumnName("sol_cot_cantidad");
-            entity.Property(e => e.SolCotDescripcion)
-                .HasMaxLength(500)
-                .HasColumnName("sol_cot_descripcion");
-            entity.Property(e => e.SolCotEstado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sol_cot_estado");
-            entity.Property(e => e.SolCotIdCabecera).HasColumnName("sol_cot_id_cabecera");
-            entity.Property(e => e.SolCotItem).HasColumnName("sol_cot_item");
-            entity.Property(e => e.SolCotObservaciones)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_cot_observaciones");
-            entity.Property(e => e.SolCotPresupuesto)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("sol_cot_presupuesto");
-            entity.Property(e => e.SolCotProcedimiento)
-                .HasMaxLength(500)
-                .HasColumnName("sol_cot_procedimiento");
-            entity.Property(e => e.SolCotUnidad)
-                .HasMaxLength(5)
-                .IsUnicode(false)
-                .HasColumnName("sol_cot_unidad");
-
-            entity.HasOne(d => d.SolCotIdCabeceraNavigation).WithMany(p => p.SolCotizacions)
-                .HasForeignKey(d => d.SolCotIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_cotizacion_cab_sol_cotizacion");
-
-            entity.HasOne(d => d.SolCotItemNavigation).WithMany(p => p.SolCotizacions)
-                .HasForeignKey(d => d.SolCotItem)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_cotizacion_item");
-        });
-
-        modelBuilder.Entity<SolOrdenCompra>(entity =>
-        {
-            entity.HasKey(e => e.SolOrdIdSolicitud);
-
-            entity.ToTable("sol_orden_compra");
-
-            entity.Property(e => e.SolOrdIdSolicitud)
-                .ValueGeneratedNever()
-                .HasColumnName("sol_ord_id_solicitud");
-            entity.Property(e => e.AudEvento)
-                .HasMaxLength(50)
-                .HasColumnName("aud_evento");
-            entity.Property(e => e.AudFecha)
-                .HasColumnType("date")
-                .HasColumnName("aud_fecha");
-            entity.Property(e => e.AudObservacion)
-                .HasMaxLength(250)
-                .HasColumnName("aud_observacion");
-            entity.Property(e => e.AudUsuario)
-                .HasMaxLength(50)
-                .HasColumnName("aud_usuario");
-            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
-            entity.Property(e => e.SolOrdAdjCotizacion)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_adj_cotizacion");
-            entity.Property(e => e.SolOrdCantidad).HasColumnName("sol_ord_cantidad");
-            entity.Property(e => e.SolOrdDescripcion)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_descripcion");
-            entity.Property(e => e.SolOrdEstado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_estado");
-            entity.Property(e => e.SolOrdIdCabecera).HasColumnName("sol_ord_id_cabecera");
-            entity.Property(e => e.SolOrdInspector)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_inspector");
-            entity.Property(e => e.SolOrdItem).HasColumnName("sol_ord_item");
-            entity.Property(e => e.SolOrdPresupuesto)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_presupuesto");
-            entity.Property(e => e.SolOrdProcedimiento)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_procedimiento");
-            entity.Property(e => e.SolOrdTelefono)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_telefono");
-            entity.Property(e => e.SolOrdUnidad)
-                .HasMaxLength(5)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_unidad");
-
-            entity.HasOne(d => d.SolOrdIdCabeceraNavigation).WithMany(p => p.SolOrdenCompras)
-                .HasForeignKey(d => d.SolOrdIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_orden_compra_cab_sol_orden_compra");
-
-            entity.HasOne(d => d.SolOrdItemNavigation).WithMany(p => p.SolOrdenCompras)
-                .HasForeignKey(d => d.SolOrdItem)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_orden_compra_item");
-        });
-
-        modelBuilder.Entity<SolPago>(entity =>
-        {
-            entity.HasKey(e => e.SolPagoIdSolicitud);
-
-            entity.ToTable("sol_pago");
-
-            entity.Property(e => e.SolPagoIdSolicitud)
-                .ValueGeneratedNever()
-                .HasColumnName("sol_pago_id_solicitud");
-            entity.Property(e => e.AudEvento)
-                .HasMaxLength(50)
-                .HasColumnName("aud_evento");
-            entity.Property(e => e.AudFecha)
-                .HasColumnType("date")
-                .HasColumnName("aud_fecha");
-            entity.Property(e => e.AudObservacion)
-                .HasMaxLength(250)
-                .HasColumnName("aud_observacion");
-            entity.Property(e => e.AudUsuario)
-                .HasMaxLength(50)
-                .HasColumnName("aud_usuario");
-            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
-            entity.Property(e => e.SolPagoAbono)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_abono");
-            entity.Property(e => e.SolPagoAplMulta)
-                .HasMaxLength(500)
-                .HasColumnName("sol_pago_apl_multa");
-            entity.Property(e => e.SolPagoCantContratada).HasColumnName("sol_pago_cant_contratada");
-            entity.Property(e => e.SolPagoCantRecibida).HasColumnName("sol_pago_cant_recibida");
-            entity.Property(e => e.SolPagoCerrarOrden)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_cerrar_orden");
-            entity.Property(e => e.SolPagoEstado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_estado");
-            entity.Property(e => e.SolPagoIdCabecera).HasColumnName("sol_pago_id_cabecera");
-            entity.Property(e => e.SolPagoItem)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_item");
-            entity.Property(e => e.SolPagoObservaciones)
-                .HasMaxLength(500)
-                .HasColumnName("sol_pago_observaciones");
-            entity.Property(e => e.SolPagoPagoTotal).HasColumnName("sol_pago_pago_total");
-            entity.Property(e => e.SolPagoReceptor)
-                .HasMaxLength(100)
-                .HasColumnName("sol_pago_receptor");
-            entity.Property(e => e.SolPagoSubtotal).HasColumnName("sol_pago_subtotal");
-            entity.Property(e => e.SolPagoTotal).HasColumnName("sol_pago_total");
-            entity.Property(e => e.SolPagoValDescontar).HasColumnName("sol_pago_val_descontar");
-            entity.Property(e => e.SolPagoValUnitario).HasColumnName("sol_pago_val_unitario");
-
-            entity.HasOne(d => d.SolPagoIdCabeceraNavigation).WithMany(p => p.SolPagos)
-                .HasForeignKey(d => d.SolPagoIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_pago_cab_sol_pago");
-        });
+        
 
         modelBuilder.Entity<TipoIdentificacion>(entity =>
         {

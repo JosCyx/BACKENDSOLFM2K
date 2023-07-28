@@ -39,7 +39,5 @@ public partial class SolOrdenCompra
 
     public int AudVeces { get; set; }
 
-    public virtual CabSolOrdenCompra SolOrdIdCabeceraNavigation { get; set; } = null!;
-
-    public virtual Item SolOrdItemNavigation { get; set; } = null!;
+    //public virtual CabSolOrdenCompra SolOrdIdCabeceraNavigation { get; set; } = null!;
 }

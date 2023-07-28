@@ -31,6 +31,24 @@ namespace SOLFM2K.Controllers
             return await _context.NivelesRuteos.ToListAsync();
         }
 
+        //retorna los niveles segun el estado indicado en el parametro
+        [HttpGet("GetNivelByEstado")]
+        public async Task<ActionResult<IEnumerable<NivelesRuteo>>> getNivelByEstado(char estadoRuteo)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var nivelesRuteo = await _context.NivelesRuteos.FromSqlRaw("EXEC sp_getNivelByEstado @p0", estadoRuteo).ToListAsync();
+
+            if (nivelesRuteo == null || nivelesRuteo.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return nivelesRuteo;
+        }
+        //METODOS PARA EXECUTAR PROCEDIMIENTOS ALMACENADOS
+        //_context.Database.ExecuteSqlRawAsync ejecuta un sp en la base que no retorna valores, se usa en inserciones, actualizaciones, etc
+        //_context.NivelesRuteos.FromSqlRaw, ejecuta un sp que si devuelve datos y los mapea en el modelo indicado antes del nombre del metodo
+
         // GET: api/NivelesRuteos/5
         [HttpGet("{CodRuteo}")]
         public async Task<ActionResult<NivelesRuteo>> GetNivelesRuteo(int CodRuteo)
