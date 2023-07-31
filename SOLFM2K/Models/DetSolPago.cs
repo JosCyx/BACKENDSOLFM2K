@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SOLFM2K.Models;
 
-public partial class SolPago
+public partial class DetSolPago
 {
     public int SolPagoIdSolicitud { get; set; }
 
@@ -47,5 +47,5 @@ public partial class SolPago
 
     public int AudVeces { get; set; }
 
-    public virtual CabSolPago SolPagoIdCabeceraNavigation { get; set; } = null!;
+    //public virtual CabSolPago SolPagoIdCabeceraNavigation { get; set; } = null!;
 }

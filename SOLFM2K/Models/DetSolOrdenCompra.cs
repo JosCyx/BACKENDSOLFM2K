@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SOLFM2K.Models;
 
-public partial class SolOrdenCompra
+public partial class DetSolOrdenCompra
 {
     public int SolOrdIdSolicitud { get; set; }
 

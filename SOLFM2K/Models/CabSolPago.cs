@@ -21,9 +21,9 @@ public partial class CabSolPago
 
     public int CabPagoSolicitante { get; set; }
 
-    public virtual TipoSolic CabPagoIdCabeceraNavigation { get; set; } = null!;
+    //public virtual TipoSolic CabPagoIdCabeceraNavigation { get; set; } = null!;
 
-    public virtual Proveedor CabPagoProveedorNavigation { get; set; } = null!;
+    //public virtual Proveedor CabPagoProveedorNavigation { get; set; } = null!;
 
-    public virtual ICollection<SolPago> SolPagos { get; set; } = new List<SolPago>();
+    //public virtual ICollection<SolPago> SolPagos { get; set; } = new List<SolPago>();
 }

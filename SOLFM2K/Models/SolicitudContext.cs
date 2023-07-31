@@ -29,9 +29,9 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<DetSolCotizacion> DetSolCotizacions { get; set; }
 
-    public virtual DbSet<SolOrdenCompra> SolOrdenCompras { get; set; }//editar
+    public virtual DbSet<DetSolOrdenCompra> SolOrdenCompras { get; set; }
 
-    public virtual DbSet<SolPago> SolPagos { get; set; }//editar
+    public virtual DbSet<DetSolPago> SolPagos { get; set; }
 
     public virtual DbSet<Documento> Documentos { get; set; }
 
@@ -42,6 +42,8 @@ public partial class SolicitudContext : DbContext
     public virtual DbSet<Empresa> Empresas { get; set; }
 
     public virtual DbSet<Funcione> Funciones { get; set; }
+
+    public virtual DbSet<ItemSector> ItemSectores { get; set; }   
 
     public virtual DbSet<NivelesRuteo> NivelesRuteos { get; set; }
 
@@ -60,6 +62,8 @@ public partial class SolicitudContext : DbContext
     public virtual DbSet<Sector> Sectors { get; set; }
 
     public virtual DbSet<Sectore> Sectores { get; set; }
+
+    public virtual DbSet<SolTracking> SolTrackings { get; set; }
 
     public virtual DbSet<TipoIdentificacion> TipoIdentificacions { get; set; }
 
@@ -99,6 +103,7 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<Area>(entity =>
         {
+            entity.HasKey(e => e.AreaId).HasName("PK_area");
             entity.ToTable("area");
 
             entity.Property(e => e.AreaId).HasColumnName("area_id");
@@ -199,10 +204,10 @@ public partial class SolicitudContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_orden_compra_tipo_solic");*/
 
-            entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
+            /*entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
                 .HasForeignKey(d => d.CabOrdcProveedor)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_orden_compra_proveedor");
+                .HasConstraintName("FK_cab_sol_orden_compra_proveedor");*/
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -237,10 +242,10 @@ public partial class SolicitudContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_pago_tipo_solic");*/
 
-            entity.HasOne(d => d.CabPagoProveedorNavigation).WithMany(p => p.CabSolPagos)
+            /*entity.HasOne(d => d.CabPagoProveedorNavigation).WithMany(p => p.CabSolPagos)
                 .HasForeignKey(d => d.CabPagoProveedor)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_pago_proveedor");
+                .HasConstraintName("FK_cab_sol_pago_proveedor");*/
         });
 
         modelBuilder.Entity<Departamento>(entity =>
@@ -332,7 +337,7 @@ public partial class SolicitudContext : DbContext
         });
 
         //editar a detsolordcompra
-        modelBuilder.Entity<SolOrdenCompra>(entity =>
+        modelBuilder.Entity<DetSolOrdenCompra>(entity =>
         {
             entity.HasKey(e => e.SolOrdIdSolicitud);
 
@@ -402,7 +407,7 @@ public partial class SolicitudContext : DbContext
         });
 
         //editar a detsolpago
-        modelBuilder.Entity<SolPago>(entity =>
+        modelBuilder.Entity<DetSolPago>(entity =>
         {
             entity.HasKey(e => e.SolPagoIdSolicitud);
 
@@ -458,10 +463,10 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.SolPagoValDescontar).HasColumnName("sol_pago_val_descontar");
             entity.Property(e => e.SolPagoValUnitario).HasColumnName("sol_pago_val_unitario");
 
-            entity.HasOne(d => d.SolPagoIdCabeceraNavigation).WithMany(p => p.SolPagos)
+            /*entity.HasOne(d => d.SolPagoIdCabeceraNavigation).WithMany(p => p.DetSolPagos)
                 .HasForeignKey(d => d.SolPagoIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_pago_cab_sol_pago");
+                .HasConstraintName("FK_sol_pago_cab_sol_pago");*/
         });
 
         modelBuilder.Entity<Documento>(entity =>
@@ -752,6 +757,27 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.FuTransaccion).HasColumnName("fu_transaccion");
         });
 
+        modelBuilder.Entity<ItemSector>(entity =>
+        {
+
+            entity.HasKey(e => e.ItmIdItem).HasName("PK_item_sector");
+
+            entity.ToTable("item_sector");
+
+            entity.Property(e => e.ItmTipoSol).HasColumnName("itm_sect_tipo_solicitud");
+
+            entity.Property(e => e.ItmNumSol).HasColumnName("itm_sect_no_solicitud");
+
+            entity.Property(e => e.ItmIdDetalle).HasColumnName("itm_sect_id_detalle");
+
+            entity.Property(e => e.ItmIdItem).HasColumnName("itm_sect_id_item");
+
+            entity.Property(e => e.ItmCantidad).HasColumnName("itm_sect_cantidad");
+
+            entity.Property(e => e.ItmSector).HasColumnName("itm_sect_sector");
+
+        });
+
         modelBuilder.Entity<NivelesRuteo>(entity =>
         {
             entity.HasKey(e => e.CodRuteo).HasName("PK_niveles_ruteo");
@@ -912,9 +938,26 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("sec_estado");
         });
 
-        
 
-        
+        modelBuilder.Entity<SolTracking>(entity =>
+        {
+
+            entity.HasKey(e => e.SolTrId).HasName("PK_sol_tracking");
+
+            entity.ToTable("sol_tracking");
+
+            entity.Property(e => e.SolTrId).HasColumnName("sol_trck_id");
+
+            entity.Property(e => e.SolTrTipoSol).HasColumnName("sol_trck_tipo_solicitud");
+
+            entity.Property(e => e.SolTrNumSol).HasColumnName("sol_trck_no_solicitud");
+
+            entity.Property(e => e.SolTrNivel).HasColumnName("sol_trck_nivel");
+
+            entity.Property(e => e.SolTrIdEmisor).HasColumnName("sol_trck_id_nomina_emisor");
+
+        });
+
 
         modelBuilder.Entity<TipoIdentificacion>(entity =>
         {
