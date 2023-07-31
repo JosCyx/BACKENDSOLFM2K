@@ -59,9 +59,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<RuteoArea> RuteoAreas { get; set; }
 
-    public virtual DbSet<Sector> Sectors { get; set; }
-
-    public virtual DbSet<Sectore> Sectores { get; set; }
+    //public virtual DbSet<Sector> Sectores { get; set; }
 
     public virtual DbSet<SolTracking> SolTrackings { get; set; }
 
@@ -904,6 +902,7 @@ public partial class SolicitudContext : DbContext
             
         });
 
+        /*
         modelBuilder.Entity<Sector>(entity =>
         {
             entity.HasKey(e => e.SectId);
@@ -917,26 +916,7 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.SectNombre)
                 .HasMaxLength(100)
                 .HasColumnName("sect_nombre");
-        });
-
-        modelBuilder.Entity<Sectore>(entity =>
-        {
-            entity.HasKey(e => e.SecId);
-
-            entity.ToTable("sectores");
-
-            entity.Property(e => e.SecId)
-                .ValueGeneratedNever()
-                .HasColumnName("sec_id");
-            entity.Property(e => e.SecDescripcion)
-                .HasMaxLength(50)
-                .HasColumnName("sec_descripcion");
-            entity.Property(e => e.SecEstado)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("sec_estado");
-        });
+        });*/
 
 
         modelBuilder.Entity<SolTracking>(entity =>
