@@ -58,8 +58,8 @@ public partial class SolicitudContext : DbContext
     public virtual DbSet<Ruteo> Ruteos { get; set; }
 
     public virtual DbSet<RuteoArea> RuteoAreas { get; set; }
-
-    //public virtual DbSet<Sector> Sectores { get; set; }
+    
+    public virtual DbSet<Sector> Sectores { get; set; }
 
     public virtual DbSet<SolTracking> SolTrackings { get; set; }
 
@@ -895,28 +895,34 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("ruteo_area");
             entity.HasKey(e => e.RutareaId);
 
-            entity.Property(e => e.RutareaId).HasColumnName("rutar_id");
-            entity.Property(e => e.RutareaTipoSol).HasColumnName("rutar_tipo_sol");
-            entity.Property(e => e.RutareaArea).HasColumnName("rutar_area");
-            entity.Property(e => e.RutareaNivel).HasColumnName("rutar_nivel");
+            entity.Property(e => e.RutareaId)
+                .HasColumnName("rutar_id");
+            entity.Property(e => e.RutareaTipoSol)
+                .HasColumnName("rutar_tipo_sol");
+            entity.Property(e => e.RutareaArea)
+                .HasColumnName("rutar_area");
+            entity.Property(e => e.RutareaNivel)
+                .HasColumnName("rutar_nivel");
             
         });
 
-        /*
+        
         modelBuilder.Entity<Sector>(entity =>
         {
             entity.HasKey(e => e.SectId);
 
             entity.ToTable("sector");
 
-            entity.Property(e => e.SectId).HasColumnName("sect_id");
-            entity.Property(e => e.SectDescripcion)
+            entity.Property(e => e.SectId)
+                .HasColumnName("sect_id");
+
+            /*entity.Property(e => e.SectDescripcion)
                 .HasMaxLength(500)
                 .HasColumnName("sect_descripcion");
             entity.Property(e => e.SectNombre)
                 .HasMaxLength(100)
-                .HasColumnName("sect_nombre");
-        });*/
+                .HasColumnName("sect_nombre");*/
+        });
 
 
         modelBuilder.Entity<SolTracking>(entity =>
@@ -926,16 +932,20 @@ public partial class SolicitudContext : DbContext
 
             entity.ToTable("sol_tracking");
 
-            entity.Property(e => e.SolTrId).HasColumnName("sol_trck_id");
+            entity.Property(e => e.SolTrId)
+                .HasColumnName("sol_trck_id");
 
-            entity.Property(e => e.SolTrTipoSol).HasColumnName("sol_trck_tipo_solicitud");
+            entity.Property(e => e.SolTrTipoSol)
+                .HasColumnName("sol_trck_tipo_solicitud");
 
-            entity.Property(e => e.SolTrNumSol).HasColumnName("sol_trck_no_solicitud");
+            entity.Property(e => e.SolTrNumSol)
+                .HasColumnName("sol_trck_no_solicitud");
 
-            entity.Property(e => e.SolTrNivel).HasColumnName("sol_trck_nivel");
+            entity.Property(e => e.SolTrNivel)
+                .HasColumnName("sol_trck_nivel");
 
-            entity.Property(e => e.SolTrIdEmisor).HasColumnName("sol_trck_id_nomina_emisor");
-
+            entity.Property(e => e.SolTrIdEmisor)
+                .HasColumnName("sol_trck_id_nomina_emisor");
         });
 
 
