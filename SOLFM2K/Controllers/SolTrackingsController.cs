@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 
@@ -30,6 +32,26 @@ namespace SOLFM2K.Controllers
           }
             return await _context.SolTrackings.ToListAsync();
         }
+
+        [HttpGet("GetLastSol")]
+        public async Task<ActionResult<IEnumerable<SolTracking>>> GetLastSolicitud(int tipoSol)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.SolTrackings.FromSqlRaw("EXEC sp_GetLastTrackingValue @p0", tipoSol).ToListAsync();
+            
+            if (result.Count == 0)
+            {
+                return Ok(0);
+            }
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
+
+
 
         // GET: api/SolTrackings/5
         [HttpGet("{id}")]

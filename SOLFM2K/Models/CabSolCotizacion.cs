@@ -29,6 +29,15 @@ public partial class CabSolCotizacion
 
     public int CabSolCotEstadoTracking { get; set; }
 
+
+    public DateTime CabSolCotPlazoEntrega { get; set; }
+
+    public DateTime CabSolCotFechaMaxentrega { get; set; }
+
+    public int CabSolCotInspector { get; set; } 
+
+    public string CabSolCotTelefInspector { get; set; } = null!;
+
     //public virtual TipoSolic CabSolCotIdCabeceraNavigation { get; set; } = null!;
 
     //public virtual ICollection<SolCotizacion> SolCotizacions { get; set; } = new List<SolCotizacion>();

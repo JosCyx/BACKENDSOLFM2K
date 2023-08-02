@@ -165,6 +165,21 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabSolCotEstadoTracking)
                 .HasColumnName("cab_sol_cot_estado_track");
 
+            entity.Property(e => e.CabSolCotPlazoEntrega)
+                .HasColumnType("date")
+                .HasColumnName("cab_sol_cot_plazo_entrega");
+
+            entity.Property(e => e.CabSolCotFechaMaxentrega)
+                .HasColumnType("date")
+                .HasColumnName("cab_sol_cot_fechamax_entrega");
+
+            entity.Property(e => e.CabSolCotInspector)
+                .HasColumnName("cab_sol_cot_inspector");
+
+            entity.Property(e => e.CabSolCotTelefInspector)
+                .HasMaxLength(15)
+                .HasColumnName("cab_sol_cot_telef_inspector");
+
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -202,11 +217,11 @@ public partial class SolicitudContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_cab_sol_orden_compra_tipo_solic");*/
 
-            /*entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
-                .HasForeignKey(d => d.CabOrdcProveedor)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_orden_compra_proveedor");*/
-        });
+        /*entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
+            .HasForeignKey(d => d.CabOrdcProveedor)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_cab_sol_orden_compra_proveedor");*/
+    });
 
         modelBuilder.Entity<CabSolPago>(entity =>
         {
@@ -282,8 +297,8 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.SolCotIdDetalle)
                 .HasColumnName("sol_cot_id_detalle");
 
-            entity.Property(e => e.SolCotItem)
-                .HasColumnName("sol_cot_item");
+            /*entity.Property(e => e.SolCotItem)
+                .HasColumnName("sol_cot_item");*/
 
             entity.Property(e => e.SolCotDescripcion)
                 .HasMaxLength(500)
