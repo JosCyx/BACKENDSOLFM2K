@@ -33,6 +33,7 @@ namespace SOLFM2K.Controllers
             return await _context.SolTrackings.ToListAsync();
         }
 
+        //obtiene el ultimo numero de solicitud registrada segun el tipo de solicitud ingresado
         [HttpGet("GetLastSol")]
         public async Task<ActionResult<IEnumerable<SolTracking>>> GetLastSolicitud(int tipoSol)
         {

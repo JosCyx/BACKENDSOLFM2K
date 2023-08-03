@@ -49,6 +49,23 @@ namespace SOLFM2K.Controllers
             return empleado;
         }
 
+
+        
+        [HttpGet("GetEmpleadobyArea")]
+        public async Task<ActionResult<IEnumerable<Empleado>>> getEmpleadobyArea(int area)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var empleadoOP = await _context.Empleados.FromSqlRaw("EXEC sp_getEmpleadobyarea @p0", area).ToListAsync();
+
+            if (empleadoOP == null || empleadoOP.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return empleadoOP;
+        }
+
+
         // PUT: api/Empleadoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{EmpleadoId}")]

@@ -159,7 +159,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_sol_cot_num_cotizaciones");
 
             entity.Property(e => e.CabSolCotEstado)
-                .HasMaxLength(50)
+                .HasMaxLength(5)
                 .HasColumnName("cab_sol_cot_estado");
 
             entity.Property(e => e.CabSolCotEstadoTracking)
