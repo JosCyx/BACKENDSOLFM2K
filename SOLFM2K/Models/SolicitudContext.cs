@@ -119,9 +119,12 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<CabSolCotizacion>(entity =>
         {
-            entity.HasKey(e => e.CabSolCotNoSolicitud);
+            entity.HasKey(e => e.CabSolCotID);
 
             entity.ToTable("cab_sol_cotizacion");
+
+            entity.Property(e => e.CabSolCotID)
+                .HasColumnName("cab_sol_cot_ID");
 
             entity.Property(e => e.CabSolCotTipoSolicitud)
                 .HasColumnName("cab_sol_cot_tipo_solicitud");
@@ -311,11 +314,6 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.SolCotCantidadTotal)
                 .HasColumnName("sol_cot_cantidad_total");
-
-            entity.Property(e => e.SolCotEstado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sol_cot_estado");
 
             entity.Property(e => e.AudEvento)
                 .HasMaxLength(50)

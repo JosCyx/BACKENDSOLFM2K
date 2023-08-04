@@ -5,6 +5,9 @@ namespace SOLFM2K.Models;
 
 public partial class CabSolCotizacion
 {
+
+    public int CabSolCotID { get; set; }
+
     public int CabSolCotTipoSolicitud { get; set; }
 
     public int CabSolCotArea { get; set; }
@@ -17,13 +20,13 @@ public partial class CabSolCotizacion
 
     public string CabSolCotAsunto { get; set; } = null!;
 
-    public string CabSolCotProcedimiento { get; set; } = null!;
+    public string? CabSolCotProcedimiento { get; set; } = null!;
 
-    public string CabSolCotObervaciones { get; set; } = null!;
+    public string? CabSolCotObervaciones { get; set; } = null!;
 
-    public string CabSolCotAdjCot { get; set; } = null!;
+    public string? CabSolCotAdjCot { get; set; } = null!;
 
-    public int CabSolCotNumCotizacion { get; set; }
+    public int? CabSolCotNumCotizacion { get; set; }
 
     public string CabSolCotEstado { get; set; } = null!;
 
@@ -34,9 +37,9 @@ public partial class CabSolCotizacion
 
     public DateTime CabSolCotFechaMaxentrega { get; set; }
 
-    public int CabSolCotInspector { get; set; } 
+    public int? CabSolCotInspector { get; set; } 
 
-    public string CabSolCotTelefInspector { get; set; } = null!;
+    public string? CabSolCotTelefInspector { get; set; } = null!;
 
     //public virtual TipoSolic CabSolCotIdCabeceraNavigation { get; set; } = null!;
 

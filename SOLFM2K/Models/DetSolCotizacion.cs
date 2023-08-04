@@ -17,8 +17,6 @@ public partial class DetSolCotizacion
 
     public int SolCotCantidadTotal { get; set; }
 
-    public string? SolCotEstado { get; set; }
-
     public string AudEvento { get; set; } = null!;
 
     public DateTime AudFecha { get; set; }

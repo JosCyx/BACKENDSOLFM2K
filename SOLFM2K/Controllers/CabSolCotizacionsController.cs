@@ -49,6 +49,20 @@ namespace SOLFM2K.Controllers
             return cabSolCotizacion;
         }
 
+        [HttpGet("GetCabecerabyID")]
+        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyID(int tipoSol, int noSol)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.CabSolCotizacions.FromSqlRaw("EXEC sp_GetIdSolicitud @p0, @p1", tipoSol, noSol).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
+
         // PUT: api/CabSolCotizacions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
