@@ -5,6 +5,8 @@ namespace SOLFM2K.Models;
 
 public partial class ItemSector
 {
+    public int ItmID { get; set; }
+
     public int ItmTipoSol { get; set; }
 
     public int ItmNumSol { get; set; }

@@ -50,10 +50,10 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpGet("GetLastDetalleCot")]
-        public async Task<ActionResult<IEnumerable<DetSolCotizacion>>> GetLastDetalleCot(int id)
+        public async Task<ActionResult<IEnumerable<DetSolCotizacion>>> GetLastDetalleCot(int tipoSol, int noSol)
         {
             // Llamada al procedimiento almacenado mediante Entity Framework Core
-            var result = await _context.DetSolCotizacions.FromSqlRaw("EXEC sp_GetLastDetallebyCotId @p0", id).ToListAsync();
+            var result = await _context.DetSolCotizacions.FromSqlRaw("EXEC sp_GetLastDetallebyCotId @p0, @p1", tipoSol, noSol).ToListAsync();
 
             if (result.Count == 0)
             {

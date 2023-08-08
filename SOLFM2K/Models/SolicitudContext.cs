@@ -115,6 +115,10 @@ public partial class SolicitudContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("area_estado");
             entity.Property(e => e.AreaIdNomina).HasColumnName("area_id_nomina");
+            entity.Property(e => e.AreaNemonico)
+                .HasMaxLength(10)
+                .IsFixedLength()
+                .HasColumnName("area_nemonico");
         });
 
         modelBuilder.Entity<CabSolCotizacion>(entity =>
@@ -290,18 +294,21 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<DetSolCotizacion>(entity =>
         {
-            entity.HasKey(e => e.SolCotIdDetalle);
+            entity.HasKey(e => e.SolCotID);
 
             entity.ToTable("det_sol_cotizacion");
 
-            entity.Property(e => e.SolCotIdCabecera)
-                .HasColumnName("sol_cot_id_cabecera");
+            entity.Property(e => e.SolCotID)
+                .HasColumnName("sol_cot_ID");
+
+            entity.Property(e => e.SolCotTipoSol)
+                .HasColumnName("sol_cot_id_tipo_sol");
+
+            entity.Property(e => e.SolCotNoSol)
+                .HasColumnName("sol_cot_id_no_sol");
 
             entity.Property(e => e.SolCotIdDetalle)
                 .HasColumnName("sol_cot_id_detalle");
-
-            /*entity.Property(e => e.SolCotItem)
-                .HasColumnName("sol_cot_item");*/
 
             entity.Property(e => e.SolCotDescripcion)
                 .HasMaxLength(500)
@@ -771,9 +778,10 @@ public partial class SolicitudContext : DbContext
         modelBuilder.Entity<ItemSector>(entity =>
         {
 
-            entity.HasKey(e => e.ItmIdItem).HasName("PK_item_sector");
+            entity.HasKey(e => e.ItmID).HasName("PK_item_sector");
 
             entity.ToTable("item_sector");
+            entity.Property(e => e.ItmID).HasColumnName("itm_sect_ID");
 
             entity.Property(e => e.ItmTipoSol).HasColumnName("itm_sect_tipo_solicitud");
 

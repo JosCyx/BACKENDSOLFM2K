@@ -5,7 +5,12 @@ namespace SOLFM2K.Models;
 
 public partial class DetSolCotizacion
 {
-    public int SolCotIdCabecera { get; set; }
+
+    public int SolCotID { get; set; }
+
+    public int SolCotTipoSol { get; set; }
+
+    public int SolCotNoSol { get; set; }
 
     public int SolCotIdDetalle { get; set; }
 
@@ -17,15 +22,15 @@ public partial class DetSolCotizacion
 
     public int SolCotCantidadTotal { get; set; }
 
-    public string AudEvento { get; set; } = null!;
+    public string? AudEvento { get; set; } = null!;
 
-    public DateTime AudFecha { get; set; }
+    public DateTime? AudFecha { get; set; }
 
-    public string AudUsuario { get; set; } = null!;
+    public string? AudUsuario { get; set; } = null!;
 
-    public string AudObservacion { get; set; } = null!;
+    public string? AudObservacion { get; set; } = null!;
 
-    public int AudVeces { get; set; }
+    public int? AudVeces { get; set; }
 
     //public virtual CabSolCotizacion SolCotIdCabeceraNavigation { get; set; } = null!;
 

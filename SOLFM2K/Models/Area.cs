@@ -13,5 +13,7 @@ public partial class Area
 
     public string AreaEstado { get; set; } = null!;
 
+    public string AreaNemonico { get; set; } = null!;
+
     //public virtual ICollection<Departamento> Departamentos { get; set; } = new List<Departamento>();
 }
