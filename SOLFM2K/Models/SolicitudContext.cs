@@ -116,7 +116,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("area_estado");
             entity.Property(e => e.AreaIdNomina).HasColumnName("area_id_nomina");
             entity.Property(e => e.AreaNemonico)
-                .HasMaxLength(10)
+                .HasMaxLength(4)
                 .IsFixedLength()
                 .HasColumnName("area_nemonico");
         });
@@ -126,6 +126,10 @@ public partial class SolicitudContext : DbContext
             entity.HasKey(e => e.CabSolCotID);
 
             entity.ToTable("cab_sol_cotizacion");
+
+            entity.Property(e => e.CabSolCotNumerico)
+                .HasMaxLength(50)
+                .HasColumnName("cab_sol_cot_numerico");
 
             entity.Property(e => e.CabSolCotID)
                 .HasColumnName("cab_sol_cot_ID");

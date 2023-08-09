@@ -8,6 +8,8 @@ public partial class CabSolCotizacion
 
     public int CabSolCotID { get; set; }
 
+    public string CabSolCotNumerico { get; set; }
+
     public int CabSolCotTipoSolicitud { get; set; }
 
     public int CabSolCotArea { get; set; }
