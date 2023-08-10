@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
+using System.Text.Json;
+using Microsoft.OpenApi.Any;
 
 namespace SOLFM2K.Controllers
 {
@@ -44,6 +46,35 @@ namespace SOLFM2K.Controllers
 
             return cabSolCotizaciones;
         }
+
+        [HttpGet("GetSolicitudByID")]
+
+        public async Task<ActionResult<IEnumerable<SolicitudTemplate>>> getSolicitudByID(int ID)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var solicitud = await _context.SolicitudTemplates.FromSqlRaw("EXEC sp_GetSolicitud @p0", ID).ToListAsync();
+
+            if (solicitud == null || solicitud.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(JsonSerializer.Serialize(solicitud));
+        }
+
+
+        /*public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> getSolicitudByTipoSol(int ID)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var solicitud = await _context.CabSolCotizacions.FromSqlRaw("EXEC sp_GetSolicitud @p0", ID).ToListAsync();
+
+            if (solicitud == null || solicitud.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return solicitud;
+        }*/
 
         /*[HttpGet("{id}")]
         public async Task<ActionResult<CabSolCotizacion>> GetCabSolCotizacion(int id)

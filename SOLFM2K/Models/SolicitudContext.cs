@@ -63,19 +63,25 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<SolTracking> SolTrackings { get; set; }
 
-    public virtual DbSet<TipoIdentificacion> TipoIdentificacions { get; set; }
-
     public virtual DbSet<TipoSolic> TipoSolics { get; set; }
 
     public virtual DbSet<Transaccione> Transacciones { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
+    public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<SolicitudTemplate>(entity =>
+        {
+            entity.HasNoKey().ToTable("tipo_identificacion");
+
+
+        });
         modelBuilder.Entity<Aplicacione>(entity =>
         {
             entity.HasKey(e => e.ApCodigo);
@@ -328,22 +334,22 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.AudEvento)
                 .HasMaxLength(50)
-                .HasColumnName("aud_evento");
+                .HasColumnName("sol_cot_aud_evento");
 
             entity.Property(e => e.AudFecha)
                 .HasColumnType("date")
-                .HasColumnName("aud_fecha");
+                .HasColumnName("sol_cot_aud_fecha");
 
             entity.Property(e => e.AudObservacion)
                 .HasMaxLength(250)
-                .HasColumnName("aud_observacion");
+                .HasColumnName("sol_cot_aud_observacion");
 
             entity.Property(e => e.AudUsuario)
                 .HasMaxLength(50)
-                .HasColumnName("aud_usuario");
+                .HasColumnName("sol_cot_aud_usuario");
 
             entity.Property(e => e.AudVeces)
-                .HasColumnName("aud_veces");
+                .HasColumnName("sol_cot_aud_veces");
             
        
 
@@ -973,23 +979,6 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("sol_trck_id_nomina_emisor");
         });
 
-
-        modelBuilder.Entity<TipoIdentificacion>(entity =>
-        {
-            entity.HasKey(e => e.TipoDocId);
-
-            entity.ToTable("tipo_identificacion");
-
-            entity.Property(e => e.TipoDocId).HasColumnName("tipo_doc_id");
-            entity.Property(e => e.TipoDocInicial)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("tipo_doc_inicial");
-            entity.Property(e => e.TipoDocNombre)
-                .HasMaxLength(50)
-                .HasColumnName("tipo_doc_nombre");
-        });
 
         modelBuilder.Entity<TipoSolic>(entity =>
         {

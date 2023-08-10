@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace SOLFM2K.Models;
@@ -6,7 +7,7 @@ namespace SOLFM2K.Models;
 public partial class Area
 {
     public int AreaId { get; set; }
-
+    
     public int AreaIdNomina { get; set; }
 
     public string AreaDecp { get; set; } = null!;
