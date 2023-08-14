@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 using System.Text.Json;
 using Microsoft.OpenApi.Any;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace SOLFM2K.Controllers
 {
@@ -48,64 +50,58 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpGet("GetSolicitudByID")]
-
-        public async Task<ActionResult<IEnumerable<SolicitudTemplate>>> getSolicitudByID(int ID)
+        public async Task<ActionResult<SolicitudTemplate>> getSolicitudByID(int ID)
         {
-            // Llamada al procedimiento almacenado mediante Entity Framework Core
-            var solicitud = await _context.SolicitudTemplates.FromSqlRaw("EXEC sp_GetSolicitud @p0", ID).ToListAsync();
+            // Obtener la cabecera de la solicitud
+            var cabecera = await _context.CabSolCotizacions
+                .FirstOrDefaultAsync(c => c.CabSolCotID == ID);
 
-            if (solicitud == null || solicitud.Count == 0)
+            if (cabecera == null)
             {
                 return NotFound();
             }
 
-            return Ok(JsonSerializer.Serialize(solicitud));
+            // Obtener detalles e items de la solicitud
+            var detalles = await _context.DetSolCotizacions
+                .Where(d => d.SolCotTipoSol == cabecera.CabSolCotTipoSolicitud && d.SolCotNoSol== cabecera.CabSolCotNoSolicitud)
+                .ToListAsync();
+
+            var solicitudCompleta = new SolicitudTemplate
+            {
+                Cabecera = cabecera,
+                Detalles = detalles
+            };
+
+            solicitudCompleta.Items = new List<ItemSector>();
+
+            foreach (var detalle in detalles)
+            {
+                var itemsDetalle = await _context.ItemSectores
+                    .Where(i => i.ItmTipoSol == cabecera.CabSolCotTipoSolicitud &&
+                                i.ItmNumSol == cabecera.CabSolCotNoSolicitud &&
+                                i.ItmIdDetalle == detalle.SolCotIdDetalle)
+                    .ToListAsync();
+
+                solicitudCompleta.Items.AddRange(itemsDetalle);
+            }
+
+            return solicitudCompleta;
         }
 
 
-        /*public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> getSolicitudByTipoSol(int ID)
-        {
-            // Llamada al procedimiento almacenado mediante Entity Framework Core
-            var solicitud = await _context.CabSolCotizacions.FromSqlRaw("EXEC sp_GetSolicitud @p0", ID).ToListAsync();
+        //[HttpGet("GetCabecerabyID")]
+        //public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyID(int tipoSol, int noSol)
+        //{
+        //    // Llamada al procedimiento almacenado mediante Entity Framework Core
+        //    var result = await _context.CabSolCotizacions.FromSqlRaw("EXEC sp_GetIdSolicitud @p0, @p1", tipoSol, noSol).ToListAsync();
 
-            if (solicitud == null || solicitud.Count == 0)
-            {
-                return NotFound();
-            }
+        //    if (result == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return solicitud;
-        }*/
-
-        /*[HttpGet("{id}")]
-        public async Task<ActionResult<CabSolCotizacion>> GetCabSolCotizacion(int id)
-        {
-          if (_context.CabSolCotizacions == null)
-          {
-              return NotFound();
-          }
-            var cabSolCotizacion = await _context.CabSolCotizacions.FindAsync(id);
-
-            if (cabSolCotizacion == null)
-            {
-                return NotFound();
-            }
-
-            return cabSolCotizacion;
-        }*/
-
-        [HttpGet("GetCabecerabyID")]
-        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyID(int tipoSol, int noSol)
-        {
-            // Llamada al procedimiento almacenado mediante Entity Framework Core
-            var result = await _context.CabSolCotizacions.FromSqlRaw("EXEC sp_GetIdSolicitud @p0, @p1", tipoSol, noSol).ToListAsync();
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            return result;
-        }
+        //    return result;
+        //}
 
         // PUT: api/CabSolCotizacions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

@@ -69,19 +69,14 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
+    //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<SolicitudTemplate>(entity =>
-        {
-            entity.HasNoKey().ToTable("tipo_identificacion");
-
-
-        });
+        
         modelBuilder.Entity<Aplicacione>(entity =>
         {
             entity.HasKey(e => e.ApCodigo);
@@ -332,24 +327,24 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.SolCotCantidadTotal)
                 .HasColumnName("sol_cot_cantidad_total");
 
-            entity.Property(e => e.AudEvento)
-                .HasMaxLength(50)
-                .HasColumnName("sol_cot_aud_evento");
+            //entity.Property(e => e.AudEvento)
+            //    .HasMaxLength(50)
+            //    .HasColumnName("sol_cot_aud_evento");
 
-            entity.Property(e => e.AudFecha)
-                .HasColumnType("date")
-                .HasColumnName("sol_cot_aud_fecha");
+            //entity.Property(e => e.AudFecha)
+            //    .HasColumnType("date")
+            //    .HasColumnName("sol_cot_aud_fecha");
 
-            entity.Property(e => e.AudObservacion)
-                .HasMaxLength(250)
-                .HasColumnName("sol_cot_aud_observacion");
+            //entity.Property(e => e.AudObservacion)
+            //    .HasMaxLength(250)
+            //    .HasColumnName("sol_cot_aud_observacion");
 
-            entity.Property(e => e.AudUsuario)
-                .HasMaxLength(50)
-                .HasColumnName("sol_cot_aud_usuario");
+            //entity.Property(e => e.AudUsuario)
+            //    .HasMaxLength(50)
+            //    .HasColumnName("sol_cot_aud_usuario");
 
-            entity.Property(e => e.AudVeces)
-                .HasColumnName("sol_cot_aud_veces");
+            //entity.Property(e => e.AudVeces)
+            //    .HasColumnName("sol_cot_aud_veces");
             
        
 
