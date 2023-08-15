@@ -937,17 +937,17 @@ public partial class SolicitudContext : DbContext
         {
             entity.HasKey(e => e.SectId);
 
-            entity.ToTable("sector");
+            entity.ToTable("sectores");
 
             entity.Property(e => e.SectId)
-                .HasColumnName("sect_id");
+                .HasColumnName("sect_ID");
 
-            /*entity.Property(e => e.SectDescripcion)
-                .HasMaxLength(500)
-                .HasColumnName("sect_descripcion");
+            entity.Property(e => e.SectIdNomina)
+                .HasColumnName("sect_Id_Nomina");
+
             entity.Property(e => e.SectNombre)
-                .HasMaxLength(100)
-                .HasColumnName("sect_nombre");*/
+                .HasMaxLength(50)
+                .HasColumnName("sect_Nombre");
         });
 
 
