@@ -32,21 +32,55 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/CabSolOrdenCompras/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CabSolOrdenCompra>> GetCabSolOrdenCompra(int id)
-        {
-          if (_context.CabSolOrdenCompras == null)
-          {
-              return NotFound();
-          }
-            var cabSolOrdenCompra = await _context.CabSolOrdenCompras.FindAsync(id);
+        //[HttpGet("{tipoSol}")]
+        //public async Task<ActionResult<List<CabSolOrdenCompra>>> GetOrdenOCByTipoSol(int tipoSol)
+        //{
+        //    var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c => c.cabSolOCTipoSolicitud == tipoSol).ToListAsync();
 
-            if (cabSolOrdenCompra == null)
+        //    if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return cabSolCotizaciones;
+        //}
+        [HttpGet("GetSolicitudByID")]
+        public async Task<ActionResult<OrdenComprasTemplate>> getSolicitudByID(int ID)
+        {
+            // Obtener la cabecera de la solicitud
+            var cabecera = await _context.CabSolOrdenCompras
+                .FirstOrDefaultAsync(c => c.cabSolOCID == ID);
+
+            if (cabecera == null)
             {
                 return NotFound();
             }
 
-            return cabSolOrdenCompra;
+            // Obtener detalles e items de la solicitud
+            var detalles = await _context.DetSolCotizacions
+                .Where(d => d.SolCotTipoSol == cabecera.cabSolOCTipoSolicitud && d.SolCotNoSol == cabecera.cabSolOCNoSolicitud)
+                .ToListAsync();
+
+            var solicitudCompleta = new OrdenComprasTemplate
+            {
+                Cabecera = cabecera,
+                Detalles = detalles
+            };
+
+            solicitudCompleta.Items = new List<ItemSector>();
+
+            foreach (var detalle in detalles)
+            {
+                var itemsDetalle = await _context.ItemSectores
+                    .Where(i => i.ItmTipoSol == cabecera.cabSolOCTipoSolicitud &&
+                                i.ItmNumSol == cabecera.cabSolOCNoSolicitud &&
+                                i.ItmIdDetalle == detalle.SolCotIdDetalle)
+                    .ToListAsync();
+
+                solicitudCompleta.Items.AddRange(itemsDetalle);
+            }
+
+            return solicitudCompleta;
         }
 
         // PUT: api/CabSolOrdenCompras/5

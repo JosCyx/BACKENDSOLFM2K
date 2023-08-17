@@ -50,7 +50,7 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpGet("GetSolicitudByID")]
-        public async Task<ActionResult<SolicitudTemplate>> getSolicitudByID(int ID)
+        public async Task<ActionResult<CotizacionTemplate>> getSolicitudByID(int ID)
         {
             // Obtener la cabecera de la solicitud
             var cabecera = await _context.CabSolCotizacions
@@ -66,7 +66,7 @@ namespace SOLFM2K.Controllers
                 .Where(d => d.SolCotTipoSol == cabecera.CabSolCotTipoSolicitud && d.SolCotNoSol== cabecera.CabSolCotNoSolicitud)
                 .ToListAsync();
 
-            var solicitudCompleta = new SolicitudTemplate
+            var solicitudCompleta = new CotizacionTemplate
             {
                 Cabecera = cabecera,
                 Detalles = detalles

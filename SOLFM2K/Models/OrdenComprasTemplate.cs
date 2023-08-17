@@ -1,8 +1,8 @@
 ﻿namespace SOLFM2K.Models
 {
-    public class SolicitudTemplate
+    public class OrdenComprasTemplate
     {
-        public CabSolCotizacion? Cabecera { get; set; }
+        public CabSolOrdenCompra? Cabecera { get; set; }
         public List<DetSolCotizacion>? Detalles { get; set; }
         public List<ItemSector>? Items { get; set; }
     }
