@@ -200,40 +200,81 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<CabSolOrdenCompra>(entity =>
         {
-            entity.HasKey(e => e.CabOrdcIdCabecera);
+            entity.HasKey(e => e.cabSolOCID);
 
             entity.ToTable("cab_sol_orden_compra");
 
-            entity.Property(e => e.CabOrdcIdCabecera)
-                .ValueGeneratedNever()
-                .HasColumnName("cab_ordc_id_cabecera");
-            entity.Property(e => e.CabOrdcAreaSolicitante)
+            entity.Property(e => e.cabSolOCNumerico)
                 .HasMaxLength(50)
-                .IsUnicode(false)
+                .HasColumnName("cab_ordc_numerico");
+
+            entity.Property(e => e.cabSolOCID)
+                .HasColumnName("cab_ordc_ID");
+
+            entity.Property(e => e.cabSolOCTipoSolicitud)
+                .HasColumnName("cab_ordc_tipo_solicitud");
+
+            entity.Property(e => e.cabSolOCArea)
                 .HasColumnName("cab_ordc_area_solicitante");
-            entity.Property(e => e.CabOrdcAsunto)
-                .HasMaxLength(500)
-                .HasColumnName("cab_ordc_asunto");
-            entity.Property(e => e.CabOrdcFecha)
+
+            entity.Property(e => e.cabSolOCNoSolicitud)
+                .HasColumnName("cab_ordc_no_solicitud");
+
+            entity.Property(e => e.cabSolOCSolicitante)
+                .HasColumnName("cab_ordc_solicitante");
+
+            entity.Property(e => e.cabSolOCFecha)
                 .HasColumnType("date")
                 .HasColumnName("cab_ordc_fecha");
-            entity.Property(e => e.CabOrdcProveedor).HasColumnName("cab_ordc_proveedor");
-            entity.Property(e => e.CabOrdcRuc)
-                .HasMaxLength(13)
-                .IsUnicode(false)
-                .HasColumnName("cab_ordc_ruc");
-            entity.Property(e => e.CabOrdcSolicitante).HasColumnName("cab_ordc_solicitante");
 
-            /*entity.HasOne(d => d.CabOrdcIdCabeceraNavigation).WithOne(p => p.CabSolOrdenCompra)
-                .HasForeignKey<CabSolOrdenCompra>(d => d.CabOrdcIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_orden_compra_tipo_solic");*/
+            entity.Property(e => e.cabSolOCAsunto)
+                .HasMaxLength(500)
+                .HasColumnName("cab_ordc_asunto");
 
-        /*entity.HasOne(d => d.CabOrdcProveedorNavigation).WithMany(p => p.CabSolOrdenCompras)
-            .HasForeignKey(d => d.CabOrdcProveedor)
-            .OnDelete(DeleteBehavior.ClientSetNull)
-            .HasConstraintName("FK_cab_sol_orden_compra_proveedor");*/
-    });
+            entity.Property(e => e.cabSolOCProcedimiento)
+                .HasMaxLength(500)
+                .HasColumnName("cab_ordc_procedimiento");
+
+            entity.Property(e => e.cabSolOCObervaciones)
+                .HasMaxLength(500)
+                .HasColumnName("cab_ordc_observaciones");
+
+            entity.Property(e => e.cabSolOCAdjCot)
+                .HasMaxLength(2)
+                .HasColumnName("cab_ordc_adj_cotizacion");
+
+            entity.Property(e => e.cabSolOCNumCotizacion)
+                .HasColumnName("cab_ordc_num_cotizaciones");
+
+            entity.Property(e => e.cabSolOCEstado)
+                .HasMaxLength(5)
+                .HasColumnName("cab_ordc_estado");
+
+            entity.Property(e => e.cabSolOCEstadoTracking)
+                .HasColumnName("cab_ordc_estado_track");
+
+            entity.Property(e => e.cabSolOCPlazoEntrega)
+                .HasColumnType("date")
+                .HasColumnName("cab_ordc_plazo_entrega");
+
+            entity.Property(e => e.cabSolOCFechaMaxentrega)
+                .HasColumnType("date")
+                .HasColumnName("cab_ordc_fechamax_entrega");
+
+            entity.Property(e => e.cabSolOCInspector)
+                .HasColumnName("cab_ordc_inspector");
+
+            entity.Property(e => e.cabSolOCTelefInspector)
+                .HasMaxLength(15)
+                .HasColumnName("cab_ordc_telef_inspector");
+
+            entity.Property(e => e.cabSolOCProveedor)
+                .HasColumnName("cab_ordc_proveedor");
+
+            entity.Property(e => e.cabSolOCRUCProveedor)
+                .HasMaxLength(25)
+                .HasColumnName("cab_ordc_ruc_proveedor");
+        });
 
         modelBuilder.Entity<CabSolPago>(entity =>
         {
