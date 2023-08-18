@@ -11,6 +11,7 @@ namespace SOLFM2K.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //hola mundo 
     public class AplicacionesController : ControllerBase
     {
         private readonly SolicitudContext _context;

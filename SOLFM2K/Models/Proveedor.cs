@@ -19,7 +19,7 @@ public partial class Proveedor
 
     public string ProvCorreo { get; set; } = null!;
 
-    public virtual ICollection<CabSolOrdenCompra> CabSolOrdenCompras { get; set; } = new List<CabSolOrdenCompra>();
+    //public virtual ICollection<CabSolOrdenCompra> CabSolOrdenCompras { get; set; } = new List<CabSolOrdenCompra>();
 
-    public virtual ICollection<CabSolPago> CabSolPagos { get; set; } = new List<CabSolPago>();
+    //public virtual ICollection<CabSolPago> CabSolPagos { get; set; } = new List<CabSolPago>();
 }
