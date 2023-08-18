@@ -115,14 +115,15 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/ItemSectors/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteItemSector(int id)
+        [HttpDelete("{tipoSol}/{noSol}/{noDet}/{noItm}")]
+        public async Task<IActionResult> DeleteItemSector(int tipoSol, int noSol, int noDet, int noItm)
         {
-            if (_context.ItemSectores == null)
-            {
-                return NotFound();
-            }
-            var itemSector = await _context.ItemSectores.FindAsync(id);
+            var itemSector = await _context.ItemSectores.FirstOrDefaultAsync(i =>
+                i.ItmTipoSol == tipoSol &&
+                i.ItmNumSol == noSol &&
+                i.ItmIdDetalle == noDet&&
+                i.ItmIdItem == noItm);
+
             if (itemSector == null)
             {
                 return NotFound();
@@ -133,6 +134,7 @@ namespace SOLFM2K.Controllers
 
             return NoContent();
         }
+
 
         private bool ItemSectorExists(int id)
         {
