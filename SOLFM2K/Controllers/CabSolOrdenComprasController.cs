@@ -126,7 +126,7 @@ namespace SOLFM2K.Controllers
             _context.CabSolOrdenCompras.Add(cabSolOrdenCompra);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCabSolOrdenCompra", new { id = cabSolOrdenCompra.cabSolOCID }, cabSolOrdenCompra);
+            return CreatedAtAction(nameof(PostCabSolOrdenCompra), new { id = cabSolOrdenCompra.cabSolOCID }, cabSolOrdenCompra);
         }
 
         // DELETE: api/CabSolOrdenCompras/5
