@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 
@@ -32,19 +33,29 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/ItemSectors/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ItemSector>> GetItemSector(int id)
+        [HttpGet("{tipoSol}/{noSol}/{noDet}")]
+        public async Task<ActionResult<IEnumerable<ItemSector>>> GetItemSector(int tipoSol, int noSol, int noDet)
         {
           if (_context.ItemSectores == null)
           {
               return NotFound();
           }
-            var itemSector = await _context.ItemSectores.FindAsync(id);
+            //var itemSector = await _context.ItemSectores.FindAsync(id);
+            var itemSector = await _context.ItemSectores.Where(item =>
+                item.ItmTipoSol == tipoSol &&
+                item.ItmNumSol == noSol &&
+                item.ItmIdDetalle == noDet).ToListAsync();
+
+            if(itemSector.Count == 0)
+            {
+                return Ok(0);
+            }
 
             if (itemSector == null)
             {
                 return NotFound();
             }
+
 
             return itemSector;
         }
@@ -134,6 +145,24 @@ namespace SOLFM2K.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("DeleteAllItems")]
+        public async Task<IActionResult> DeleteAllItembySol(int tipoSol, int noSol)
+        {
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync("EXEC deleteItemsbySol @tipoSol, @noSol",
+                    new SqlParameter("@tipoSol", tipoSol),
+                    new SqlParameter("@noSol", noSol));
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting items.");
+            }
+        }
+
 
 
         private bool ItemSectorExists(int id)

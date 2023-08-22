@@ -115,14 +115,14 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/DetSolCotizacions/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDetSolCotizacion(int id)
+        [HttpDelete("{SolCotID}")]
+        public async Task<IActionResult> DeleteDetSolCotizacion(int SolCotID)
         {
             if (_context.DetSolCotizacions == null)
             {
                 return NotFound();
             }
-            var detSolCotizacion = await _context.DetSolCotizacions.FindAsync(id);
+            var detSolCotizacion = await _context.DetSolCotizacions.FindAsync(SolCotID);
             if (detSolCotizacion == null)
             {
                 return NotFound();
