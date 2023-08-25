@@ -67,6 +67,24 @@ namespace SOLFM2K.Controllers
             return result;
         }
 
+        [HttpGet("GetLastDetalleID")]
+        public async Task<ActionResult<IEnumerable<DetSolCotizacion>>> GetLastItemID()
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.DetSolCotizacions.FromSqlRaw("EXEC getLastID ").ToListAsync();
+
+            if (result.Count == 0)
+            {
+                return Ok(0);
+            }
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
+
 
         // PUT: api/DetSolCotizacions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

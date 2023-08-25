@@ -78,6 +78,24 @@ namespace SOLFM2K.Controllers
             return result;
         }
 
+        [HttpGet("GetLastItemID")]
+        public async Task<ActionResult<IEnumerable<ItemSector>>> GetLastItemID()
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.ItemSectores.FromSqlRaw("EXEC getLastItemID ").ToListAsync();
+
+            if (result.Count == 0)
+            {
+                return Ok(0);
+            }
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
+
 
         // PUT: api/ItemSectors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
