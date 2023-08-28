@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 
@@ -130,6 +131,24 @@ namespace SOLFM2K.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostDetSolCotizacion), new { id = detSolCotizacion.SolCotIdDetalle }, detSolCotizacion);
+        }
+
+        //metodo que llama al SP en la base y elimina todos los detalles
+        [HttpDelete("DeleteAllDetails")]
+        public async Task<IActionResult> DeleteAllItembySol(int tipoSol, int noSol)
+        {
+            try
+            {
+                await _context.Database.ExecuteSqlRawAsync("EXEC deleteDetallesbySol @tipoSol, @noSol",
+                    new SqlParameter("@tipoSol", tipoSol),
+                    new SqlParameter("@noSol", noSol));
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while deleting items.");
+            }
         }
 
         // DELETE: api/DetSolCotizacions/5
