@@ -144,14 +144,12 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/ItemSectors/5
-        [HttpDelete("{tipoSol}/{noSol}/{noDet}/{noItm}")]
-        public async Task<IActionResult> DeleteItemSector(int tipoSol, int noSol, int noDet, int noItm)
+        [HttpDelete("{tipoSol}/{noSol}")]
+        public async Task<IActionResult> DeleteItemSector(int tipoSol, int noSol)
         {
             var itemSector = await _context.ItemSectores.FirstOrDefaultAsync(i =>
                 i.ItmTipoSol == tipoSol &&
-                i.ItmNumSol == noSol &&
-                i.ItmIdDetalle == noDet&&
-                i.ItmIdItem == noItm);
+                i.ItmNumSol == noSol);
 
             if (itemSector == null)
             {

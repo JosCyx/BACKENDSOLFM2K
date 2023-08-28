@@ -108,7 +108,7 @@ namespace SOLFM2K.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCabSolCotizacion(int id, CabSolCotizacion cabSolCotizacion)
         {
-            if (id != cabSolCotizacion.CabSolCotNoSolicitud)
+            if (id != cabSolCotizacion.CabSolCotID)
             {
                 return BadRequest();
             }
