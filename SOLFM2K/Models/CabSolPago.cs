@@ -5,25 +5,28 @@ namespace SOLFM2K.Models;
 
 public partial class CabSolPago
 {
-    public int CabPagoIdCabecera { get; set; }
+    public int CabPagoID { get; set; }
 
-    public int CabPagoIdOrdenCompra { get; set; }
-
-    public DateTime CabPagoFechaFactura { get; set; }
-
-    public string CabPagoNumFactura { get; set; } = null!;
-
-    public int CabPagoProveedor { get; set; }
-
-    public DateTime CabPagoFechaSolPago { get; set; }
-
-    public string CabPagoRuc { get; set; } = null!;
-
+    public string CabPagoNumerico { get; set; }
+    public int CabPagoTipoSolicitud { get; set; }
+    public int CabPagoNoSolicitud { get; set; }
+    public int CabPagoAreaSolicitante { get; set; }
     public int CabPagoSolicitante { get; set; }
-
-    //public virtual TipoSolic CabPagoIdCabeceraNavigation { get; set; } = null!;
-
-    //public virtual Proveedor CabPagoProveedorNavigation { get; set; } = null!;
-
-    //public virtual ICollection<SolPago> SolPagos { get; set; } = new List<SolPago>();
+    public string CabPagoNoOrdenCompra { get; set; }
+    public DateTime CabPagoFechaEmision { get; set; }
+    public DateTime CabPagoFechaEnvio { get; set; }
+    public string CabPagoNumFactura { get; set; }
+    public DateTime CabPagoFechaFactura { get; set; }
+    public int CabPagoProveedor { get; set; }
+    public string CabPagoRuc { get; set; }
+    public string CabPagoObservaciones { get; set; } = null!;
+    public string CabPagoAplicarMulta { get; set; } = null!;
+    public float CabPagoValorMulta { get; set; }
+    public float CabPagoValorTotalAut { get; set; }
+    public int CabPagoReceptor { get; set; }
+    public DateTime CabPagoFechaInspeccion { get; set; } 
+    public string CabPagoCancelacionOrden { get; set; } = null!;
+    public string CabPagoEstado { get; set; }
+    public int CabPagoEstadoTrack { get; set; }
 }
+

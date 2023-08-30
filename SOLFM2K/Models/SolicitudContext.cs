@@ -278,41 +278,132 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<CabSolPago>(entity =>
         {
-            entity.HasKey(e => e.CabPagoIdCabecera);
+            entity.HasKey(e => e.CabPagoID);
 
             entity.ToTable("cab_sol_pago");
 
-            entity.Property(e => e.CabPagoIdCabecera)
-                .ValueGeneratedNever()
-                .HasColumnName("cab_pago_id_cabecera");
-            entity.Property(e => e.CabPagoFechaFactura)
-                .HasColumnType("date")
-                .HasColumnName("cab_pago_fecha_factura");
-            entity.Property(e => e.CabPagoFechaSolPago)
-                .HasColumnType("date")
-                .HasColumnName("cab_pago_fecha_sol_pago");
-            entity.Property(e => e.CabPagoIdOrdenCompra).HasColumnName("cab_pago_id_orden_compra");
+            entity.Property(e => e.CabPagoID)
+                .HasColumnName("cab_pago_ID")
+                .ValueGeneratedNever();
+
+            entity.Property(e => e.CabPagoNumerico)
+                .IsRequired()
+                .HasColumnName("cab_pago_numerico")
+                .HasMaxLength(50);
+
+            entity.Property(e => e.CabPagoTipoSolicitud)
+                .HasColumnName("cab_pago_tipo_solicitud");
+
+            entity.Property(e => e.CabPagoNoSolicitud)
+                .HasColumnName("cab_pago_no_solicitud");
+
+            entity.Property(e => e.CabPagoAreaSolicitante)
+                .HasColumnName("cab_pago_area_solicitante");
+
+            entity.Property(e => e.CabPagoSolicitante)
+                .HasColumnName("cab_pago_solicitante");
+
+            entity.Property(e => e.CabPagoNoOrdenCompra)
+                .IsRequired()
+                .HasColumnName("cab_pago_no_orden_compra")
+                .HasMaxLength(15);
+
+            entity.Property(e => e.CabPagoFechaEmision)
+                .HasColumnName("cab_pago_fecha_emision")
+                .HasColumnType("date");
+
+            entity.Property(e => e.CabPagoFechaEnvio)
+                .HasColumnName("cab_pago_fecha_envio")
+                .HasColumnType("date");
+
             entity.Property(e => e.CabPagoNumFactura)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("cab_pago_num_factura");
-            entity.Property(e => e.CabPagoProveedor).HasColumnName("cab_pago_proveedor");
+                .IsRequired()
+                .HasColumnName("cab_pago_num_factura")
+                .HasMaxLength(25);
+
+            entity.Property(e => e.CabPagoFechaFactura)
+                .HasColumnName("cab_pago_fecha_factura")
+                .HasColumnType("date");
+
+            entity.Property(e => e.CabPagoProveedor)
+                .HasColumnName("cab_pago_proveedor");
+
             entity.Property(e => e.CabPagoRuc)
-                .HasMaxLength(13)
-                .IsUnicode(false)
-                .HasColumnName("cab_pago_ruc");
-            entity.Property(e => e.CabPagoSolicitante).HasColumnName("cab_pago_solicitante");
+                .IsRequired()
+                .HasColumnName("cab_pago_ruc")
+                .HasMaxLength(25);
 
-            /*entity.HasOne(d => d.CabPagoIdCabeceraNavigation).WithOne(p => p.CabSolPago)
-                .HasForeignKey<CabSolPago>(d => d.CabPagoIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_pago_tipo_solic");*/
+            entity.Property(e => e.CabPagoObservaciones)
+                .HasColumnName("cab_pago_observaciones")
+                .HasMaxLength(500);
 
-            /*entity.HasOne(d => d.CabPagoProveedorNavigation).WithMany(p => p.CabSolPagos)
-                .HasForeignKey(d => d.CabPagoProveedor)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_cab_sol_pago_proveedor");*/
+            entity.Property(e => e.CabPagoAplicarMulta)
+                .HasColumnName("cab_pago_aplicar_multa")
+                .HasMaxLength(500);
+
+            entity.Property(e => e.CabPagoValorMulta)
+                .HasColumnName("cab_pago_valor_multa");
+
+            entity.Property(e => e.CabPagoValorTotalAut)
+                .HasColumnName("cab_pago_valor_total_aut");
+
+            entity.Property(e => e.CabPagoReceptor)
+                .HasColumnName("cab_pago_receptor");
+
+            entity.Property(e => e.CabPagoFechaInspeccion)
+                .HasColumnName("cab_pago_fecha_inspeccion")
+                .HasColumnType("date");
+
+            entity.Property(e => e.CabPagoCancelacionOrden)
+                .HasColumnName("cab_pago_cancelacion_orden")
+                .HasMaxLength(5);
+
+            entity.Property(e => e.CabPagoEstado)
+                .IsRequired()
+                .HasColumnName("cab_pago_estado")
+                .HasMaxLength(5);
+
+            entity.Property(e => e.CabPagoEstadoTrack)
+                .HasColumnName("cab_pago_estado_track");
         });
+
+        /* modelBuilder.Entity<CabSolPago>(entity =>
+         {
+             entity.HasKey(e => e.CabPagoIdCabecera);
+
+             entity.ToTable("cab_sol_pago");
+
+             entity.Property(e => e.CabPagoIdCabecera)
+                 .ValueGeneratedNever()
+                 .HasColumnName("cab_pago_id_cabecera");
+             entity.Property(e => e.CabPagoFechaFactura)
+                 .HasColumnType("date")
+                 .HasColumnName("cab_pago_fecha_factura");
+             entity.Property(e => e.CabPagoFechaSolPago)
+                 .HasColumnType("date")
+                 .HasColumnName("cab_pago_fecha_sol_pago");
+             entity.Property(e => e.CabPagoIdOrdenCompra).HasColumnName("cab_pago_id_orden_compra");
+             entity.Property(e => e.CabPagoNumFactura)
+                 .HasMaxLength(20)
+                 .IsUnicode(false)
+                 .HasColumnName("cab_pago_num_factura");
+             entity.Property(e => e.CabPagoProveedor).HasColumnName("cab_pago_proveedor");
+             entity.Property(e => e.CabPagoRuc)
+                 .HasMaxLength(13)
+                 .IsUnicode(false)
+                 .HasColumnName("cab_pago_ruc");
+             entity.Property(e => e.CabPagoSolicitante).HasColumnName("cab_pago_solicitante");
+
+             entity.HasOne(d => d.CabPagoIdCabeceraNavigation).WithOne(p => p.CabSolPago)
+                 .HasForeignKey<CabSolPago>(d => d.CabPagoIdCabecera)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_cab_sol_pago_tipo_solic");
+
+        entity.HasOne(d => d.CabPagoProveedorNavigation).WithMany(p => p.CabSolPagos)
+            .HasForeignKey(d => d.CabPagoProveedor)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_cab_sol_pago_proveedor");
+    });*/
 
         modelBuilder.Entity<Departamento>(entity =>
         {
