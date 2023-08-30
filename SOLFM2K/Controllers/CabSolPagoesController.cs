@@ -106,7 +106,7 @@ namespace SOLFM2K.Controllers
                 }
             }
 
-            return CreatedAtAction("GetCabSolPago", new { id = cabSolPago.CabPagoID }, cabSolPago);
+            return CreatedAtAction(nameof(PostCabSolPago), new { id = cabSolPago.CabPagoID }, cabSolPago);
         }
 
         // DELETE: api/CabSolPagoes/5
