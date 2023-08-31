@@ -11,11 +11,11 @@ namespace SOLFM2K.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CabSolPagoesController : ControllerBase
+    public class CabSolPagoController : ControllerBase
     {
         private readonly SolicitudContext _context;
 
-        public CabSolPagoesController(SolicitudContext context)
+        public CabSolPagoController(SolicitudContext context)
         {
             _context = context;
         }

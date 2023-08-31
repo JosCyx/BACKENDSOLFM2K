@@ -283,8 +283,7 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("cab_sol_pago");
 
             entity.Property(e => e.CabPagoID)
-                .HasColumnName("cab_pago_ID")
-                .ValueGeneratedNever();
+                .HasColumnName("cab_pago_ID");
 
             entity.Property(e => e.CabPagoNumerico)
                 .IsRequired()
@@ -328,9 +327,9 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabPagoProveedor)
                 .HasColumnName("cab_pago_proveedor");
 
-            entity.Property(e => e.CabPagoRuc)
+            entity.Property(e => e.CabPagoRucProveedor)
                 .IsRequired()
-                .HasColumnName("cab_pago_ruc")
+                .HasColumnName("cab_pago_ruc_proveedor")
                 .HasMaxLength(25);
 
             entity.Property(e => e.CabPagoObservaciones)
