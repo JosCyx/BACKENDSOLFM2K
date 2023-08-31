@@ -1148,9 +1148,10 @@ public partial class SolicitudContext : DbContext
         {
             entity.HasKey(e => e.UsId);
 
-            entity.ToTable("usuario");
+            entity.ToTable("usuarios");
 
-            entity.Property(e => e.UsId).HasColumnName("us_id");
+            entity.Property(e => e.UsId)
+                .HasColumnName("us_ID");
             entity.Property(e => e.AudEvento)
                 .HasMaxLength(50)
                 .HasColumnName("aud_evento");
@@ -1163,14 +1164,18 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.AudUsuario)
                 .HasMaxLength(50)
                 .HasColumnName("aud_usuario");
-            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
+            entity.Property(e => e.AudVeces)
+                .HasColumnName("aud_veces");
             entity.Property(e => e.UsBanUserData)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("us_ban_user_data");
-            entity.Property(e => e.UsContrasenia).HasColumnName("us_contrasenia");
-            entity.Property(e => e.UsEmpresa).HasColumnName("us_empresa");
+            entity.Property(e => e.UsContrasenia)
+                .HasMaxLength(25)
+                .HasColumnName("us_contrasenia");
+            entity.Property(e => e.UsEmpresa)
+                .HasColumnName("us_empresa");
             entity.Property(e => e.UsEstado)
                 .HasMaxLength(1)
                 .HasColumnName("us_estado");
@@ -1192,7 +1197,8 @@ public partial class SolicitudContext : DbContext
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("us_ServicioC");
-            entity.Property(e => e.UsTipoAcceso).HasColumnName("us_tipo_acceso");
+            entity.Property(e => e.UsTipoAcceso)
+                .HasColumnName("us_tipo_acceso");
             entity.Property(e => e.UsUserData)
                 .HasMaxLength(50)
                 .IsUnicode(false)

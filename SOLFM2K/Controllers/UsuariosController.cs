@@ -49,6 +49,27 @@ namespace SOLFM2K.Controllers
             return usuario;
         }
 
+        [HttpGet("Login")]
+        //PENDIENTE DE AGREGAR FUNCIONALIDAD CON TOKENS
+        public async Task<ActionResult<Usuario>> LoginUser(string username, string pass)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(us => us.UsLogin == username);
+
+            if (user == null)
+            {
+                return NotFound("El usuario no existe.");
+            }
+
+            if (user.UsContrasenia != pass)
+            {
+                return BadRequest("La contraseña no coincide.");
+            }
+
+            return user;
+        }
+
+
+
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{UsId}")]

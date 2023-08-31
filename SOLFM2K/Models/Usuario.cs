@@ -11,7 +11,7 @@ public partial class Usuario
 
     public string UsLogin { get; set; } = null!;
 
-    public byte[] UsContrasenia { get; set; } = null!;
+    public string UsContrasenia { get; set; } = null!;
 
     public string UsNombre { get; set; } = null!;
 
