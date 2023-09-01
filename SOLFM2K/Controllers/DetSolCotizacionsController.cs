@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
@@ -30,6 +31,22 @@ namespace SOLFM2K.Controllers
               return NotFound();
           }
             return await _context.DetSolCotizacions.ToListAsync();
+        }
+        //Procedimiento de GetDetalle_solicitud
+        [HttpGet("GetDetalleSolicitud")]
+        public async Task<ActionResult<IEnumerable<DetSolCotizacion>>> GetDetSolCotizacions(int tipoSol, int noSol)
+        {
+            var result = await _context.DetSolCotizacions.FromSqlRaw("EXEC sp_GetDetalle_solicitud @p0, @p1", tipoSol, noSol).ToListAsync();
+            if (result.Count == 0)
+            {
+                return Ok(0);
+            }
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
         }
 
         // GET: api/DetSolCotizacions/5
