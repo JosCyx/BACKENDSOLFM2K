@@ -1189,6 +1189,8 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(25)
                 .IsUnicode(false)
                 .HasColumnName("us_login");
+            entity.Property(e => e.UsIdNomina)
+                .HasColumnName("us_id_nomina");
             entity.Property(e => e.UsNombre)
                 .HasMaxLength(100)
                 .HasColumnName("us_nombre");

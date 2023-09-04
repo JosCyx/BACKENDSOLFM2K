@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SOLFM2K.Models;
+using SOLFM2K.Services;
 
 namespace SOLFM2K.Controllers
 {
@@ -14,10 +20,12 @@ namespace SOLFM2K.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly SolicitudContext _context;
+        private readonly ITokenService _tokenService; // Inyecta el servicio
 
-        public UsuariosController(SolicitudContext context)
+        public UsuariosController(SolicitudContext context, ITokenService tokenService) // Inyecta el servicio
         {
             _context = context;
+            _tokenService = tokenService; // Asigna el servicio
         }
 
         // GET: api/Usuarios
@@ -49,23 +57,39 @@ namespace SOLFM2K.Controllers
             return usuario;
         }
 
-        [HttpGet("Login")]
-        //PENDIENTE DE AGREGAR FUNCIONALIDAD CON TOKENS
-        public async Task<ActionResult<Usuario>> LoginUser(string username, string pass)
+        [HttpPost("Login")]
+        public async Task<ActionResult<object>> LoginUser([FromBody] LoginModel model)
+        //public async Task<ActionResult<object>> LoginUser(string username, string pass)
         {
-            var user = await _context.Usuarios.FirstOrDefaultAsync(us => us.UsLogin == username);
+            var user = await _context.Usuarios.FirstOrDefaultAsync(us => us.UsLogin == model.username);
 
             if (user == null)
             {
                 return NotFound("El usuario no existe.");
             }
 
-            if (user.UsContrasenia != pass)
+            if (user.UsContrasenia != model.pass)
             {
                 return BadRequest("La contraseña no coincide.");
             }
 
-            return user;
+            // Generar un token JWT utilizando el servicio
+            //var token = _tokenService.GenerateToken(user);
+            var token = _tokenService.GenerateToken(user, 720);
+
+            // Crear un objeto que contenga el token y los datos del usuario
+            var response = new
+            {
+                Token = token,
+                Usuario = new
+                {
+                    usLogin = user.UsLogin,
+                    usIdNomina = user.UsIdNomina
+                }
+            };
+
+            // Devolver el objeto JSON en la respuesta
+            return Ok(response); // Aquí usamos Ok() para indicar que la solicitud fue exitosa
         }
 
 

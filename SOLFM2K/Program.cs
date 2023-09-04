@@ -1,6 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SOLFM2K.Models;
+using SOLFM2K.Services;
+using System.Text;
 
+//var  secretKey = "RQ9aP&1BvXxZ$uFqGKsX5GmDwN8@Y3T!";
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
@@ -29,6 +34,23 @@ builder.Services.AddCors(options =>
         });
 });
 
+var secretKey = builder.Configuration["SecKey"];
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = "https://localhost:7086/", // Cambia esto con tu issuer
+            ValidAudience = "http://localhost:4200/", // Cambia esto con tu audience
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)), // Cambia esto con tu clave secreta
+        };
+    });
+
+builder.Services.AddScoped<ITokenService, TokenService>(); // Registra el servicio ITokenService
+
+
 var app = builder.Build();
 
 
@@ -40,6 +62,8 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 app.UseCors("newPolicy");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
