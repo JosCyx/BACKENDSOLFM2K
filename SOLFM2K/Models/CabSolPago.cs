@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Routing.Constraints;
+using System;
 using System.Collections.Generic;
 
 namespace SOLFM2K.Models;
@@ -21,10 +22,10 @@ public partial class CabSolPago
     public string CabPagoRucProveedor { get; set; }
     public string CabPagoObservaciones { get; set; } = null!;
     public string CabPagoAplicarMulta { get; set; } = null!;
-    public float CabPagoValorMulta { get; set; }
-    public float CabPagoValorTotalAut { get; set; }
+    public double CabPagoValorMulta { get; set; }
+    public double CabPagoValorTotalAut { get; set; }
     public int CabPagoReceptor { get; set; }
-    public DateTime CabPagoFechaInspeccion { get; set; } 
+    public DateTime CabPagoFechaInspeccion { get; set; }
     public string CabPagoCancelacionOrden { get; set; } = null!;
     public string CabPagoEstado { get; set; }
     public int CabPagoEstadoTrack { get; set; }
