@@ -29,7 +29,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<DetSolCotizacion> DetSolCotizacions { get; set; }
 
-    public virtual DbSet<DetSolPago> SolPagos { get; set; }
+    public virtual DbSet<DetSolPago> DetSolPagos { get; set; }
 
     public virtual DbSet<Documento> Documentos { get; set; }
 
@@ -330,6 +330,9 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_ruc_proveedor")
                 .HasMaxLength(25);
 
+            entity.Property(e => e.Cabpagototal)
+                .HasColumnName("cab_pago_total");
+      
             entity.Property(e => e.CabPagoObservaciones)
                 .HasColumnName("cab_pago_observaciones")
                 .HasMaxLength(500);

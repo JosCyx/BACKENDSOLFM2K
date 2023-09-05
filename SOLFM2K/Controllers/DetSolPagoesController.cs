@@ -24,22 +24,22 @@ namespace SOLFM2K.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DetSolPago>>> GetSolPagos()
         {
-          if (_context.SolPagos == null)
+          if (_context.DetSolPagos == null)
           {
               return NotFound();
           }
-            return await _context.SolPagos.ToListAsync();
+            return await _context.DetSolPagos.ToListAsync();
         }
 
         // GET: api/DetSolPagoes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<DetSolPago>> GetDetSolPago(int id)
         {
-          if (_context.SolPagos == null)
+          if (_context.DetSolPagos == null)
           {
               return NotFound();
           }
-            var detSolPago = await _context.SolPagos.FindAsync(id);
+            var detSolPago = await _context.DetSolPagos.FindAsync(id);
 
             if (detSolPago == null)
             {
@@ -85,11 +85,11 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<DetSolPago>> PostDetSolPago(DetSolPago detSolPago)
         {
-          if (_context.SolPagos == null)
+          if (_context.DetSolPagos == null)
           {
               return Problem("Entity set 'SolicitudContext.SolPagos'  is null.");
           }
-            _context.SolPagos.Add(detSolPago);
+            _context.DetSolPagos.Add(detSolPago);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostDetSolPago), new { id = detSolPago.DetPagoID }, detSolPago);
@@ -99,17 +99,17 @@ namespace SOLFM2K.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDetSolPago(int id)
         {
-            if (_context.SolPagos == null)
+            if (_context.DetSolPagos == null)
             {
                 return NotFound();
             }
-            var detSolPago = await _context.SolPagos.FindAsync(id);
+            var detSolPago = await _context.DetSolPagos.FindAsync(id);
             if (detSolPago == null)
             {
                 return NotFound();
             }
 
-            _context.SolPagos.Remove(detSolPago);
+            _context.DetSolPagos.Remove(detSolPago);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -117,7 +117,7 @@ namespace SOLFM2K.Controllers
 
         private bool DetSolPagoExists(int id)
         {
-            return (_context.SolPagos?.Any(e => e.DetPagoID == id)).GetValueOrDefault();
+            return (_context.DetSolPagos?.Any(e => e.DetPagoID == id)).GetValueOrDefault();
         }
     }
 }

@@ -79,6 +79,34 @@ namespace SOLFM2K.Controllers
 
             return NoContent();
         }
+        //get Cabecera y detalle 
+        [HttpGet("GetSolicitudByID")]
+        public async Task<ActionResult<PagoTemplate>> getSolicitudByID(int ID)
+        {
+            // Obtener la cabecera de la solicitud
+            var cabecera = await _context.CabSolPagos
+                .FirstOrDefaultAsync(c => c.CabPagoID == ID);
+
+            if (cabecera == null)
+            {
+                return NotFound();
+            }
+
+            // Obtener detalles e items de la solicitud
+            var detalles = await _context.DetSolPagos
+                .Where(d => d.DetPagoTipoSol == cabecera.CabPagoTipoSolicitud && d.DetPagoNoSol == cabecera.CabPagoNoSolicitud)
+                .ToListAsync();
+
+            var solicitudCompleta = new PagoTemplate
+            {
+                cabecera = cabecera,
+                detalles = detalles
+            };
+
+
+            
+            return solicitudCompleta;
+        }
 
         // POST: api/CabSolPagoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
