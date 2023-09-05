@@ -48,8 +48,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-builder.Services.AddScoped<ITokenService, TokenService>(); // Registra el servicio ITokenService
+// Registra el servicio ITokenService
+builder.Services.AddScoped<ITokenService, TokenService>();
 
+// Registrar el filtro de autorización personalizado
+builder.Services.AddScoped<JwtAuthorizationFilter>();
 
 var app = builder.Build();
 

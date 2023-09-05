@@ -6,6 +6,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ namespace SOLFM2K.Controllers
 
         // GET: api/Usuarios
         [HttpGet]
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
           if (_context.Usuarios == null)
@@ -57,6 +59,7 @@ namespace SOLFM2K.Controllers
             return usuario;
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public async Task<ActionResult<object>> LoginUser([FromBody] LoginModel model)
         //public async Task<ActionResult<object>> LoginUser(string username, string pass)
@@ -74,7 +77,6 @@ namespace SOLFM2K.Controllers
             }
 
             // Generar un token JWT utilizando el servicio
-            //var token = _tokenService.GenerateToken(user);
             var token = _tokenService.GenerateToken(user, 720);
 
             // Crear un objeto que contenga el token y los datos del usuario
@@ -84,7 +86,8 @@ namespace SOLFM2K.Controllers
                 Usuario = new
                 {
                     usLogin = user.UsLogin,
-                    usIdNomina = user.UsIdNomina
+                    usIdNomina = user.UsIdNomina,
+                    usNombre = user.UsNombre
                 }
             };
 
