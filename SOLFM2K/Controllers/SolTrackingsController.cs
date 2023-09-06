@@ -11,6 +11,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class SolTrackingsController : ControllerBase

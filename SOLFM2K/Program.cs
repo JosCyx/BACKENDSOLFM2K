@@ -7,20 +7,24 @@ using System.Text;
 
 //var  secretKey = "RQ9aP&1BvXxZ$uFqGKsX5GmDwN8@Y3T!";
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
 
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var issuer = jwtSettings["Issuer"];
+var audience = jwtSettings["Audience"];
+var secretKey = jwtSettings["SecretKey"];
+
+// Add services to the container.
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 //add context
 builder.Services.AddDbContext<SolicitudContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
 });
-
 
 //add policy
 builder.Services.AddCors(options =>
@@ -34,7 +38,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-var secretKey = builder.Configuration["SecKey"];
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -42,9 +46,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidIssuer = "https://localhost:7086/", // Cambia esto con tu issuer
-            ValidAudience = "http://localhost:4200/", // Cambia esto con tu audience
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)), // Cambia esto con tu clave secreta
+            ValidIssuer = issuer,
+            ValidAudience = audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
         };
     });
 
@@ -54,6 +58,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 // Registrar el filtro de autorización personalizado
 builder.Services.AddScoped<JwtAuthorizationFilter>();
 
+//contruye la app
 var app = builder.Build();
 
 

@@ -16,22 +16,20 @@ using SOLFM2K.Services;
 
 namespace SOLFM2K.Controllers
 {
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase
     {
         private readonly SolicitudContext _context;
-        private readonly ITokenService _tokenService; // Inyecta el servicio
 
-        public UsuariosController(SolicitudContext context, ITokenService tokenService) // Inyecta el servicio
+        public UsuariosController(SolicitudContext context) // Inyecta el servicio
         {
             _context = context;
-            _tokenService = tokenService; // Asigna el servicio
         }
 
         // GET: api/Usuarios
         [HttpGet]
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
           if (_context.Usuarios == null)
@@ -58,44 +56,6 @@ namespace SOLFM2K.Controllers
 
             return usuario;
         }
-
-        [AllowAnonymous]
-        [HttpPost("Login")]
-        public async Task<ActionResult<object>> LoginUser([FromBody] LoginModel model)
-        //public async Task<ActionResult<object>> LoginUser(string username, string pass)
-        {
-            var user = await _context.Usuarios.FirstOrDefaultAsync(us => us.UsLogin == model.username);
-
-            if (user == null)
-            {
-                return NotFound("El usuario no existe.");
-            }
-
-            if (user.UsContrasenia != model.pass)
-            {
-                return BadRequest("La contraseña no coincide.");
-            }
-
-            // Generar un token JWT utilizando el servicio
-            var token = _tokenService.GenerateToken(user, 720);
-
-            // Crear un objeto que contenga el token y los datos del usuario
-            var response = new
-            {
-                Token = token,
-                Usuario = new
-                {
-                    usLogin = user.UsLogin,
-                    usIdNomina = user.UsIdNomina,
-                    usNombre = user.UsNombre
-                }
-            };
-
-            // Devolver el objeto JSON en la respuesta
-            return Ok(response); // Aquí usamos Ok() para indicar que la solicitud fue exitosa
-        }
-
-
 
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
