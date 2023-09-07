@@ -29,9 +29,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<DetSolCotizacion> DetSolCotizacions { get; set; }
 
-    public virtual DbSet<DetSolOrdenCompra> SolOrdenCompras { get; set; }
-
-    public virtual DbSet<DetSolPago> SolPagos { get; set; }
+    public virtual DbSet<DetSolPago> DetSolPagos { get; set; }
 
     public virtual DbSet<Documento> Documentos { get; set; }
 
@@ -283,8 +281,7 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("cab_sol_pago");
 
             entity.Property(e => e.CabPagoID)
-                .HasColumnName("cab_pago_ID")
-                .ValueGeneratedNever();
+                .HasColumnName("cab_pago_ID");
 
             entity.Property(e => e.CabPagoNumerico)
                 .IsRequired()
@@ -328,11 +325,14 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabPagoProveedor)
                 .HasColumnName("cab_pago_proveedor");
 
-            entity.Property(e => e.CabPagoRuc)
+            entity.Property(e => e.CabPagoRucProveedor)
                 .IsRequired()
-                .HasColumnName("cab_pago_ruc")
+                .HasColumnName("cab_pago_ruc_proveedor")
                 .HasMaxLength(25);
 
+            entity.Property(e => e.Cabpagototal)
+                .HasColumnName("cab_pago_total");
+      
             entity.Property(e => e.CabPagoObservaciones)
                 .HasColumnName("cab_pago_observaciones")
                 .HasMaxLength(500);
@@ -491,137 +491,41 @@ public partial class SolicitudContext : DbContext
                 .HasConstraintName("FK_sol_cotizacion_item");*/
         });
 
-        //editar a detsolordcompra
-        modelBuilder.Entity<DetSolOrdenCompra>(entity =>
-        {
-            entity.HasKey(e => e.SolOrdIdSolicitud);
-
-            entity.ToTable("sol_orden_compra");
-
-            entity.Property(e => e.SolOrdIdSolicitud)
-                .ValueGeneratedNever()
-                .HasColumnName("sol_ord_id_solicitud");
-            entity.Property(e => e.AudEvento)
-                .HasMaxLength(50)
-                .HasColumnName("aud_evento");
-            entity.Property(e => e.AudFecha)
-                .HasColumnType("date")
-                .HasColumnName("aud_fecha");
-            entity.Property(e => e.AudObservacion)
-                .HasMaxLength(250)
-                .HasColumnName("aud_observacion");
-            entity.Property(e => e.AudUsuario)
-                .HasMaxLength(50)
-                .HasColumnName("aud_usuario");
-            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
-            entity.Property(e => e.SolOrdAdjCotizacion)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_adj_cotizacion");
-            entity.Property(e => e.SolOrdCantidad).HasColumnName("sol_ord_cantidad");
-            entity.Property(e => e.SolOrdDescripcion)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_descripcion");
-            entity.Property(e => e.SolOrdEstado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_estado");
-            entity.Property(e => e.SolOrdIdCabecera).HasColumnName("sol_ord_id_cabecera");
-            entity.Property(e => e.SolOrdInspector)
-                .HasMaxLength(100)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_inspector");
-            entity.Property(e => e.SolOrdItem).HasColumnName("sol_ord_item");
-            entity.Property(e => e.SolOrdPresupuesto)
-                .HasMaxLength(30)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_presupuesto");
-            entity.Property(e => e.SolOrdProcedimiento)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_procedimiento");
-            entity.Property(e => e.SolOrdTelefono)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_telefono");
-            entity.Property(e => e.SolOrdUnidad)
-                .HasMaxLength(5)
-                .IsUnicode(false)
-                .HasColumnName("sol_ord_unidad");
-
-            /*entity.HasOne(d => d.SolOrdIdCabeceraNavigation).WithMany(p => p.SolOrdenCompras)
-                .HasForeignKey(d => d.SolOrdIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_orden_compra_cab_sol_orden_compra");*/
-
-            /*entity.HasOne(d => d.SolOrdItemNavigation).WithMany(p => p.SolOrdenCompras)
-                .HasForeignKey(d => d.SolOrdItem)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_orden_compra_item");*/
-        });
-
         //editar a detsolpago
         modelBuilder.Entity<DetSolPago>(entity =>
         {
-            entity.HasKey(e => e.SolPagoIdSolicitud);
+            entity.HasKey(e => e.DetPagoID);
 
-            entity.ToTable("sol_pago");
+            entity.ToTable("det_sol_pago"); // Reemplaza "nombre_de_la_tabla" con el nombre real de tu tabla en la base de datos.
 
-            entity.Property(e => e.SolPagoIdSolicitud)
-                .ValueGeneratedNever()
-                .HasColumnName("sol_pago_id_solicitud");
-            entity.Property(e => e.AudEvento)
-                .HasMaxLength(50)
-                .HasColumnName("aud_evento");
-            entity.Property(e => e.AudFecha)
-                .HasColumnType("date")
-                .HasColumnName("aud_fecha");
-            entity.Property(e => e.AudObservacion)
-                .HasMaxLength(250)
-                .HasColumnName("aud_observacion");
-            entity.Property(e => e.AudUsuario)
-                .HasMaxLength(50)
-                .HasColumnName("aud_usuario");
-            entity.Property(e => e.AudVeces).HasColumnName("aud_veces");
-            entity.Property(e => e.SolPagoAbono)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_abono");
-            entity.Property(e => e.SolPagoAplMulta)
-                .HasMaxLength(500)
-                .HasColumnName("sol_pago_apl_multa");
-            entity.Property(e => e.SolPagoCantContratada).HasColumnName("sol_pago_cant_contratada");
-            entity.Property(e => e.SolPagoCantRecibida).HasColumnName("sol_pago_cant_recibida");
-            entity.Property(e => e.SolPagoCerrarOrden)
-                .HasMaxLength(2)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_cerrar_orden");
-            entity.Property(e => e.SolPagoEstado)
-                .HasMaxLength(50)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_estado");
-            entity.Property(e => e.SolPagoIdCabecera).HasColumnName("sol_pago_id_cabecera");
-            entity.Property(e => e.SolPagoItem)
-                .HasMaxLength(500)
-                .IsUnicode(false)
-                .HasColumnName("sol_pago_item");
-            entity.Property(e => e.SolPagoObservaciones)
-                .HasMaxLength(500)
-                .HasColumnName("sol_pago_observaciones");
-            entity.Property(e => e.SolPagoPagoTotal).HasColumnName("sol_pago_pago_total");
-            entity.Property(e => e.SolPagoReceptor)
-                .HasMaxLength(100)
-                .HasColumnName("sol_pago_receptor");
-            entity.Property(e => e.SolPagoSubtotal).HasColumnName("sol_pago_subtotal");
-            entity.Property(e => e.SolPagoTotal).HasColumnName("sol_pago_total");
-            entity.Property(e => e.SolPagoValDescontar).HasColumnName("sol_pago_val_descontar");
-            entity.Property(e => e.SolPagoValUnitario).HasColumnName("sol_pago_val_unitario");
+            entity.Property(e => e.DetPagoID)
+                .HasColumnName("det_pago_ID")
+                .IsRequired(); // Esto indica que la columna es requerida.
 
-            /*entity.HasOne(d => d.SolPagoIdCabeceraNavigation).WithMany(p => p.DetSolPagos)
-                .HasForeignKey(d => d.SolPagoIdCabecera)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_sol_pago_cab_sol_pago");*/
+            entity.Property(e => e.DetPagoItemDesc)
+                .HasColumnName("det_pago_item_desc")
+                .HasMaxLength(255); // Puedes ajustar el tamaño máximo según tus necesidades.
+
+            entity.Property(e => e.DetPagoCantContratada)
+                .HasColumnName("det_pago_cant_contratada");
+
+            entity.Property(e => e.DetPagoCantRecibida)
+                .HasColumnName("det_pago_cant_recibida");
+
+            entity.Property(e => e.DetPagoValUnitario)
+                .HasColumnName("det_pago_val_unitario");
+
+            entity.Property(e => e.DetPagoSubtotal)
+                .HasColumnName("det_pago_subtotal");
+
+            entity.Property(e => e.DetPagoTipoSol)
+                .HasColumnName("det_pago_tipo_solicitud");
+
+            entity.Property(e => e.DetPagoNoSol)
+                .HasColumnName("det_pago_no_solicitud");
+
+            entity.Property(e => e.DetPagoIdDetalle)
+                .HasColumnName("det_pago_id_detalle");
         });
 
         modelBuilder.Entity<Documento>(entity =>
