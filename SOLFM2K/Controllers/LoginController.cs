@@ -43,6 +43,7 @@ namespace SOLFM2K.Controllers
                 Token = token,
                 Usuario = new
                 {
+                    //datos para realizar la autorizacion
                     usLogin = user.UsLogin,
                     usIdNomina = user.UsIdNomina,
                     usNombre = user.UsNombre
