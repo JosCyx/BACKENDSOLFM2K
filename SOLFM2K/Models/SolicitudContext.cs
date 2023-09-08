@@ -53,6 +53,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<RolUsuario> RolUsuarios { get; set; }
 
+    public virtual DbSet<RolTransaccion> RolTransaccion { get; set; }
+
     public virtual DbSet<Ruteo> Ruteos { get; set; }
 
     public virtual DbSet<RuteoArea> RuteoAreas { get; set; }
@@ -934,6 +936,26 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(20)
                 .HasColumnName("ru_login");
             entity.Property(e => e.RuRol).HasColumnName("ru_rol");
+        });
+
+        modelBuilder.Entity<RolTransaccion>(entity =>
+        {
+            entity.ToTable("rol_transaccion");
+
+            entity.HasKey(e => e.RtId).HasName("PK_tb_rol_transaccion");
+
+            entity.Property(e => e.RtId)
+                  .HasColumnName("rt_id");
+            entity.Property(e => e.RtEmpresa)
+                  .HasColumnName("rt_empresa");
+            entity.Property(e => e.RtRol)
+                  .HasColumnName("rt_rol");
+            entity.Property(e => e.RtTransaccion)
+                    .HasMaxLength(75)
+                    .HasColumnName("rt_transaccion");
+            entity.Property(e => e.RtEstado)
+                  .HasMaxLength(1)
+                  .HasColumnName("rt_estado");
         });
 
         modelBuilder.Entity<Ruteo>(entity =>
