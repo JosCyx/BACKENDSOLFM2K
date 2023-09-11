@@ -867,24 +867,32 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.ProvId)
                 .ValueGeneratedNever()
                 .HasColumnName("prov_id");
-            entity.Property(e => e.ProvCiudad)
-                .HasMaxLength(100)
-                .HasColumnName("prov_ciudad");
-            entity.Property(e => e.ProvCorreo)
-                .HasMaxLength(100)
-                .HasColumnName("prov_correo");
-            entity.Property(e => e.ProvEmail)
-                .HasMaxLength(50)
-                .HasColumnName("prov_email");
+            entity.Property(e => e.ProvRuc)
+                .HasMaxLength(20)
+                .HasColumnName("prov_ruc");
             entity.Property(e => e.ProvNombre)
                 .HasMaxLength(100)
                 .HasColumnName("prov_nombre");
-            entity.Property(e => e.ProvPais)
+            entity.Property(e => e.ProvAlias)
                 .HasMaxLength(100)
-                .HasColumnName("prov_pais");
+                .HasColumnName("prov_alias");
+            entity.Property(e => e.ProvTelefono)
+                .HasMaxLength(15)
+                .HasColumnName("prov_telefono");
+            entity.Property(e => e.ProvCorreo)
+                .HasMaxLength(50)
+                .HasColumnName("prov_correo");
+
+            entity.Property(e => e.ProvCiudad)
+                .HasMaxLength(50)
+                .HasColumnName("prov_ciudad");
             entity.Property(e => e.ProvProvincia)
-                .HasMaxLength(100)
+                .HasMaxLength(50)
                 .HasColumnName("prov_provincia");
+            entity.Property(e => e.ProvPais)
+                .HasMaxLength(50)
+                .HasColumnName("prov_pais");
+            
         });
 
         modelBuilder.Entity<Prueba>(entity =>

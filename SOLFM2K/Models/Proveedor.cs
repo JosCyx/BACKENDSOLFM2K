@@ -7,17 +7,23 @@ public partial class Proveedor
 {
     public int ProvId { get; set; }
 
+    public string ProvRuc { get; set; } = null!;
+
     public string ProvNombre { get; set; } = null!;
+    
+    public string? ProvAlias { get; set; } = null!;
 
-    public string ProvEmail { get; set; } = null!;
+    public string? ProvTelefono { get; set; } = null!;
 
-    public string ProvCiudad { get; set; } = null!;
+    public string? ProvCorreo { get; set; } = null!;
 
-    public string ProvProvincia { get; set; } = null!;
+    public string? ProvCiudad { get; set; } = null!;
 
-    public string ProvPais { get; set; } = null!;
+    public string? ProvProvincia { get; set; } = null!;
 
-    public string ProvCorreo { get; set; } = null!;
+    public string? ProvPais { get; set; } = null!;
+
+    
 
     //public virtual ICollection<CabSolOrdenCompra> CabSolOrdenCompras { get; set; } = new List<CabSolOrdenCompra>();
 
