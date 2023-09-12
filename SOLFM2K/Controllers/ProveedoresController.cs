@@ -32,7 +32,7 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpGet("ProveedorbyRuc")]
-        public async Task<ActionResult<IEnumerable<ProveedorTemplate>>> GetRuteoAreasByRutaArea(string ruc)
+        public async Task<ActionResult<IEnumerable<ProveedorTemplate>>> GetProveedorByRuc(string ruc)
         {
             var proveedor = await _context.ProveedorTemplates.FromSqlRaw("EXEC sp_buscarProveedorByRUC @p0", ruc).ToListAsync();
        
