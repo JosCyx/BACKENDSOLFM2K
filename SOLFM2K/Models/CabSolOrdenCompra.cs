@@ -42,7 +42,7 @@ public partial class CabSolOrdenCompra
 
     public string? cabSolOCTelefInspector { get; set; } = null!;
 
-    public int? cabSolOCProveedor { get; set; }
+    public string? cabSolOCProveedor { get; set; }
 
     public string? cabSolOCRUCProveedor { get; set; } = null!;
 
