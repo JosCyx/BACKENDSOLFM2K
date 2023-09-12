@@ -69,6 +69,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
+    public virtual DbSet<ProveedorTemplate> ProveedorTemplates { get; set; }
+
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -269,6 +271,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_telef_inspector");
 
             entity.Property(e => e.cabSolOCProveedor)
+                .HasMaxLength(50)
                 .HasColumnName("cab_ordc_proveedor");
 
             entity.Property(e => e.cabSolOCRUCProveedor)
@@ -865,7 +868,6 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("proveedor");
 
             entity.Property(e => e.ProvId)
-                .ValueGeneratedNever()
                 .HasColumnName("prov_id");
             entity.Property(e => e.ProvRuc)
                 .HasMaxLength(20)
@@ -893,6 +895,30 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("prov_pais");
             
+        });
+        modelBuilder.Entity<ProveedorTemplate>(entity =>
+        {
+           
+
+            entity.ToTable("proveedorTmp");
+            entity.HasNoKey();
+
+            entity.Property(e => e.prov_alias)
+                .HasMaxLength(100)
+                .HasColumnName("prvtmp_alias");
+            entity.Property(e => e.prov_nombre)
+                .HasMaxLength(100)
+                .HasColumnName("prvtmp_nombre");
+            entity.Property(e => e.prov_ruc)
+                .HasMaxLength(20)
+                .HasColumnName("prvtmp_ruc");
+            entity.Property(e => e.prov_telefono)
+                .HasMaxLength(15)
+                .HasColumnName("prvtmp_telefono");
+          
+
+            
+
         });
 
         modelBuilder.Entity<Prueba>(entity =>

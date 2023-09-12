@@ -32,9 +32,10 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpGet("ProveedorbyRuc")]
-        public async Task<ActionResult<IEnumerable<Proveedor>>> GetRuteoAreasByRutaArea(string ruc)
+        public async Task<ActionResult<IEnumerable<ProveedorTemplate>>> GetRuteoAreasByRutaArea(string ruc)
         {
-            var proveedor = await _context.Proveedors.Where(ra => ra.ProvRuc == ruc).ToListAsync();
+            var proveedor = await _context.ProveedorTemplates.FromSqlRaw("EXEC sp_buscarProveedorByRUC @p0", ruc).ToListAsync();
+       
 
             if (proveedor == null || proveedor.Count == 0)
             {
@@ -42,6 +43,19 @@ namespace SOLFM2K.Controllers
             }
 
             return proveedor;
+        }
+        [HttpGet("ProveedorByNombre")]
+        public async Task<ActionResult<IEnumerable<ProveedorTemplate>>> getProveedorByNombre(string nombre)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var ProveedorByNombre = await _context.ProveedorTemplates.FromSqlRaw("EXEC sp_buscarProveedorByNombre @p0", nombre).ToListAsync();
+
+            if (ProveedorByNombre == null || ProveedorByNombre.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return ProveedorByNombre;
         }
 
         // GET: api/Proveedors/5
