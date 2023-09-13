@@ -71,6 +71,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<ProveedorTemplate> ProveedorTemplates { get; set; }
 
+    public virtual DbSet<CotizacionProveedor> CotizacionProveedors { get; set; }
+
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1166,6 +1168,33 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false)
                 .HasColumnName("us_user_data");
+        });
+
+        modelBuilder.Entity<CotizacionProveedor>(entity =>
+        {
+            entity.HasKey(e => e.CotProvId).HasName("PK_proveedor");
+
+            entity.ToTable("cotizacion_proveedor");
+
+            entity.Property(e => e.CotProvId).HasColumnName("cot_prov_id");
+            entity.Property(e => e.CotProvCorreo)
+                .HasMaxLength(50)
+                .HasColumnName("cot_prov_correo");
+            entity.Property(e => e.CotProvDireccion)
+                .HasMaxLength(50)
+                .HasColumnName("cot_prov_direccion");
+            entity.Property(e => e.CotProvNoProveedor).HasColumnName("cot_prov_no_proveedor");
+            entity.Property(e => e.CotProvNoSolicitud).HasColumnName("cot_prov_no_solicitud");
+            entity.Property(e => e.CotProvNombre)
+                .HasMaxLength(100)
+                .HasColumnName("cot_prov_nombre");
+            entity.Property(e => e.CotProvRuc)
+                .HasMaxLength(20)
+                .HasColumnName("cot_prov_ruc");
+            entity.Property(e => e.CotProvTelefono)
+                .HasMaxLength(15)
+                .HasColumnName("cot_prov_telefono");
+            entity.Property(e => e.CotProvTipoSolicitud).HasColumnName("cot_prov_tipo_solicitud");
         });
 
         OnModelCreatingPartial(modelBuilder);
