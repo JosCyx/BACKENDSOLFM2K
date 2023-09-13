@@ -328,7 +328,8 @@ public partial class SolicitudContext : DbContext
                 .HasColumnType("date");
 
             entity.Property(e => e.CabPagoProveedor)
-                .HasColumnName("cab_pago_proveedor");
+                .HasColumnName("cab_pago_proveedor")
+                 .HasMaxLength(50);
 
             entity.Property(e => e.CabPagoRucProveedor)
                 .IsRequired()

@@ -18,7 +18,7 @@ public partial class CabSolPago
     public DateTime CabPagoFechaEnvio { get; set; }
     public string CabPagoNumFactura { get; set; }
     public DateTime CabPagoFechaFactura { get; set; }
-    public int CabPagoProveedor { get; set; }
+    public string CabPagoProveedor { get; set; }
     public string CabPagoRucProveedor { get; set; }
     public double Cabpagototal { get; set; }
     public string CabPagoObservaciones { get; set; } = null!;
