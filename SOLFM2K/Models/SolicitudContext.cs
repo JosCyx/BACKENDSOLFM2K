@@ -1182,7 +1182,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CotProvDireccion)
                 .HasMaxLength(50)
                 .HasColumnName("cot_prov_direccion");
-            entity.Property(e => e.CotProvNoProveedor).HasColumnName("cot_prov_no_proveedor");
             entity.Property(e => e.CotProvNoSolicitud).HasColumnName("cot_prov_no_solicitud");
             entity.Property(e => e.CotProvNombre)
                 .HasMaxLength(100)
