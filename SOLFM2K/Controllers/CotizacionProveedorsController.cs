@@ -9,6 +9,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class CotizacionProveedorsController : ControllerBase
@@ -49,6 +50,22 @@ namespace SOLFM2K.Controllers
             return cotizacionProveedor;
         }
 
+        // GET: api/CotizacionProveedors
+        [HttpGet("GetProveedorbyCotizacion")]
+        public async Task<ActionResult<IEnumerable<CotizacionProveedor>>> GetProveedorbyCotizacion(int tipoSol, int noSol)
+        {
+            var cotizacionProveedor = await _context.CotizacionProveedors
+                                      .Where(cp => cp.CotProvTipoSolicitud == tipoSol && cp.CotProvNoSolicitud == noSol).ToListAsync();
+
+            if (cotizacionProveedor == null || cotizacionProveedor.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return cotizacionProveedor;
+        }
+
+
         // PUT: api/CotizacionProveedors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -85,15 +102,32 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<CotizacionProveedor>> PostCotizacionProveedor(CotizacionProveedor cotizacionProveedor)
         {
-          if (_context.CotizacionProveedors == null)
-          {
-              return Problem("Entity set 'SolicitudContext.CotizacionProveedors'  is null.");
-          }
+            if (_context.CotizacionProveedors == null)
+            {
+                return Problem("Entity set 'SolicitudContext.CotizacionProveedors' is null.");
+            }
+
+            // Verificar si ya existe un proveedor con la misma información
+            var existingProveedor = await _context.CotizacionProveedors
+                .FirstOrDefaultAsync(cp =>
+                    cp.CotProvRuc == cotizacionProveedor.CotProvRuc &&
+                    cp.CotProvNombre == cotizacionProveedor.CotProvNombre &&
+                    cp.CotProvTelefono == cotizacionProveedor.CotProvTelefono);
+
+            if (existingProveedor != null)
+            {
+                // El proveedor ya existe, puedes manejar esta situación según tus necesidades
+                // Por ejemplo, podrías devolver un mensaje de error o simplemente no hacer nada
+                return Conflict("El proveedor ya existe en la base de datos.");
+            }
+
+            // Si no se encuentra un proveedor existente, agrega el nuevo proveedor
             _context.CotizacionProveedors.Add(cotizacionProveedor);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostCotizacionProveedor), new { id = cotizacionProveedor.CotProvId }, cotizacionProveedor);
         }
+
 
         // DELETE: api/CotizacionProveedors/5
         [HttpDelete("{id}")]
