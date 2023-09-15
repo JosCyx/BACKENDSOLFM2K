@@ -196,6 +196,14 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("cab_sol_cot_telef_inspector");
 
+            entity.Property(e => e.CabSolCotAprobPresup)
+                .HasMaxLength(5)
+                .HasColumnName("cab_sol_cot_aprob_presup");
+
+            entity.Property(e => e.CabSolCotMtovioDev)
+                .HasMaxLength(5)
+                .HasColumnName("cab_sol_cot_motivo_devolucion");
+
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)

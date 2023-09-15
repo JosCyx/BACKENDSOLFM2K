@@ -9,7 +9,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class CotizacionProveedorsController : ControllerBase
@@ -54,8 +54,8 @@ namespace SOLFM2K.Controllers
         [HttpGet("GetProveedorbyCotizacion")]
         public async Task<ActionResult<IEnumerable<CotizacionProveedor>>> GetProveedorbyCotizacion(int tipoSol, int noSol)
         {
-            var cotizacionProveedor = await _context.CotizacionProveedors
-                                      .Where(cp => cp.CotProvTipoSolicitud == tipoSol && cp.CotProvNoSolicitud == noSol).ToListAsync();
+            var cotizacionProveedor = await _context.CotizacionProveedors.Where(cp => cp.CotProvTipoSolicitud == tipoSol && 
+                                                                                cp.CotProvNoSolicitud == noSol).ToListAsync();
 
             if (cotizacionProveedor == null || cotizacionProveedor.Count == 0)
             {
