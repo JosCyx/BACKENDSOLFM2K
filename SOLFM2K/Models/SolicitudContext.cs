@@ -73,6 +73,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<CotizacionProveedor> CotizacionProveedors { get; set; }
 
+
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -539,18 +540,21 @@ public partial class SolicitudContext : DbContext
         modelBuilder.Entity<Documento>(entity =>
         {
             entity
-                .HasNoKey()
                 .ToTable("documentos");
-
-            entity.Property(e => e.DocClave).HasColumnName("doc_clave");
-            entity.Property(e => e.DocDescripcion)
-                .HasMaxLength(50)
-                .HasColumnName("doc_descripcion");
+            entity.HasKey(e => e.DocId).HasName("PK_documentos");
             entity.Property(e => e.DocEstado)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("doc_estado");
+            entity.Property(e => e.DocId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("doc_id");
+            entity.Property(e => e.DocNoSolicitud).HasColumnName("doc_no_solicitud");
+            entity.Property(e => e.DocTipoSolicitud).HasColumnName("doc_tipo_solicitud");
+            entity.Property(e => e.DocUrl)
+                .HasMaxLength(300)
+                .HasColumnName("doc_URL");
         });
 
         modelBuilder.Entity<EmplNivel>(entity =>
