@@ -119,8 +119,8 @@ namespace SOLFM2K.Controllers
                     //using (FileStream newFile = System.IO.File.Create(Filepaths))//
                     using (var stream = System.IO.File.Create(rutaDOC))
                     {
-                        stream.CopyTo(stream);
-                        //stream.Flush();//
+                        archivos.CopyTo(stream);
+                        stream.Flush();
                     }
                     var documento = new Documento();
                     documento.DocUrl = rutaDOC;
@@ -134,8 +134,8 @@ namespace SOLFM2K.Controllers
                     var rutaDOC = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Compra\" + prefijo + archivos.FileName;
                     using (var stream = System.IO.File.Create(rutaDOC))
                     {
-                        stream.CopyTo(stream);
-                        //stream.Flush();//
+                        archivos.CopyTo(stream);
+                        stream.Flush();
                     }
                     var documento = new Documento();
                     documento.DocUrl = rutaDOC;
@@ -149,8 +149,8 @@ namespace SOLFM2K.Controllers
                     var rutaDOC = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\" + prefijo + archivos.FileName;
                     using (var stream = System.IO.File.Create(rutaDOC))
                     {
-                        stream.CopyTo(stream);
-                        //stream.Flush();//
+                        archivos.CopyTo(stream);
+                        stream.Flush();
                     }
                     var documento = new Documento();
                     documento.DocUrl = rutaDOC;
