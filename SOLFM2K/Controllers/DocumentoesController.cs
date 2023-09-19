@@ -16,14 +16,12 @@ namespace SOLFM2K.Controllers
     public class DocumentoController : ControllerBase
     {
         private readonly SolicitudContext _context;
-        private readonly string _rutaService;
-        private readonly string _rutaLocal;
+        
 
-        public DocumentoController(SolicitudContext context,IConfiguration config)
+        public DocumentoController(SolicitudContext context)
         {
             _context = context;
-            //_rutaService = config.GetSection("Configuracion").GetSection("RutaService").Value;
-            string _rutaLocal= "http:\\192.168.1.75\\Solicitudes\\Solicitud_Cotizacion";
+       
         }
 
         // GET: api/Documentoes
@@ -103,74 +101,55 @@ namespace SOLFM2K.Controllers
         // Subir archivos  PDF 
         [HttpPost]
         [Route("upload")]
-        public  ActionResult UploadFiles( IFormFile archivos,string prefijo,int tipoSOl)
+        public ActionResult UploadFiles(IFormFile archivos, string prefijo, int tipoSol, int noSol)
         {
-        
             // Credenciales para servidor 
             var user = "";
             var password = "";
-            var RedCredencial = new NetworkCredential(user, password);
+            var redCredencial = new NetworkCredential(user, password);
+
             try
             {
-                if (tipoSOl == 1)
+                string rutaBase = @"\\192.168.1.75\Solicitudes\";
+                string subdirectorio = "";
+
+                switch (tipoSol)
                 {
-                    //coti
-                    var rutaDOC = @"\\192.168.1.75\Solicitudes\Solicitud_Cotizacion\" + prefijo + archivos.FileName;
-                    //using (FileStream newFile = System.IO.File.Create(Filepaths))//
-                    using (var stream = System.IO.File.Create(rutaDOC))
-                    {
-                        archivos.CopyTo(stream);
-                        stream.Flush();
-                    }
-                    var documento = new Documento();
-                    documento.DocUrl = rutaDOC;
-
-                    _context.Documentos.Add(documento);
-                    _context.SaveChanges();
-
+                    case 1:
+                        subdirectorio = "Solicitud_Cotizacion";
+                        break;
+                    case 2:
+                        subdirectorio = "Solicitud_Orden_Compra";
+                        break;
+                    case 3:
+                        subdirectorio = "Solicitud_Orden_Pago";
+                        break;
+                    default:
+                        return BadRequest("Tipo de solicitud no válido");
                 }
-                else if (tipoSOl == 2)
+
+                string rutaDOC = Path.Combine(rutaBase, subdirectorio, prefijo + archivos.FileName);
+
+                using (var stream = System.IO.File.Create(rutaDOC))
                 {
-                    var rutaDOC = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Compra\" + prefijo + archivos.FileName;
-                    using (var stream = System.IO.File.Create(rutaDOC))
-                    {
-                        archivos.CopyTo(stream);
-                        stream.Flush();
-                    }
-                    var documento = new Documento();
-                    documento.DocUrl = rutaDOC;
-
-                    _context.Documentos.Add(documento);
-                    _context.SaveChanges();
-
+                    archivos.CopyTo(stream);
+                    stream.Flush();
                 }
-                else if (tipoSOl == 3)
-                {
-                    var rutaDOC = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\" + prefijo + archivos.FileName;
-                    using (var stream = System.IO.File.Create(rutaDOC))
-                    {
-                        archivos.CopyTo(stream);
-                        stream.Flush();
-                    }
-                    var documento = new Documento();
-                    documento.DocUrl = rutaDOC;
 
-                    _context.Documentos.Add(documento);
-                    _context.SaveChanges();
-                }
-                //Se guarda en la ruta del servidor 
-                //using (var newFile = new FileStream(rutaDOC,File.Create,FileAccess.Write,FileShare.None))
-                //{
-                //    archivos.CopyTo(newFile);
-                //}
-                //return CreatedAtAction(nameof(PostDocumento), new { id = documento.DocId }, documento);
+                var documento = new Documento();
+                documento.DocTipoSolicitud = tipoSol;
+                documento.DocNoSolicitud = noSol;
+                documento.DocUrl = rutaDOC;
+
+                _context.Documentos.Add(documento);
+                _context.SaveChanges();
+
                 return Ok(archivos);
             }
             catch (Exception error)
             {
                 return StatusCode(500, "Error al subir el archivo: " + error.Message);
             }
-            
         }
 
         // DELETE: api/Documentoes/5
