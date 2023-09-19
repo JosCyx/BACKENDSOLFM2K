@@ -6,9 +6,11 @@ using SOLFM2K.Services;
 using SOLFM2K.Services.EmailService;
 using System.Text;
 
+
 //var  secretKey = "RQ9aP&1BvXxZ$uFqGKsX5GmDwN8@Y3T!";
 var builder = WebApplication.CreateBuilder(args);
 
+//coregir acceso a configuracion de jwt
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var issuer = jwtSettings["Issuer"];
 var audience = jwtSettings["Audience"];
