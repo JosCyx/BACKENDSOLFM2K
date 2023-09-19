@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SOLFM2K.Models;
 using SOLFM2K.Services;
+using SOLFM2K.Services.EmailService;
 using System.Text;
 
 //var  secretKey = "RQ9aP&1BvXxZ$uFqGKsX5GmDwN8@Y3T!";
@@ -54,6 +55,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 // Registra el servicio ITokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
+
+//Registra el servicio IEmailService
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Registrar el filtro de autorización personalizado
 builder.Services.AddScoped<JwtAuthorizationFilter>();

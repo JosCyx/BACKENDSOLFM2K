@@ -11,8 +11,6 @@ public partial class CotizacionProveedor
 
     public int CotProvNoSolicitud { get; set; }
 
-    public int CotProvNoProveedor { get; set; }
-
     public string CotProvRuc { get; set; } = null!;
 
     public string CotProvNombre { get; set; } = null!;

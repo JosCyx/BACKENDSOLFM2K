@@ -197,6 +197,14 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("cab_sol_cot_telef_inspector");
 
+            entity.Property(e => e.CabSolCotAprobPresup)
+                .HasMaxLength(5)
+                .HasColumnName("cab_sol_cot_aprob_presup");
+
+            entity.Property(e => e.CabSolCotMtovioDev)
+                .HasMaxLength(5)
+                .HasColumnName("cab_sol_cot_motivo_devolucion");
+
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -1187,7 +1195,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CotProvDireccion)
                 .HasMaxLength(50)
                 .HasColumnName("cot_prov_direccion");
-            entity.Property(e => e.CotProvNoProveedor).HasColumnName("cot_prov_no_proveedor");
             entity.Property(e => e.CotProvNoSolicitud).HasColumnName("cot_prov_no_solicitud");
             entity.Property(e => e.CotProvNombre)
                 .HasMaxLength(100)
