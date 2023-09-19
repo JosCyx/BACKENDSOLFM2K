@@ -73,6 +73,10 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<CotizacionProveedor> CotizacionProveedors { get; set; }
 
+    public virtual DbSet<SmtpConf> SmtpConfs { get; set; }
+
+    public virtual DbSet<JwtConfig> JwtConfigs { get; set; }
+
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1201,6 +1205,41 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("cot_prov_telefono");
             entity.Property(e => e.CotProvTipoSolicitud).HasColumnName("cot_prov_tipo_solicitud");
+        });
+
+        modelBuilder.Entity<SmtpConf>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("smtp_conf");
+
+            entity.Property(e => e.Pass)
+                .HasMaxLength(32)
+                .HasColumnName("pass");
+            entity.Property(e => e.Status)
+                .HasMaxLength(3)
+                .IsFixedLength()
+                .HasColumnName("status");
+            entity.Property(e => e.Username)
+                .HasMaxLength(50)
+                .HasColumnName("username");
+        });
+
+        modelBuilder.Entity<JwtConfig>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToTable("jwt_config");
+
+            entity.Property(e => e.JwtAudence)
+                .HasMaxLength(100)
+                .HasColumnName("jwt_audence");
+            entity.Property(e => e.JwtIssuer)
+                .HasMaxLength(100)
+                .HasColumnName("jwt_issuer");
+            entity.Property(e => e.JwtSecretKey)
+                .HasMaxLength(100)
+                .HasColumnName("jwt_secretKey");
         });
 
         OnModelCreatingPartial(modelBuilder);
