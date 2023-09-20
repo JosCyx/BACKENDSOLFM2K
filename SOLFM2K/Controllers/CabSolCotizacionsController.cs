@@ -16,7 +16,7 @@ namespace SOLFM2K.Controllers
     [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    
     public class CabSolCotizacionsController : ControllerBase
     {
         private readonly SolicitudContext _context;

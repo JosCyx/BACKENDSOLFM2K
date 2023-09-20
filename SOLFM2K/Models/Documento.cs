@@ -10,6 +10,7 @@ public partial class Documento
     public int DocTipoSolicitud { get; set; }
 
     public int DocNoSolicitud { get; set; }
+    public string? DocNombre { get; set; }
 
     public string DocUrl { get; set; } = null!;
 

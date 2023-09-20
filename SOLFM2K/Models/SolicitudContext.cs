@@ -563,6 +563,11 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.DocUrl)
                 .HasMaxLength(300)
                 .HasColumnName("doc_URL");
+
+            entity.Property(e => e.DocNombre)
+                .HasMaxLength(100)
+                .HasColumnName("doc_nombre");
+
         });
 
         modelBuilder.Entity<EmplNivel>(entity =>

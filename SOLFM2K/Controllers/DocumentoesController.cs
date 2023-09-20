@@ -11,28 +11,31 @@ using static System.Net.WebRequestMethods;
 
 namespace SOLFM2K.Controllers
 {
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentoController : ControllerBase
     {
         private readonly SolicitudContext _context;
-        
+
 
         public DocumentoController(SolicitudContext context)
         {
             _context = context;
-       
+
         }
 
         // GET: api/Documentoes
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Documento>>> GetDocumentos()
+        [HttpGet("GetDocumentos")]
+        public async Task<ActionResult<IEnumerable<Documento>>> GetDocumentos(int tipoSol,int noSol)
         {
-          if (_context.Documentos == null)
+            var documentos = await _context.Documentos
+              .Where(c => c.DocTipoSolicitud == tipoSol && c.DocNoSolicitud == noSol).ToListAsync();
+            if (documentos == null)
           {
               return NotFound();
           }
-            return await _context.Documentos.ToListAsync();
+            return  documentos;
         }
 
         // GET: api/Documentoes/5
@@ -139,6 +142,7 @@ namespace SOLFM2K.Controllers
                 var documento = new Documento();
                 documento.DocTipoSolicitud = tipoSol;
                 documento.DocNoSolicitud = noSol;
+                documento.DocNombre =archivos.FileName;
                 documento.DocUrl = rutaDOC;
 
                 _context.Documentos.Add(documento);
