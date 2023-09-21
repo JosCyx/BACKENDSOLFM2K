@@ -3,9 +3,13 @@ using System.Collections.Generic;
 
 namespace SOLFM2K.Models;
 
-public partial class SmtpConf
+public partial class ParamsConf
 {
-    public string Username { get; set; } = null!;
+    public int Id { get; set; }
+
+    public string Identify { get; set; } = null!;
+
+    public string Content { get; set; } = null!;
 
     public string Pass { get; set; } = null!;
 

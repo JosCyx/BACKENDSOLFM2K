@@ -73,7 +73,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<CotizacionProveedor> CotizacionProveedors { get; set; }
 
-    public virtual DbSet<SmtpConf> SmtpConfs { get; set; }
+    public virtual DbSet<ParamsConf> ParamsConfs { get; set; }
 
     public virtual DbSet<JwtConfig> JwtConfigs { get; set; }
 
@@ -1207,22 +1207,27 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CotProvTipoSolicitud).HasColumnName("cot_prov_tipo_solicitud");
         });
 
-        modelBuilder.Entity<SmtpConf>(entity =>
+        modelBuilder.Entity<ParamsConf>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("smtp_conf");
+            entity.HasKey(e => e.Id).HasName("PK_params_conf");
 
+            entity
+                .ToTable("params_conf");
+
+            entity.Property(e => e.Id).HasColumnName("param_ID");
             entity.Property(e => e.Pass)
-                .HasMaxLength(32)
-                .HasColumnName("pass");
+                .HasMaxLength(80)
+                .HasColumnName("param_pass");
             entity.Property(e => e.Status)
                 .HasMaxLength(3)
                 .IsFixedLength()
-                .HasColumnName("status");
-            entity.Property(e => e.Username)
+                .HasColumnName("param_status");
+            entity.Property(e => e.Content)
                 .HasMaxLength(50)
-                .HasColumnName("username");
+                .HasColumnName("param_content");
+            entity.Property(e => e.Identify)
+                .HasMaxLength(50)
+                .HasColumnName("param_identify");
         });
 
         modelBuilder.Entity<JwtConfig>(entity =>

@@ -16,25 +16,24 @@ namespace SOLFM2K.Services.EmailService
         public EmailService(IConfiguration configuration, SolicitudContext context)
         {
             _configuration = configuration;
-            _context = context; 
+            _context = context;
         }
 
         public void SendEmail(EmailDTO request)
         {
-            var smtpCredentials = _context.SmtpConfs.FirstOrDefault();
-
-            if (smtpCredentials == null)
-            {
-                //something
-            }
+            //recupera las credenciales para enviar los correos
+            var smtpCredentials = _context.ParamsConfs.FirstOrDefault(cr => cr.Identify == "SMTP");
 
             var emailHost = _configuration.GetSection("MailConfiguration:EmailHost").Value;
-            var emailUsername = smtpCredentials.Username;
+            var emailUsername = smtpCredentials.Content;
             var emailPass = smtpCredentials.Pass;
+
+
+            //recorre la lista de destinatarios y envia un correo a cada uno
 
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(emailUsername));
-            email.To.Add(MailboxAddress.Parse(request.Para));
+            email.To.Add(MailboxAddress.Parse(request.Destinatario));
             email.Subject = request.Asunto;
             email.Body = new TextPart(TextFormat.Html) { Text = request.Contenido };
             email.Body.Headers.Add("Content-Type", "text/html; charset=utf-8");
@@ -44,6 +43,8 @@ namespace SOLFM2K.Services.EmailService
             smtp.Authenticate(emailUsername, emailPass);
             smtp.Send(email);
             smtp.Disconnect(true);
+
         }
+   
     }
 }
