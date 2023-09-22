@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SOLFM2K.Models;
 using SOLFM2K.Services;
+using SOLFM2K.Services.CryptoService;
 using SOLFM2K.Services.EmailService;
 using System.Text;
 
@@ -63,6 +64,8 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Registrar el filtro de autorización personalizado
 builder.Services.AddScoped<JwtAuthorizationFilter>();
+
+builder.Services.AddScoped<ICryptoService, CryptoService>();
 
 //contruye la app
 var app = builder.Build();
