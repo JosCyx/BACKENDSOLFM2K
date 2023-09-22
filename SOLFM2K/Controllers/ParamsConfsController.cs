@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
+using SOLFM2K.Services.CryptoService;
 
 namespace SOLFM2K.Controllers
 {
@@ -14,10 +15,12 @@ namespace SOLFM2K.Controllers
     public class ParamsConfsController : ControllerBase
     {
         private readonly SolicitudContext _context;
+        private readonly CryptoService _cryptoService;
 
-        public ParamsConfsController(SolicitudContext context)
+        public ParamsConfsController(SolicitudContext context, CryptoService cryptoService)
         {
             _context = context;
+            _cryptoService = cryptoService;
         }
 
         // GET: api/ParamsConfs
@@ -104,14 +107,29 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<ParamsConf>> PostParamsConf(ParamsConf paramsConf)
         {
-          if (_context.ParamsConfs == null)
-          {
-              return Problem("Entity set 'SolicitudContext.ParamsConfs'  is null.");
-          }
-            _context.ParamsConfs.Add(paramsConf);
-            await _context.SaveChangesAsync();
+            if (paramsConf == null)
+            {
+                return BadRequest("El objeto 'paramsConf' no puede ser nulo.");
+            }
 
-            return CreatedAtAction(nameof(PostParamsConf), new { id = paramsConf.Id }, paramsConf);
+            try
+            {
+                // Cifra la contraseña antes de guardarla en la base de datos
+                string claveCifrada = _cryptoService.EncryptPassword(paramsConf.Pass);
+
+                // Asigna la clave cifrada de vuelta a la propiedad 'Pass' de 'paramsConf'
+                paramsConf.Pass = claveCifrada;
+
+                _context.ParamsConfs.Add(paramsConf);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(PostParamsConf), new { id = paramsConf.Id }, paramsConf);
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return BadRequest($"Error al guardar la configuración: {ex.Message}");
+            } 
         }
 
         // DELETE: api/ParamsConfs/5
