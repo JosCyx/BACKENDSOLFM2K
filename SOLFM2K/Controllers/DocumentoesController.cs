@@ -37,6 +37,29 @@ namespace SOLFM2K.Controllers
           }
             return  documentos;
         }
+        //Documentos 
+        [HttpGet("visualizeFile")]
+        public IActionResult visualizeFile(string fileName)
+        {
+            try
+            {
+                string rutaBase = @"\\192.168.1.75\Solicitudes\";
+                string filePath = Path.Combine(rutaBase, fileName);
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return NotFound("El archivo no existe en el servidor ");
+                }
+                byte[] fileBytes=System.IO.File.ReadAllBytes(filePath);
+
+
+                return File(fileBytes, "application/octet-stream", fileName);
+            
+            }catch (Exception ex)
+            {
+                return StatusCode(500, "Error en archivo: " + ex.Message);
+            }
+
+        }
 
         // GET: api/Documentoes/5
         [HttpGet("{id}")]
