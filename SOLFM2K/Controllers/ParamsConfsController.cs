@@ -15,16 +15,12 @@ namespace SOLFM2K.Controllers
     public class ParamsConfsController : ControllerBase
     {
         private readonly SolicitudContext _context;
-        //private readonly CryptoService _cryptoService;
+        private readonly ICryptoService _cryptoService;
 
-        /*public ParamsConfsController(SolicitudContext context, CryptoService cryptoService)
+        public ParamsConfsController(SolicitudContext context, ICryptoService cryptoService)
         {
             _context = context;
             _cryptoService = cryptoService;
-        }*/
-        public ParamsConfsController(SolicitudContext context)
-        {
-            _context = context;
         }
 
         // GET: api/ParamsConfs
@@ -108,7 +104,7 @@ namespace SOLFM2K.Controllers
 
         // POST: api/ParamsConfs
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        /*[HttpPost]
+        [HttpPost]
         public async Task<ActionResult<ParamsConf>> PostParamsConf(ParamsConf paramsConf)
         {
             if (paramsConf == null)
@@ -134,7 +130,7 @@ namespace SOLFM2K.Controllers
                 // Manejo de errores
                 return BadRequest($"Error al guardar la configuración: {ex.Message}");
             } 
-        }*/
+        }
 
         // DELETE: api/ParamsConfs/5
         [HttpDelete("{id}")]

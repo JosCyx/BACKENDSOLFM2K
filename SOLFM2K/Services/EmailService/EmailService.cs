@@ -13,22 +13,21 @@ namespace SOLFM2K.Services.EmailService
     {
         private readonly IConfiguration _configuration;
         private readonly SolicitudContext _context;
-        //private readonly ICryptoService _cryptoService;
+        private readonly ICryptoService _cryptoService;
 
-        public EmailService(IConfiguration configuration, SolicitudContext context//, ICryptoService cryptoService
-                                                                                   )
+        public EmailService(IConfiguration configuration, SolicitudContext context, ICryptoService cryptoService)
         {
             _configuration = configuration;
             _context = context;
             //inyeccion de dependencia del servicio de encriptacion
-            //_cryptoService = cryptoService;
+            _cryptoService = cryptoService;
         }
 
         //desencripta una contraseña que le ingrese como parametro
-        /*public string GetPass(string passDB)
+        public string GetPass(string passDB)
         {
             return _cryptoService.DecryptPassword(passDB);
-        }*/
+        }
 
         public void SendEmail(EmailDTO request)
         {
@@ -37,8 +36,8 @@ namespace SOLFM2K.Services.EmailService
 
             var emailHost = _configuration.GetSection("MailConfiguration:EmailHost").Value;
             var emailUsername = smtpCredentials.Content;
-            var emailPass = smtpCredentials.Pass;
-            //var emailPass = GetPass(smtpCredentials.Pass);
+            //var emailPass = smtpCredentials.Pass;
+            var emailPass = GetPass(smtpCredentials.Pass);
             
 
 

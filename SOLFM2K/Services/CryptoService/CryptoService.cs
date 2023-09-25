@@ -3,9 +3,9 @@ using System.Text;
 
 namespace SOLFM2K.Services.CryptoService
 {
-    /*public class CryptoService : ICryptoService
+    public class CryptoService : ICryptoService
     {
-        private readonly string encryptionKey = "fm2k"; // ESTABLECER UNA CLAVE DE CIFRADO SEGURA
+        private readonly string encryptionKey; // ESTABLECER UNA CLAVE DE CIFRADO SEGURA
 
         public CryptoService(string encryptionKey)
         {
@@ -65,7 +65,7 @@ namespace SOLFM2K.Services.CryptoService
                 return srDecrypt.ReadToEnd();
             }
         }
-    }*/
+    }
 
     /*public class CryptoService : ICryptoService
     {

@@ -57,7 +57,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 //Registra el servicio de encriptación
-//builder.Services.AddScoped<ICryptoService, CryptoService>();
+builder.Services.AddSingleton(provider => "eb&zgVadt%Xis2T2");
+builder.Services.AddScoped<ICryptoService, CryptoService>();
 
 // Registra el servicio ITokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
