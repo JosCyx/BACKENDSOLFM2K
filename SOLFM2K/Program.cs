@@ -56,6 +56,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//Registra el servicio de encriptación
+//builder.Services.AddScoped<ICryptoService, CryptoService>();
+
 // Registra el servicio ITokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -65,7 +68,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 // Registrar el filtro de autorización personalizado
 builder.Services.AddScoped<JwtAuthorizationFilter>();
 
-builder.Services.AddScoped<ICryptoService, CryptoService>();
+
 
 //contruye la app
 var app = builder.Build();
