@@ -342,7 +342,8 @@ public partial class SolicitudContext : DbContext
                 .HasColumnType("date");
 
             entity.Property(e => e.CabPagoProveedor)
-                .HasColumnName("cab_pago_proveedor");
+                .HasColumnName("cab_pago_proveedor")
+                 .HasMaxLength(50);
 
             entity.Property(e => e.CabPagoRucProveedor)
                 .IsRequired()
@@ -550,18 +551,26 @@ public partial class SolicitudContext : DbContext
         modelBuilder.Entity<Documento>(entity =>
         {
             entity
-                .HasNoKey()
                 .ToTable("documentos");
-
-            entity.Property(e => e.DocClave).HasColumnName("doc_clave");
-            entity.Property(e => e.DocDescripcion)
-                .HasMaxLength(50)
-                .HasColumnName("doc_descripcion");
+            entity.HasKey(e => e.DocId).HasName("PK_documentos");
             entity.Property(e => e.DocEstado)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
                 .HasColumnName("doc_estado");
+            entity.Property(e => e.DocId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("doc_id");
+            entity.Property(e => e.DocNoSolicitud).HasColumnName("doc_no_solicitud");
+            entity.Property(e => e.DocTipoSolicitud).HasColumnName("doc_tipo_solicitud");
+            entity.Property(e => e.DocUrl)
+                .HasMaxLength(300)
+                .HasColumnName("doc_URL");
+
+            entity.Property(e => e.DocNombre)
+                .HasMaxLength(100)
+                .HasColumnName("doc_nombre");
+
         });
 
         modelBuilder.Entity<EmplNivel>(entity =>
