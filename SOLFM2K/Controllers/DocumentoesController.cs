@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -39,35 +40,51 @@ namespace SOLFM2K.Controllers
         }
         //Documentos 
         [HttpGet("visualizeFile")]
-        public IActionResult visualizeFile(string fileName)
+        public async Task<IActionResult> visualizeFile(string fileName)
         {
             try
             { 
                 string rutaBase = @"\\192.168.1.75\Solicitudes\";
-                string filePath = Path.Combine(rutaBase, fileName);
+                // Especifica las credenciales de usuario y contraseña
+                string usuario = "tuUsuario";
+                string contraseña = "tuContraseña";
 
-                // Crear credenciales de usuario y contraseña
-                NetworkCredential credentials = new NetworkCredential("usuario", "contraseña");
-   
-                // Crear instancia de WebClient
-                using (WebClient webClient = new WebClient())
+                using (var httpClient = new HttpClient())
                 {
-                    webClient.Credentials = credentials;
+                    // Configura las credenciales en el encabezado de autenticación
+                    var byteArray = System.Text.Encoding.ASCII.GetBytes($"{usuario}:{contraseña}");
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+
+                    // Realiza una solicitud GET para obtener el archivo
+                    HttpResponseMessage response = await httpClient.GetAsync(rutaBase + fileName);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        byte[] fileBytes = await response.Content.ReadAsByteArrayAsync();
+                        return File(fileBytes, "application/octet-stream", fileName);
+                    }
+                    else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        return NotFound("El archivo no existe en el servidor");
+                    }
+                    else
+                    {
+                        return StatusCode(500, "Error en archivo: " + response.ReasonPhrase);
+                    }
                 }
+                //string filePath = Path.Combine(rutaBase, fileName);
+                //if (!System.IO.File.Exists(filePath))
+                //{
+                //    return NotFound("El archivo no existe en el servidor ");
+                //}
 
-                if (!System.IO.File.Exists(filePath))
-                {
-                    return NotFound("El archivo no existe en el servidor ");
-                }
-                 // Especifica las credenciales de usuario y contraseña
-     
-               
-                byte[] fileBytes=System.IO.File.ReadAllBytes(filePath);
+                //byte[] fileBytes=System.IO.File.ReadAllBytes(filePath);
 
 
-                return File(fileBytes, "application/octet-stream", fileName);
-            
-            }catch (Exception ex)
+                //return File(fileBytes, "application/octet-stream", fileName);
+
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Error en archivo: " + ex.Message);
             }
