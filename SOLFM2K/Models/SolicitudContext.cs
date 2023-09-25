@@ -1155,7 +1155,7 @@ public partial class SolicitudContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("us_ban_user_data");
             entity.Property(e => e.UsContrasenia)
-                .HasMaxLength(25)
+                .HasMaxLength(100)
                 .HasColumnName("us_contrasenia");
             entity.Property(e => e.UsEmpresa)
                 .HasColumnName("us_empresa");

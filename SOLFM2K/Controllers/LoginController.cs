@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 using SOLFM2K.Services;
+using SOLFM2K.Services.CryptoService;
 
 namespace SOLFM2K.Controllers
 {
@@ -13,11 +14,13 @@ namespace SOLFM2K.Controllers
     {
         private readonly SolicitudContext _context;
         private readonly ITokenService _tokenService; // Inyecta el servicio
+        private readonly ICryptoService _cryptoService;
 
-        public LoginController(SolicitudContext context, ITokenService tokenService)
+        public LoginController(SolicitudContext context, ITokenService tokenService, ICryptoService cryptoService)
         {
             _context = context;
             _tokenService = tokenService;
+            _cryptoService = cryptoService;
         }
 
         [AllowAnonymous]
@@ -26,12 +29,18 @@ namespace SOLFM2K.Controllers
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(us => us.UsLogin == model.username);
 
+            
+
+            
+
             if (user == null)
             {
                 return NotFound("El usuario no existe.");
             }
 
-            if (user.UsContrasenia != model.pass)
+            var newPass = _cryptoService.DecryptPassword(user.UsContrasenia);
+
+            if (newPass != model.pass)
             {
                 return BadRequest("La contraseña no coincide.");
             }

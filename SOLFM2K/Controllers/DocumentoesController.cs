@@ -50,6 +50,8 @@ namespace SOLFM2K.Controllers
                 {
                     return NotFound("El archivo no existe en el servidor ");
                 }
+
+
                 string username = "Sistemas";
                 string password = ".Fundacion2k*";
                 NetworkCredential networkCredential = new NetworkCredential(username, password);
