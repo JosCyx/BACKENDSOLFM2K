@@ -37,7 +37,7 @@ namespace SOLFM2K.Controllers
               return NotFound();
           }
             return await _context.Usuarios.ToListAsync();
-        }
+        } 
 
         // GET: api/Usuarios/5
         [HttpGet("{UsId}")]

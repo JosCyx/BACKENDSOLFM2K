@@ -4,8 +4,8 @@ namespace SOLFM2K.Services.CryptoService
 {
     public interface ICryptoService
     {
-        void EncryptPassword(string password);
+        string EncryptPassword(string password);
 
-        void DecryptPassword(string encryptedPassword);
+        string DecryptPassword(string encryptedPassword);
     }
 }
