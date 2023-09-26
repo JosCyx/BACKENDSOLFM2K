@@ -29,10 +29,6 @@ namespace SOLFM2K.Controllers
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(us => us.UsLogin == model.username);
 
-            
-
-            
-
             if (user == null)
             {
                 return NotFound("El usuario no existe.");

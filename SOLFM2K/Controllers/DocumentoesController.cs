@@ -37,42 +37,63 @@ namespace SOLFM2K.Controllers
           }
             return  documentos;
         }
+
         //Documentos 
         [HttpGet("visualizeFile")]
         public IActionResult visualizeFile(string fileName)
         {
             try
-            { 
+            {
                 string rutaBase = @"\\192.168.1.75\Solicitudes\";
                 string filePath = Path.Combine(rutaBase, fileName);
 
+                string contraseña = ".Fundacion2K*";
+
+                // Escapa la contraseña
+                string contraseñaFormateada = Uri.EscapeDataString(contraseña);
+
                 // Crear credenciales de usuario y contraseña
-                NetworkCredential credentials = new NetworkCredential("usuario", "contraseña");
-   
-                // Crear instancia de WebClient
+                NetworkCredential credentials = new NetworkCredential("Sistemas", contraseñaFormateada);
+
+                // Crear instancia de WebClient y configurar las credenciales
                 using (WebClient webClient = new WebClient())
                 {
                     webClient.Credentials = credentials;
+
+                    // Intentar descargar el archivo
+                    try
+                    {
+                        byte[] fileBytes = webClient.DownloadData(filePath);
+
+                        // Devolver el archivo descargado
+                        return File(fileBytes, "application/octet-stream", fileName);
+                    }
+                    catch (WebException ex)
+                    {
+                        // Si ocurre un error al descargar el archivo, puedes proporcionar un mensaje de error personalizado.
+                        if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null)
+                        {
+                            var response = (HttpWebResponse)ex.Response;
+                            if (response.StatusCode == HttpStatusCode.NotFound)
+                            {
+                                // El archivo no se encontró en el servidor
+                                string errorMessage = $"El archivo '{fileName}' no se encontró en el servidor.";
+                                return NotFound(errorMessage);
+                            }
+                        }
+
+                        // En caso de otros errores, puedes manejarlos según sea necesario.
+                        return StatusCode(500, "catch interno: " + ex.Message);
+                    }
                 }
-
-                if (!System.IO.File.Exists(filePath))
-                {
-                    return NotFound("El archivo no existe en el servidor ");
-                }
-                 // Especifica las credenciales de usuario y contraseña
-     
-               
-                byte[] fileBytes=System.IO.File.ReadAllBytes(filePath);
-
-
-                return File(fileBytes, "application/octet-stream", fileName);
-            
-            }catch (Exception ex)
-            {
-                return StatusCode(500, "Error en archivo: " + ex.Message);
             }
-
+            catch (Exception ex)
+            {
+                // Manejo de otros errores que puedan ocurrir durante la ejecución
+                return StatusCode(500, "catch principal: " + ex.Message);
+            }
         }
+
 
         // GET: api/Documentoes/5
         [HttpGet("{id}")]
