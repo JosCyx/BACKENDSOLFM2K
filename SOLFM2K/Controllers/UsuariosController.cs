@@ -98,13 +98,16 @@ namespace SOLFM2K.Controllers
 
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{UsId}")]
+        [HttpPut("{UsIdNomina}")]
         public async Task<IActionResult> PutUsuario(int UsIdNomina, Usuario usuario)
         {
             if (UsIdNomina != usuario.UsIdNomina)
             {
                 return BadRequest();
             }
+            // Cifra la nueva contraseña antes de actualizarla en la base de datos
+            string claveCifrada = _cryptoService.EncryptPassword(usuario.UsContrasenia);
+            usuario.UsContrasenia = claveCifrada;
 
             _context.Entry(usuario).State = EntityState.Modified;
 
