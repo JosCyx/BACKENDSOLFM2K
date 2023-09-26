@@ -62,11 +62,12 @@ namespace SOLFM2K.Controllers
                 {
                     webClient.Credentials = credentials;
 
-                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
 
 
-                return File(fileBytes, "application/octet-stream", fileName);
+                    return File(fileBytes, "application/octet-stream", fileName);
 
+                }
             }
             catch (Exception ex)
             {
@@ -75,10 +76,10 @@ namespace SOLFM2K.Controllers
             }
         }
 
-        }
+        
 
         [HttpGet("viewFile")]
-        public IActionResult viewFile(string fileName)
+        public IActionResult nuevometodo(string fileName)
         {
             try
             {
@@ -86,12 +87,14 @@ namespace SOLFM2K.Controllers
                 string filePath = Path.Combine(rutaBase, fileName);
                 
                 //extrae las credenciales de la base de datos y desencripta la contraseña
-                var credentialsDB = _context.ParamsConfs.FirstOrDefault(cr => cr.Identify == "SVSOLICITUDES");
-                var svPass = _cryptoService.DecryptPassword(credentialsDB.Pass);
+                //var credentialsDB = _context.ParamsConfs.FirstOrDefault(cr => cr.Identify == "SVSOLICITUDES");
+                //var svPass = _cryptoService.DecryptPassword(credentialsDB.Pass);
 
                 //credenciales del servidor de archivos
-                string username = credentialsDB.Content;
-                string password = svPass;
+                //string username = credentialsDB.Content;
+                //string password = svPass;
+                string username = "Sistemas";
+                string password = ".Fundacion2K*";
 
 
                 //configuracion de las credenciales para el objeto httpclient
