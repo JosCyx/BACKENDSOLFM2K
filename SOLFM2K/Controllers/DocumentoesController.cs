@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
+using SOLFM2K.Services.CryptoService;
 using static System.Net.WebRequestMethods;
 
 namespace SOLFM2K.Controllers
@@ -17,25 +18,26 @@ namespace SOLFM2K.Controllers
     public class DocumentoController : ControllerBase
     {
         private readonly SolicitudContext _context;
+        private readonly ICryptoService _cryptoService;
 
-
-        public DocumentoController(SolicitudContext context)
+        public DocumentoController(SolicitudContext context, ICryptoService cryptoService)
         {
             _context = context;
+            _cryptoService = cryptoService;
 
         }
 
         // GET: api/Documentoes
         [HttpGet("GetDocumentos")]
-        public async Task<ActionResult<IEnumerable<Documento>>> GetDocumentos(int tipoSol,int noSol)
+        public async Task<ActionResult<IEnumerable<Documento>>> GetDocumentos(int tipoSol, int noSol)
         {
             var documentos = await _context.Documentos
               .Where(c => c.DocTipoSolicitud == tipoSol && c.DocNoSolicitud == noSol).ToListAsync();
             if (documentos == null)
-          {
-              return NotFound();
-          }
-            return  documentos;
+            {
+                return NotFound();
+            }
+            return documentos;
         }
         //Documentos 
         [HttpGet("visualizeFile")]
@@ -62,26 +64,90 @@ namespace SOLFM2K.Controllers
                     Credentials = networkCredential.GetCredential(new Uri(rutaBase), "Basic")
                 });
 
-                byte[] fileBytes=System.IO.File.ReadAllBytes(filePath);
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
 
 
                 return File(fileBytes, "application/octet-stream", fileName);
-            
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Error en archivo: " + ex.Message);
             }
 
         }
 
+        [HttpGet("viewFile")]
+        public IActionResult viewFile(string fileName)
+        {
+            try
+            {
+                string rutaBase = @"\\192.168.1.75\Solicitudes\";
+                string filePath = Path.Combine(rutaBase, fileName);
+                
+                //extrae las credenciales de la base de datos y desencripta la contraseña
+                var credentialsDB = _context.ParamsConfs.FirstOrDefault(cr => cr.Identify == "SVSOLICITUDES");
+                var svPass = _cryptoService.DecryptPassword(credentialsDB.Pass);
+
+                //credenciales del servidor de archivos
+                string username = credentialsDB.Content;
+                string password = svPass;
+                //string username = "Sistemas";
+                //string password = ".Fundacion2k*";
+
+
+                //configuracion de las credenciales para el objeto httpclient
+                NetworkCredential networkCredential = new NetworkCredential(username, password);
+
+                // Crear un HttpClient personalizado con las credenciales
+                HttpClient httpClient = new HttpClient(new HttpClientHandler
+                {
+                    Credentials = networkCredential.GetCredential(new Uri(rutaBase), "Basic")
+                });
+
+                // Realiza una solicitud HEAD para verificar la existencia del archivo
+                HttpResponseMessage headResponse = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, rutaBase + fileName)).Result;
+
+                if (headResponse.IsSuccessStatusCode)
+                {
+                    // El archivo existe en el servidor, procede a descargarlo como arreglo de bytes
+                    HttpResponseMessage getResponse = httpClient.GetAsync(rutaBase + fileName).Result;
+                    if (getResponse.IsSuccessStatusCode)
+                    {
+                        byte[] fileBytes = getResponse.Content.ReadAsByteArrayAsync().Result;
+                        return File(fileBytes, "application/octet-stream", fileName);
+                    }
+                    else
+                    {
+                        // Manejar el error de descarga del archivo
+                        return StatusCode((int)getResponse.StatusCode, "Error al descargar el archivo: " + getResponse.ReasonPhrase);
+                    }
+                }
+                else if (headResponse.StatusCode == HttpStatusCode.NotFound)
+                {
+                    // El archivo no existe en el servidor.
+                    return NotFound("El archivo no existe en el servidor.");
+                }
+                else
+                {
+                    // Manejar otros errores de la solicitud HEAD
+                    return StatusCode((int)headResponse.StatusCode, "Error al verificar la existencia del archivo: " + headResponse.ReasonPhrase);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Catch exterior, error en archivo: " + ex.Message);
+            }
+        }
+
         // GET: api/Documentoes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Documento>> GetDocumento(int id)
         {
-          if (_context.Documentos == null)
-          {
-              return NotFound();
-          }
+            if (_context.Documentos == null)
+            {
+                return NotFound();
+            }
             var documento = await _context.Documentos.FindAsync(id);
 
             if (documento == null)
@@ -128,10 +194,10 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<Documento>> PostDocumento(Documento documento)
         {
-          if (_context.Documentos == null)
-          {
-              return Problem("Entity set 'SolicitudContext.Documentos'  is null.");
-          }
+            if (_context.Documentos == null)
+            {
+                return Problem("Entity set 'SolicitudContext.Documentos'  is null.");
+            }
             _context.Documentos.Add(documento);
             await _context.SaveChangesAsync();
 
@@ -178,7 +244,7 @@ namespace SOLFM2K.Controllers
                 var documento = new Documento();
                 documento.DocTipoSolicitud = tipoSol;
                 documento.DocNoSolicitud = noSol;
-                documento.DocNombre =archivos.FileName;
+                documento.DocNombre = archivos.FileName;
                 documento.DocUrl = rutaDOC;
 
                 _context.Documentos.Add(documento);
