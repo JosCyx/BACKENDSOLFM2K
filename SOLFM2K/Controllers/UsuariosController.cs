@@ -18,7 +18,7 @@ using SOLFM2K.Services.CryptoService;
 
 namespace SOLFM2K.Controllers
 {
-    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class UsuariosController : ControllerBase

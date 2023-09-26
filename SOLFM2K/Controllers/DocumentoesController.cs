@@ -92,8 +92,6 @@ namespace SOLFM2K.Controllers
                 //credenciales del servidor de archivos
                 string username = credentialsDB.Content;
                 string password = svPass;
-                //string username = "Sistemas";
-                //string password = ".Fundacion2k*";
 
 
                 //configuracion de las credenciales para el objeto httpclient
