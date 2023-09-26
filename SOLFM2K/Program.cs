@@ -3,12 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SOLFM2K.Models;
 using SOLFM2K.Services;
+using SOLFM2K.Services.CryptoService;
 using SOLFM2K.Services.EmailService;
 using System.Text;
+
 
 //var  secretKey = "RQ9aP&1BvXxZ$uFqGKsX5GmDwN8@Y3T!";
 var builder = WebApplication.CreateBuilder(args);
 
+//coregir acceso a configuracion de jwt
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var issuer = jwtSettings["Issuer"];
 var audience = jwtSettings["Audience"];
@@ -53,6 +56,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//Registra el servicio de encriptación
+builder.Services.AddSingleton(provider => "eb&zgVadt%Xis2T2");
+builder.Services.AddScoped<ICryptoService, CryptoService>();
+
 // Registra el servicio ITokenService
 builder.Services.AddScoped<ITokenService, TokenService>();
 
@@ -61,6 +68,8 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Registrar el filtro de autorización personalizado
 builder.Services.AddScoped<JwtAuthorizationFilter>();
+
+
 
 //contruye la app
 var app = builder.Build();

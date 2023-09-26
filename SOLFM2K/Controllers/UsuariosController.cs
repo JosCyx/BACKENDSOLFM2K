@@ -9,10 +9,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SOLFM2K.Models;
 using SOLFM2K.Services;
+using SOLFM2K.Services.CryptoService;
 
 namespace SOLFM2K.Controllers
 {
@@ -22,31 +24,68 @@ namespace SOLFM2K.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly SolicitudContext _context;
+        private readonly ICryptoService _cryptoService;
 
-        public UsuariosController(SolicitudContext context) // Inyecta el servicio
+        public UsuariosController(SolicitudContext context, ICryptoService cryptoService) // Inyecta el servicio
         {
             _context = context;
+            _cryptoService = cryptoService;
         }
 
         // GET: api/Usuarios
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
-          if (_context.Usuarios == null)
-          {
-              return NotFound();
-          }
+            if (_context.Usuarios == null)
+            {
+                return NotFound();
+            }
             return await _context.Usuarios.ToListAsync();
         }
+
+        [HttpGet("BuscarUsuario")]
+        public async Task<ActionResult<List<Usuario>>> BuscarUsuario(int tipoBusqueda, string terminoBusqueda)
+        {
+            if (tipoBusqueda < 1 || tipoBusqueda > 2)
+            {
+                return BadRequest("error tipo busqueda");
+            }
+            // Llama al procedimiento almacenado searchEmpleado
+            var usuariosEncontrados = 
+                await _context.Usuarios.FromSqlRaw("EXEC searchUsuario @p0, @p1", tipoBusqueda, terminoBusqueda).ToListAsync();
+
+            if (usuariosEncontrados == null || usuariosEncontrados.Count == 0)
+            {
+                return NotFound("No se encontraron usuarios que coincidan con la búsqueda.");
+            }
+
+            // Devuelve la lista de usuarios encontrados
+            return Ok(usuariosEncontrados);
+        }
+
+        // GET: api/Usuarios/BuscarUsuariobyIdNomina
+        [HttpGet("BuscarUsuariobyIdNomina")]
+        public async Task<ActionResult<Usuario>> BuscarUsuariobyIdNomina(int idNomina)
+        {
+            var usuario = await _context.Usuarios.Where(u => u.UsIdNomina == idNomina).ToListAsync();
+
+            if (usuario == null)
+            {
+                   return NotFound("No se encontró el usuario con el id de nómina proporcionado.");
+            }
+
+            return Ok(usuario);
+        }   
+
 
         // GET: api/Usuarios/5
         [HttpGet("{UsId}")]
         public async Task<ActionResult<Usuario>> GetUsuario(int UsId)
         {
-          if (_context.Usuarios == null)
-          {
-              return NotFound();
-          }
+            if (_context.Usuarios == null)
+            {
+                return NotFound();
+            }
             var usuario = await _context.Usuarios.FindAsync(UsId);
 
             if (usuario == null)
@@ -60,9 +99,9 @@ namespace SOLFM2K.Controllers
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{UsId}")]
-        public async Task<IActionResult> PutUsuario(int UsId, Usuario usuario)
+        public async Task<IActionResult> PutUsuario(int UsIdNomina, Usuario usuario)
         {
-            if (UsId != usuario.UsId)
+            if (UsIdNomina != usuario.UsIdNomina)
             {
                 return BadRequest();
             }
@@ -75,7 +114,7 @@ namespace SOLFM2K.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UsuarioExists(UsId))
+                if (!UsuarioExists(UsIdNomina))
                 {
                     return NotFound();
                 }
@@ -93,14 +132,35 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-          if (_context.Usuarios == null)
-          {
-              return Problem("Entity set 'SolicitudContext.Usuarios'  is null.");
-          }
-            _context.Usuarios.Add(usuario);
-            await _context.SaveChangesAsync();
+            if (_context.Usuarios == null)
+            {
+                return Problem("Entity set 'SolicitudContext.Usuarios'  is null.");
+            }
 
-            return CreatedAtAction(nameof(PostUsuario), new { id = usuario.UsId }, usuario);
+            if (usuario == null)
+            {
+                return BadRequest("El objeto 'usuario' no puede ser nulo.");
+            }
+
+            try
+            {
+                // Cifra la contraseña antes de guardarla en la base de datos
+                string claveCifrada = _cryptoService.EncryptPassword(usuario.UsContrasenia);
+
+                // Asigna la clave cifrada de vuelta a la propiedad 'UsContrasenia' de 'usuario'
+                usuario.UsContrasenia = claveCifrada;
+
+                _context.Usuarios.Add(usuario);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(PostUsuario), new { id = usuario.UsId }, usuario);
+            }
+            catch (Exception ex)
+            {
+                var innerException = ex.InnerException;
+                // Manejo de errores
+                return BadRequest($"Error al guardar la configuración: {ex.Message}\nInner Exception: {innerException?.Message}");
+            }
         }
 
         // DELETE: api/Usuarios/5
