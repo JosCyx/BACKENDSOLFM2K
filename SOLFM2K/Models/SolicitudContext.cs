@@ -1163,10 +1163,10 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(1)
                 .HasColumnName("us_estado");
             entity.Property(e => e.UsFechaCaduca)
-                .HasColumnType("datetime")
+                .HasColumnType("date")
                 .HasColumnName("us_fecha_caduca");
             entity.Property(e => e.UsFechaInicio)
-                .HasColumnType("datetime")
+                .HasColumnType("date")
                 .HasColumnName("us_fecha_inicio");
             entity.Property(e => e.UsLogin)
                 .HasMaxLength(25)
