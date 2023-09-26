@@ -42,43 +42,7 @@ namespace SOLFM2K.Controllers
         }
 
         //Documentos 
-        [HttpGet("visualizeFile")]
-        public async Task<IActionResult> visualizeFile(string fileName)
-        {
-            try
-            {
-                string rutaBase = @"\\192.168.1.75\Solicitudes\";
-                // Especifica las credenciales de usuario y contraseña
-                string usuario = "tuUsuario";
-                string contraseña = "tuContraseña";
-
-                string contraseña = ".Fundacion2K*";
-
-                // Escapa la contraseña
-                string contraseñaFormateada = Uri.EscapeDataString(contraseña);
-
-                // Crear credenciales de usuario y contraseña
-                NetworkCredential credentials = new NetworkCredential("Sistemas", contraseñaFormateada);
-
-                // Crear instancia de WebClient y configurar las credenciales
-                using (WebClient webClient = new WebClient())
-                {
-                    webClient.Credentials = credentials;
-
-                    byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-
-
-                    return File(fileBytes, "application/octet-stream", fileName);
-
-                }
-            }
-            catch (Exception ex)
-            {
-                // Manejo de otros errores que puedan ocurrir durante la ejecución
-                return StatusCode(500, "catch principal: " + ex.Message);
-            }
-        }
-
+       
         
 
         [HttpGet("viewFile")]
