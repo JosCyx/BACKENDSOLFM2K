@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 using SOLFM2K.Services.CryptoService;
 using static System.Net.WebRequestMethods;
+using System.Runtime.InteropServices;
 
 namespace SOLFM2K.Controllers
 {
@@ -41,137 +42,38 @@ namespace SOLFM2K.Controllers
             return documentos;
         }
 
-        //Documentos 
-       
-        
-
-        [HttpGet("viewFile")]
-        public IActionResult nuevometodo(string fileName)
+        //Documentos  
+        //MODIFICAR LA RUTA PARA QUE COINCIDA CON LA RUTA LOCAL DEL SERVIDOR
+        [HttpGet("ViewFile")]
+        public IActionResult ViewFile(string fileName)
         {
             try
             {
-                string rutaBase = @"\\192.168.1.75\Solicitudes\";
-                string filePath = Path.Combine(rutaBase, fileName);
-                
-                //extrae las credenciales de la base de datos y desencripta la contraseña
-                //var credentialsDB = _context.ParamsConfs.FirstOrDefault(cr => cr.Identify == "SVSOLICITUDES");
-                //var svPass = _cryptoService.DecryptPassword(credentialsDB.Pass);
+                // Ruta a la carpeta en la unidad C:
+                string folderPath = @"C:\prueba";
 
-                //credenciales del servidor de archivos
-                //string username = credentialsDB.Content;
-                //string password = svPass;
-                string username = "Sistemas";
-                string password = ".Fundacion2K*";
+                // Combina la ruta de la carpeta con el nombre de archivo
+                string filePath = Path.Combine(folderPath, fileName);
 
-
-                //configuracion de las credenciales para el objeto httpclient
-                NetworkCredential networkCredential = new NetworkCredential(username, password);
-
-                // Crear un HttpClient personalizado con las credenciales
-                HttpClient httpClient = new HttpClient(new HttpClientHandler
+                if (!System.IO.File.Exists(filePath))
                 {
-                    Credentials = networkCredential.GetCredential(new Uri(rutaBase), "Basic")
-                });
-
-                // Realiza una solicitud HEAD para verificar la existencia del archivo
-                HttpResponseMessage headResponse = httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, rutaBase + fileName)).Result;
-
-                if (headResponse.IsSuccessStatusCode)
-                {
-                    // El archivo existe en el servidor, procede a descargarlo como arreglo de bytes
-                    HttpResponseMessage getResponse = httpClient.GetAsync(rutaBase + fileName).Result;
-                    if (getResponse.IsSuccessStatusCode)
-                    {
-                        byte[] fileBytes = getResponse.Content.ReadAsByteArrayAsync().Result;
-                        return File(fileBytes, "application/octet-stream", fileName);
-                    }
-                    else
-                    {
-                        // Manejar el error de descarga del archivo
-                        return StatusCode((int)getResponse.StatusCode, "Error al descargar el archivo: " + getResponse.ReasonPhrase);
-                    }
+                    return NotFound("El archivo no existe en la carpeta de prueba");
                 }
-                else if (headResponse.StatusCode == HttpStatusCode.NotFound)
-                {
-                    // El archivo no existe en el servidor.
-                    return NotFound("El archivo no existe en el servidor.");
-                }
-                else
-                {
-                    // Manejar otros errores de la solicitud HEAD
-                    return StatusCode((int)headResponse.StatusCode, "Error al verificar la existencia del archivo: " + headResponse.ReasonPhrase);
-                }
+
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+                // Devuelve el archivo como una respuesta HTTP
+                return File(fileBytes, "application/octet-stream", fileName);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Catch exterior, error en archivo: " + ex.Message);
+                return StatusCode(500, "Error en archivo: " + ex.Message);
             }
         }
 
-        // GET: api/Documentoes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Documento>> GetDocumento(int id)
-        {
-            if (_context.Documentos == null)
-            {
-                return NotFound();
-            }
-            var documento = await _context.Documentos.FindAsync(id);
 
-            if (documento == null)
-            {
-                return NotFound();
-            }
-
-            return documento;
-        }
-
-        // PUT: api/Documentoes/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDocumento(int id, Documento documento)
-        {
-            if (id != documento.DocId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(documento).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!DocumentoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Documentoes
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Documento>> PostDocumento(Documento documento)
-        {
-            if (_context.Documentos == null)
-            {
-                return Problem("Entity set 'SolicitudContext.Documentos'  is null.");
-            }
-            _context.Documentos.Add(documento);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetDocumento", new { id = documento.DocId }, documento);
-        }
         // Subir archivos  PDF 
+        //MODIFICAR LA RUTA PARA QUE COINCIDA CON LA RUTA LOCAL DEL SERVIDOR
         [HttpPost]
         [Route("upload")]
         public ActionResult UploadFiles(IFormFile archivos, string prefijo, int tipoSol, int noSol)
@@ -226,30 +128,20 @@ namespace SOLFM2K.Controllers
             }
         }
 
-        // DELETE: api/Documentoes/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDocumento(int id)
-        {
-            if (_context.Documentos == null)
-            {
-                return NotFound();
-            }
-            var documento = await _context.Documentos.FindAsync(id);
-            if (documento == null)
-            {
-                return NotFound();
-            }
-
-            _context.Documentos.Remove(documento);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-
         private bool DocumentoExists(int id)
         {
             return (_context.Documentos?.Any(e => e.DocId == id)).GetValueOrDefault();
         }
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+
+        
     }
 }
+
+
