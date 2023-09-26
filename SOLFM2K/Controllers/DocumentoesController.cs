@@ -42,26 +42,26 @@ namespace SOLFM2K.Controllers
         public IActionResult visualizeFile(string fileName)
         {
             try
-            {
+            { 
                 string rutaBase = @"\\192.168.1.75\Solicitudes\";
                 string filePath = Path.Combine(rutaBase, fileName);
+
+                // Crear credenciales de usuario y contraseña
+                NetworkCredential credentials = new NetworkCredential("usuario", "contraseña");
+   
+                // Crear instancia de WebClient
+                using (WebClient webClient = new WebClient())
+                {
+                    webClient.Credentials = credentials;
+                }
 
                 if (!System.IO.File.Exists(filePath))
                 {
                     return NotFound("El archivo no existe en el servidor ");
                 }
-
-
-                string username = "Sistemas";
-                string password = ".Fundacion2k*";
-                NetworkCredential networkCredential = new NetworkCredential(username, password);
-
-                // Crear un HttpClient personalizado con las credenciales
-                HttpClient httpClient = new HttpClient(new HttpClientHandler
-                {
-                    Credentials = networkCredential.GetCredential(new Uri(rutaBase), "Basic")
-                });
-
+                 // Especifica las credenciales de usuario y contraseña
+     
+               
                 byte[] fileBytes=System.IO.File.ReadAllBytes(filePath);
 
 
