@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 using SOLFM2K.Services;
 using SOLFM2K.Services.CryptoService;
+using SOLFM2K.Services.WDAuthenticate;
 
 namespace SOLFM2K.Controllers
 {
@@ -15,12 +16,14 @@ namespace SOLFM2K.Controllers
         private readonly SolicitudContext _context;
         private readonly ITokenService _tokenService; // Inyecta el servicio
         private readonly ICryptoService _cryptoService;
+        private readonly IAuthorizeService _authorizeService;
 
-        public LoginController(SolicitudContext context, ITokenService tokenService, ICryptoService cryptoService)
+        public LoginController(SolicitudContext context, ITokenService tokenService, ICryptoService cryptoService, IAuthorizeService authorizeService)
         {
             _context = context;
             _tokenService = tokenService;
             _cryptoService = cryptoService;
+            _authorizeService = authorizeService;
         }
 
         [AllowAnonymous]
@@ -56,6 +59,19 @@ namespace SOLFM2K.Controllers
             };
 
             return Ok(response);
+        }
+
+        // GET: api/Authorize
+        [AllowAnonymous]
+        [HttpGet("GetAuthorization")]
+        public List<string> GetAuthorization(string login)
+        {
+
+            var roles = _authorizeService.GetRoles(login);
+
+            var rolTransaccions = _authorizeService.GetRolTransaccions(roles);
+
+            return rolTransaccions;
         }
 
     }

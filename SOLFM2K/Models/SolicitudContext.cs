@@ -53,7 +53,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<RolUsuario> RolUsuarios { get; set; }
 
-    public virtual DbSet<RolTransaccion> RolTransaccion { get; set; }
+    public virtual DbSet<RolTransaccion> RolTransaccions { get; set; }
 
     public virtual DbSet<Ruteo> Ruteos { get; set; }
 
@@ -964,7 +964,6 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("rol");
 
             entity.Property(e => e.RoCodigo).HasColumnName("ro_codigo");
-            entity.Property(e => e.RoAplicacion).HasColumnName("ro_aplicacion");
             entity.Property(e => e.RoEmpresa).HasColumnName("ro_empresa");
             entity.Property(e => e.RoEstado)
                 .HasMaxLength(1)
@@ -1008,7 +1007,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.RtRol)
                   .HasColumnName("rt_rol");
             entity.Property(e => e.RtTransaccion)
-                    .HasMaxLength(75)
                     .HasColumnName("rt_transaccion");
             entity.Property(e => e.RtEstado)
                   .HasMaxLength(1)

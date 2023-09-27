@@ -5,6 +5,7 @@ using SOLFM2K.Models;
 using SOLFM2K.Services;
 using SOLFM2K.Services.CryptoService;
 using SOLFM2K.Services.EmailService;
+using SOLFM2K.Services.WDAuthenticate;
 using System.Text;
 
 
@@ -59,6 +60,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //Registra el servicio de encriptación
 builder.Services.AddSingleton(provider => "eb&zgVadt%Xis2T2");
 builder.Services.AddScoped<ICryptoService, CryptoService>();
+
+// Registra el servicio ITokenService
+builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
 
 // Registra el servicio ITokenService
 builder.Services.AddScoped<ITokenService, TokenService>();

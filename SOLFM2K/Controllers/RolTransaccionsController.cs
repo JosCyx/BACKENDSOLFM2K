@@ -9,6 +9,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class RolTransaccionsController : ControllerBase
@@ -24,11 +25,11 @@ namespace SOLFM2K.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RolTransaccion>>> GetRolTransaccion()
         {
-          if (_context.RolTransaccion == null)
+          if (_context.RolTransaccions == null)
           {
               return NotFound();
           }
-            return await _context.RolTransaccion.ToListAsync();
+            return await _context.RolTransaccions.ToListAsync();
         }
 
         //devuelve las transacciones que tiene disponibles el rol consultado
@@ -36,12 +37,12 @@ namespace SOLFM2K.Controllers
         [HttpGet("GetTransaccionbyRol")]
         public async Task<ActionResult<IEnumerable<RolTransaccion>>> GetRolTransaccionByRtRol(int rtRol)
         {
-            if (_context.RolTransaccion == null)
+            if (_context.RolTransaccions == null)
             {
                 return NotFound();
             }
 
-            var rolTransacciones = await _context.RolTransaccion.Where(r => r.RtRol == rtRol).ToListAsync();
+            var rolTransacciones = await _context.RolTransaccions.Where(r => r.RtRol == rtRol).ToListAsync();
 
             if (rolTransacciones == null || !rolTransacciones.Any())
             {
@@ -58,11 +59,11 @@ namespace SOLFM2K.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<RolTransaccion>> GetRolTransaccion(int id)
         {
-          if (_context.RolTransaccion == null)
+          if (_context.RolTransaccions == null)
           {
               return NotFound();
           }
-            var rolTransaccion = await _context.RolTransaccion.FindAsync(id);
+            var rolTransaccion = await _context.RolTransaccions.FindAsync(id);
 
             if (rolTransaccion == null)
             {
@@ -108,11 +109,11 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<RolTransaccion>> PostRolTransaccion(RolTransaccion rolTransaccion)
         {
-          if (_context.RolTransaccion == null)
+          if (_context.RolTransaccions == null)
           {
               return Problem("Entity set 'SolicitudContext.RolTransaccion'  is null.");
           }
-            _context.RolTransaccion.Add(rolTransaccion);
+            _context.RolTransaccions.Add(rolTransaccion);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(PostRolTransaccion), new { id = rolTransaccion.RtId }, rolTransaccion);
@@ -122,17 +123,17 @@ namespace SOLFM2K.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRolTransaccion(int id)
         {
-            if (_context.RolTransaccion == null)
+            if (_context.RolTransaccions == null)
             {
                 return NotFound();
             }
-            var rolTransaccion = await _context.RolTransaccion.FindAsync(id);
+            var rolTransaccion = await _context.RolTransaccions.FindAsync(id);
             if (rolTransaccion == null)
             {
                 return NotFound();
             }
 
-            _context.RolTransaccion.Remove(rolTransaccion);
+            _context.RolTransaccions.Remove(rolTransaccion);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -140,7 +141,7 @@ namespace SOLFM2K.Controllers
 
         private bool RolTransaccionExists(int id)
         {
-            return (_context.RolTransaccion?.Any(e => e.RtId == id)).GetValueOrDefault();
+            return (_context.RolTransaccions?.Any(e => e.RtId == id)).GetValueOrDefault();
         }
     }
 }

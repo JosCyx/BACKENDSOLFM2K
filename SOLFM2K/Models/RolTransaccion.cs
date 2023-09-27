@@ -5,7 +5,7 @@
         public int RtId { get; set; }
         public int RtEmpresa { get; set; }
         public int RtRol { get; set; }
-        public string RtTransaccion { get; set; }
+        public int RtTransaccion { get; set; }
         public string RtEstado { get; set; }
 
     }
