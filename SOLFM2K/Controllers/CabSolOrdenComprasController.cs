@@ -32,19 +32,6 @@ namespace SOLFM2K.Controllers
             return await _context.CabSolOrdenCompras.ToListAsync();
         }
 
-        // GET: api/CabSolOrdenCompras/5
-        //[HttpGet("{tipoSol}")]
-        //public async Task<ActionResult<List<CabSolOrdenCompra>>> GetOrdenOCByTipoSol(int tipoSol)
-        //{
-        //    var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c => c.cabSolOCTipoSolicitud == tipoSol).ToListAsync();
-
-        //    if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return cabSolCotizaciones;
-        //}
         [HttpGet("GetSolicitudByID")]
         public async Task<ActionResult<OrdenComprasTemplate>> getSolicitudByID(int ID)
         {
@@ -82,6 +69,19 @@ namespace SOLFM2K.Controllers
             }
 
             return solicitudCompleta;
+        }
+        [HttpGet("GetOCEstado")]
+        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetOCEstado(string state)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.CabSolOrdenCompras.Where(ca => ca.cabSolOCEstado == state).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
         }
 
         // PUT: api/CabSolOrdenCompras/5

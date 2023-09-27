@@ -13,7 +13,7 @@ using System.Data;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+   [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     
@@ -91,19 +91,19 @@ namespace SOLFM2K.Controllers
         }
 
 
-        //[HttpGet("GetCabecerabyID")]
-        //public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyID(int tipoSol, int noSol)
-        //{
-        //    // Llamada al procedimiento almacenado mediante Entity Framework Core
-        //    var result = await _context.CabSolCotizacions.FromSqlRaw("EXEC sp_GetIdSolicitud @p0, @p1", tipoSol, noSol).ToListAsync();
+        [HttpGet("GetCOTEstado")]
+        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCOTEstado( string state)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.CabSolCotizacions.Where(ca=>ca.CabSolCotEstado == state).ToListAsync();
 
-        //    if (result == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (result == null)
+            {
+                return NotFound();
+            }
 
-        //    return result;
-        //}
+            return result;
+        }
 
         // PUT: api/CabSolCotizacions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
