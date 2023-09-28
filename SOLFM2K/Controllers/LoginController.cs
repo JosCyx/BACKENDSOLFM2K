@@ -48,9 +48,7 @@ namespace SOLFM2K.Controllers
 
             var roles = _authorizeService.GetRoles(user.UsLogin);
 
-            //  corregir esto del 0
-
-            var userArea = _context.Empleados.Where(x => "0" + x.EmpleadoIdentificacion == user.UsLogin).FirstOrDefault();
+            var userArea = _context.Empleados.Where(x => x.EmpleadoIdNomina == user.UsIdNomina).FirstOrDefault();
             
 
 
