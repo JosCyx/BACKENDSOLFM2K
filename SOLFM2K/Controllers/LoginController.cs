@@ -46,6 +46,15 @@ namespace SOLFM2K.Controllers
 
             var token = _tokenService.GenerateToken(user, 720);
 
+            var roles = _authorizeService.GetRoles(user.UsLogin);
+
+            //  corregir esto del 0
+
+            var userArea = _context.Empleados.Where(x => "0" + x.EmpleadoIdentificacion == user.UsLogin).FirstOrDefault();
+            
+
+
+
             var response = new
             {
                 Token = token,
@@ -54,7 +63,9 @@ namespace SOLFM2K.Controllers
                     //datos para realizar la autorizacion
                     usLogin = user.UsLogin,
                     usIdNomina = user.UsIdNomina,
-                    usNombre = user.UsNombre
+                    usNombre = user.UsNombre,
+                    usArea = userArea.EmpleadoIdArea,
+                    usRoles = roles
                 }
             };
 
@@ -72,6 +83,24 @@ namespace SOLFM2K.Controllers
             var rolTransaccions = _authorizeService.GetRolTransaccions(roles);
 
             return rolTransaccions;
+        }
+
+        [AllowAnonymous]
+        [HttpGet("GetRolesList")]
+        public List<string> GetRolesList(string login)
+        {
+
+            var rolesList = _context.RolUsuarios
+        .Where(x => x.RuLogin == login)
+        .Join(
+            _context.Rols,
+            ru => ru.RuRol,
+            rol => rol.RoCodigo,
+            (ru, rol) => rol.RoNivelRt.ToString() // Seleccionar RoNivelRt y convertirlo a string
+        )
+        .ToList();
+
+            return rolesList;
         }
 
     }

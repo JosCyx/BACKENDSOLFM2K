@@ -13,6 +13,8 @@ public partial class Rol
 
     public string? RoEstado { get; set; }
 
+    public int RoNivelRt { get; set; }
+
 
     //public virtual Aplicacione? RoAplicacionNavigation { get; set; }
 }

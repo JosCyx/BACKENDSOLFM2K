@@ -208,6 +208,10 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(5)
                 .HasColumnName("cab_sol_cot_motivo_devolucion");
 
+            entity.Property(e => e.CabSolCotIdEmisor)
+                .HasColumnName("cab_sol_cot_generate_by");
+
+
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -291,6 +295,9 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.cabSolOCRUCProveedor)
                 .HasMaxLength(25)
                 .HasColumnName("cab_ordc_ruc_proveedor");
+
+            entity.Property(e => e.cabSolOCIdEmisor)
+                .HasColumnName("cab_ordc_generate_by");
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -385,6 +392,9 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.CabPagoEstadoTrack)
                 .HasColumnName("cab_pago_estado_track");
+
+            entity.Property(e => e.CabPagoIdEmisor)
+                .HasColumnName("cab_pago_generate_by");
         });
 
         /* modelBuilder.Entity<CabSolPago>(entity =>
@@ -971,6 +981,7 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.RoNombre)
                 .HasMaxLength(40)
                 .HasColumnName("ro_nombre");
+            entity.Property(e => e.RoNivelRt).HasColumnName("ro_nivel_rt");
 
             /*entity.HasOne(d => d.RoAplicacionNavigation).WithMany(p => p.Rols)
                 .HasForeignKey(d => d.RoAplicacion)

@@ -30,5 +30,6 @@ public partial class CabSolPago
     public string CabPagoCancelacionOrden { get; set; } = null!;
     public string CabPagoEstado { get; set; }
     public int CabPagoEstadoTrack { get; set; }
+    public int CabPagoIdEmisor { get; set; }
 }
 

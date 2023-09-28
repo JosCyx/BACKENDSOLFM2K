@@ -38,10 +38,10 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/CabSolCotizacions/5
-        /*[HttpGet("{tipoSol}")]
-        public async Task<ActionResult<List<CabSolCotizacion>>> GetCabeceraTipoSolicitud(int tipoSol)
+        [HttpGet("GetCabecerabyNomina")]
+        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyNomina(int idNomina)
         {
-            var cabSolCotizaciones = await _context.CabSolCotizacions.Where(c => c.CabSolCotTipoSolicitud == tipoSol).ToListAsync();
+            var cabSolCotizaciones = await _context.CabSolCotizacions.Where(c => c.CabSolCotIdEmisor == idNomina).ToListAsync();
 
             if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
             {
@@ -49,7 +49,23 @@ namespace SOLFM2K.Controllers
             }
 
             return cabSolCotizaciones;
-        }*/
+        }
+
+
+        [HttpGet("GetCabecerabyarea")]
+        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyArea(int area)
+        {
+            var cabSolCotizaciones = await _context.CabSolCotizacions.Where(c => c.CabSolCotArea == area).ToListAsync();
+
+            if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return cabSolCotizaciones;
+        }
+
+
 
         [HttpGet("GetSolicitudByID")]
         public async Task<ActionResult<CotizacionTemplate>> getSolicitudByID(int ID)

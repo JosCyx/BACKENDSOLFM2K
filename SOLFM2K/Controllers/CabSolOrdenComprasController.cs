@@ -32,19 +32,35 @@ namespace SOLFM2K.Controllers
             return await _context.CabSolOrdenCompras.ToListAsync();
         }
 
-        // GET: api/CabSolOrdenCompras/5
-        //[HttpGet("{tipoSol}")]
-        //public async Task<ActionResult<List<CabSolOrdenCompra>>> GetOrdenOCByTipoSol(int tipoSol)
-        //{
-        //    var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c => c.cabSolOCTipoSolicitud == tipoSol).ToListAsync();
+        // GET: api/CabSolCotizacions/5
+        [HttpGet("GetCabecerabyNomina")]
+        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetCabecerabyNomina(int idNomina)
+        {
+            var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c => c.cabSolOCIdEmisor == idNomina).ToListAsync();
 
-        //    if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
-        //    {
-        //        return NotFound();
-        //    }
+            if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+            {
+                return NotFound();
+            }
 
-        //    return cabSolCotizaciones;
-        //}
+            return cabSolCotizaciones;
+        }
+
+
+        [HttpGet("GetCabecerabyarea")]
+        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetCabecerabyArea(int area)
+        {
+            var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c => c.cabSolOCArea == area).ToListAsync();
+
+            if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return cabSolCotizaciones;
+        }
+
+
         [HttpGet("GetSolicitudByID")]
         public async Task<ActionResult<OrdenComprasTemplate>> getSolicitudByID(int ID)
         {

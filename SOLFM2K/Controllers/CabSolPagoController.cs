@@ -32,6 +32,35 @@ namespace SOLFM2K.Controllers
             return await _context.CabSolPagos.ToListAsync();
         }
 
+        // GET: api/CabSolCotizacions/5
+        [HttpGet("GetCabecerabyNomina")]
+        public async Task<ActionResult<IEnumerable<CabSolPago>>> GetCabecerabyNomina(int idNomina)
+        {
+            var cabSolCotizaciones = await _context.CabSolPagos.Where(c => c.CabPagoIdEmisor == idNomina).ToListAsync();
+
+            if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return cabSolCotizaciones;
+        }
+
+
+        [HttpGet("GetCabecerabyarea")]
+        public async Task<ActionResult<IEnumerable<CabSolPago>>> GetCabecerabyArea(int area)
+        {
+            var cabSolCotizaciones = await _context.CabSolPagos.Where(c => c.CabPagoAreaSolicitante == area).ToListAsync();
+
+            if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return cabSolCotizaciones;
+        }
+
+
         // GET: api/CabSolPagoes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CabSolPago>> GetCabSolPago(int id)
