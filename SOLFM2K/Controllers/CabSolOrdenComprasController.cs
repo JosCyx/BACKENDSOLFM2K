@@ -99,6 +99,19 @@ namespace SOLFM2K.Controllers
 
             return solicitudCompleta;
         }
+        [HttpGet("GetOCEstado")]
+        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetOCEstado(string state)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.CabSolOrdenCompras.Where(ca => ca.cabSolOCEstado == state).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
 
         // PUT: api/CabSolOrdenCompras/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

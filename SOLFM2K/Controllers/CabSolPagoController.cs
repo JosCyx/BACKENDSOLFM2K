@@ -78,6 +78,19 @@ namespace SOLFM2K.Controllers
 
             return cabSolPago;
         }
+        [HttpGet("GetSOEstado")]
+        public async Task<ActionResult<IEnumerable<CabSolPago>>> GetOPEstado(string state)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var result = await _context.CabSolPagos.Where(ca => ca.CabPagoEstado == state).ToListAsync();
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return result;
+        }
 
         // PUT: api/CabSolPagoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
