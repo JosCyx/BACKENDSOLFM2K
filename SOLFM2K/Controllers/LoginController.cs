@@ -50,9 +50,6 @@ namespace SOLFM2K.Controllers
 
             var userArea = _context.Empleados.Where(x => x.EmpleadoIdNomina == user.UsIdNomina).FirstOrDefault();
             
-
-
-
             var response = new
             {
                 Token = token,

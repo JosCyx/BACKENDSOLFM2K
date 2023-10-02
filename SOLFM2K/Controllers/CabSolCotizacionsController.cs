@@ -10,13 +10,14 @@ using System.Text.Json;
 using Microsoft.OpenApi.Any;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Xml;
 
 namespace SOLFM2K.Controllers
 {
-   [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
-    
+
     public class CabSolCotizacionsController : ControllerBase
     {
         private readonly SolicitudContext _context;
@@ -30,10 +31,10 @@ namespace SOLFM2K.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabSolCotizacions()
         {
-          if (_context.CabSolCotizacions == null)
-          {
-              return NotFound();
-          }
+            if (_context.CabSolCotizacions == null)
+            {
+                return NotFound();
+            }
             return await _context.CabSolCotizacions.ToListAsync();
         }
 
@@ -81,7 +82,7 @@ namespace SOLFM2K.Controllers
 
             // Obtener detalles e items de la solicitud
             var detalles = await _context.DetSolCotizacions
-                .Where(d => d.SolCotTipoSol == cabecera.CabSolCotTipoSolicitud && d.SolCotNoSol== cabecera.CabSolCotNoSolicitud)
+                .Where(d => d.SolCotTipoSol == cabecera.CabSolCotTipoSolicitud && d.SolCotNoSol == cabecera.CabSolCotNoSolicitud)
                 .ToListAsync();
 
             var solicitudCompleta = new CotizacionTemplate
@@ -108,10 +109,10 @@ namespace SOLFM2K.Controllers
 
 
         [HttpGet("GetCOTEstado")]
-        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCOTEstado( string state)
+        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCOTEstado(string state)
         {
             // Llamada al procedimiento almacenado mediante Entity Framework Core
-            var result = await _context.CabSolCotizacions.Where(ca=>ca.CabSolCotEstado == state).ToListAsync();
+            var result = await _context.CabSolCotizacions.Where(ca => ca.CabSolCotEstado == state).ToListAsync();
 
             if (result == null)
             {
@@ -120,6 +121,46 @@ namespace SOLFM2K.Controllers
 
             return result;
         }
+
+
+        [HttpPut("UpdateEstadoTracking")]
+        public IActionResult UpdateEstadoTracking(int tipoSol, int noSol, int newEstado)
+        {
+            var entityToUpdate = _context.CabSolCotizacions.FirstOrDefault(e => e.CabSolCotTipoSolicitud == tipoSol && e.CabSolCotNoSolicitud == noSol);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.CabSolCotEstadoTracking = newEstado;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
+        [HttpPut("UpdateEstado")]
+        public IActionResult UpdateEstado(int tipoSol, int noSol, string newEstado)
+        {
+            var entityToUpdate = _context.CabSolCotizacions.FirstOrDefault(e => e.CabSolCotTipoSolicitud == tipoSol && e.CabSolCotNoSolicitud == noSol);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.CabSolCotEstado = newEstado;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
 
         // PUT: api/CabSolCotizacions/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -157,10 +198,10 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<CabSolCotizacion>> PostCabSolCotizacion(CabSolCotizacion cabSolCotizacion)
         {
-          if (_context.CabSolCotizacions == null)
-          {
-              return Problem("Entity set 'SolicitudContext.CabSolCotizacions'  is null.");
-          }
+            if (_context.CabSolCotizacions == null)
+            {
+                return Problem("Entity set 'SolicitudContext.CabSolCotizacions'  is null.");
+            }
             _context.CabSolCotizacions.Add(cabSolCotizacion);
             await _context.SaveChangesAsync();
 
