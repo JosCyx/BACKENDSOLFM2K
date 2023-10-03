@@ -24,7 +24,6 @@ namespace SOLFM2K.Controllers
 
         // GET: api/Rols
         [HttpGet]
-        
         public async Task<ActionResult<IEnumerable<Rol>>> GetRols()
         {
           if (_context.Rols == null)
