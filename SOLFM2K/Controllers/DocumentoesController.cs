@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace SOLFM2K.Controllers
 {
-    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentoController : ControllerBase
