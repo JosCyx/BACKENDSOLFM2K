@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
+using SQLitePCL;
 
 namespace SOLFM2K.Controllers
 {
@@ -109,14 +110,25 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<RolTransaccion>> PostRolTransaccion(RolTransaccion rolTransaccion)
         {
-          if (_context.RolTransaccions == null)
-          {
-              return Problem("Entity set 'SolicitudContext.RolTransaccion'  is null.");
-          }
-            _context.RolTransaccions.Add(rolTransaccion);
-            await _context.SaveChangesAsync();
+            //una consulta con el usua
+            var autorizacion = _context.RolTransaccions.FirstOrDefault( aut=>aut.RtRol == rolTransaccion.RtRol && aut.RtTransaccion == rolTransaccion.RtTransaccion );
+            if (autorizacion != null)
+            {
+                return Conflict("Elemento ya existe");
+            }
+            else
+            {
+                if (_context.RolTransaccions == null)
+                {
+                    return Problem("Entity set 'SolicitudContext.RolTransaccion'  is null.");
+                }
+                _context.RolTransaccions.Add(rolTransaccion);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(PostRolTransaccion), new { id = rolTransaccion.RtId }, rolTransaccion);
+                return CreatedAtAction(nameof(PostRolTransaccion), new { id = rolTransaccion.RtId }, rolTransaccion);
+            }
+
+            
         }
 
         // DELETE: api/RolTransaccions/5
