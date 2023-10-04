@@ -38,8 +38,8 @@ namespace SOLFM2K.Controllers
         [HttpGet("GetPrambyIdentify")]
         public async Task<ActionResult<IEnumerable<ParamsConf>>> GetPrambyIdentify(string identify)
         {
+            //var parametro = _context.ParamsConfs.FirstOrDefault(pr => pr.Identify == identify);
             var param = await _context.ParamsConfs.Where(pr => pr.Identify == identify).ToListAsync();
-
             if (param == null)
             {
                 return NotFound();

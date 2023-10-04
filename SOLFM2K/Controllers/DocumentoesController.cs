@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentoController : ControllerBase
@@ -138,9 +138,33 @@ namespace SOLFM2K.Controllers
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+        [HttpPost]
+        [Route("UploadSolPagoDocs")]
+        public ActionResult<string> UploadSolPagoDocs(IFormFile archivos, string prefijo)
+        {
+            
+            try
+            {
+                string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
 
-        
+                string rutaDOC = Path.Combine(rutaBase, prefijo + archivos.FileName);
+
+                using (var stream = System.IO.File.Create(rutaDOC))
+                {
+                    archivos.CopyTo(stream);
+                    stream.Flush();
+                }
+
+                return Ok(rutaDOC);
+            }
+            catch (Exception error)
+            {
+                return StatusCode(500, "Error al subir el archivo: " + error.Message);
+            }
+        }
+
+
+
     }
 }
 
