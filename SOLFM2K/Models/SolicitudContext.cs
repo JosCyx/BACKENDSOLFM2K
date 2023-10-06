@@ -77,6 +77,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<JwtConfig> JwtConfigs { get; set; }
 
+    public virtual DbSet<DestinoSolPago> DestinoSolPagos { get; set; }
+
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1263,6 +1265,26 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.JwtSecretKey)
                 .HasMaxLength(100)
                 .HasColumnName("jwt_secretKey");
+        });
+
+        modelBuilder.Entity<DestinoSolPago>(entity =>
+        {
+            entity.HasKey(e => e.DestPagId);
+
+            entity.ToTable("destino_sol_pago");
+
+            entity.Property(e => e.DestPagId).HasColumnName("dest_pag_id");
+            entity.Property(e => e.DestPagEmpleado).HasColumnName("dest_pag_empleado");
+            entity.Property(e => e.DestPagEvidencia)
+                .HasMaxLength(200)
+                .HasColumnName("dest_pag_evidencia");
+            entity.Property(e => e.DestPagIdDetalle).HasColumnName("dest_pag_id_detalle");
+            entity.Property(e => e.DestPagNoSol).HasColumnName("dest_pag_no_sol");
+            entity.Property(e => e.DestPagObervacion)
+                .HasMaxLength(500)
+                .HasColumnName("dest_pag_obervacion");
+            entity.Property(e => e.DestPagSector).HasColumnName("dest_pag_sector");
+            entity.Property(e => e.DestPagTipoSol).HasColumnName("dest_pag_tipo_sol");
         });
 
         OnModelCreatingPartial(modelBuilder);
