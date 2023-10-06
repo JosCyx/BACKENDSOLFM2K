@@ -196,7 +196,7 @@ namespace SOLFM2K.Controllers
                         _context.SaveChanges();
                     }
 
-                    return Ok("Archivo eliminado correctamente.");
+                    return Ok(documento);
                 }
                 else
                 {
