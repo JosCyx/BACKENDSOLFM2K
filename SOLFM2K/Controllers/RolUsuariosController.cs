@@ -31,6 +31,25 @@ namespace SOLFM2K.Controllers
           }
             return await _context.RolUsuarios.ToListAsync();
         }
+        //devuelve los roles que tiene disponibles el usuario consultado
+        // GET: api/RolUsuarios/RuUsuario/{ruUsuario}
+        [HttpGet("GetUsuariobyNom")]
+        public async Task<ActionResult<IEnumerable<RolUsuario>>> GetRolUsuarioByRtRol(string usuario)
+        {
+            if (_context.RolUsuarios == null)
+            {
+                return NotFound();
+            }
+
+            var rolUsuarios = await _context.RolUsuarios.Where(r => r.RuLogin == usuario).ToListAsync();
+
+            if (rolUsuarios == null || !rolUsuarios.Any())
+            {
+                return NotFound();
+            }
+
+            return rolUsuarios;
+        }
 
         // GET: api/RolUsuarios/5
         [HttpGet("{id}")]
@@ -86,14 +105,23 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<RolUsuario>> PostRolUsuario(RolUsuario rolUsuario)
         {
-          if (_context.RolUsuarios == null)
-          {
-              return Problem("Entity set 'SolicitudContext.RolUsuarios'  is null.");
-          }
-            _context.RolUsuarios.Add(rolUsuario);
-            await _context.SaveChangesAsync();
+            var autorizacion = _context.RolUsuarios.FirstOrDefault(aut => aut.RuRol == rolUsuario.RuRol && aut.RuLogin == rolUsuario.RuLogin);
+            if (autorizacion != null)
+            {
+                return BadRequest("El usuario ya tiene asignado el rol");
+            }
+            else
+            {
+                if (_context.RolUsuarios == null)
+                {
+                    return Problem("Entity set 'SolicitudContext.RolUsuarios'  is null.");
+                }
+                _context.RolUsuarios.Add(rolUsuario);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(PostRolUsuario), new { id = rolUsuario.RuId }, rolUsuario);
+                return CreatedAtAction(nameof(PostRolUsuario), new { id = rolUsuario.RuId }, rolUsuario);
+            }
+            
         }
 
         // DELETE: api/RolUsuarios/5
