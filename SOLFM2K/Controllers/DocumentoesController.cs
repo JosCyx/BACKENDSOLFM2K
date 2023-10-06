@@ -12,6 +12,7 @@ using SOLFM2K.Services.CryptoService;
 using static System.Net.WebRequestMethods;
 using System.Runtime.InteropServices;
 
+
 namespace SOLFM2K.Controllers
 {
     //[ServiceFilter(typeof(JwtAuthorizationFilter))]
@@ -79,9 +80,9 @@ namespace SOLFM2K.Controllers
         public ActionResult UploadFiles(IFormFile archivos, string prefijo, int tipoSol, int noSol)
         {
             // Credenciales para servidor 
-            var user = "";
-            var password = "";
-            var redCredencial = new NetworkCredential(user, password);
+            //var user = "";
+            //var password = "";
+            //var redCredencial = new NetworkCredential(user, password);
 
             try
             {
@@ -175,37 +176,67 @@ namespace SOLFM2K.Controllers
                 return StatusCode(500, "Error al subir el archivo: " + error.Message);
             }
         }
-
-
-       /* [HttpPost]
-        [Route("UploadSolPagoDocs")]
-        public ActionResult UploadSolPagoDocs(IFormFile archivos, string prefijo)
+        //Se elimina desde servidor  y en la  base de datos
+        [HttpDelete("DeleteFile")]
+        public  IActionResult DeleteFile(string url)
         {
-            
             try
             {
-                string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
-
-                string rutaDOC = Path.Combine(rutaBase, prefijo + archivos.FileName);
-
-                using (var stream = System.IO.File.Create(rutaDOC))
+                if (string.IsNullOrEmpty(url))
                 {
-                    archivos.CopyTo(stream);
-                    stream.Flush();
+                    return BadRequest("La URL del archivo es nula o vacia");
                 }
-
-                var response = new
+                if (System.IO.File.Exists(url))
                 {
-                    url = rutaDOC
-                };
+                    System.IO.File.Delete(url);
+                    var documento = _context.Documentos.FirstOrDefault(d => d.DocUrl == url);
+                    if (documento != null)
+                    {
+                        _context.Documentos.Remove(documento);
+                        _context.SaveChanges();
+                    }
 
-                return Ok(response);
+                    return Ok("Archivo eliminado correctamente.");
+                }
+                else
+                {
+                    return NotFound("El archivo no existe en el directorio");
+                }
             }
-            catch (Exception error)
+            catch (Exception ex )
             {
-                return StatusCode(500, "Error al subir el archivo: " + error.Message);
+                return StatusCode(500, "Error en archivo: " + ex.Message);
             }
-        }*/
+        }
+        /* [HttpPost]
+         [Route("UploadSolPagoDocs")]
+         public ActionResult UploadSolPagoDocs(IFormFile archivos, string prefijo)
+         {
+
+             try
+             {
+                 string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
+
+                 string rutaDOC = Path.Combine(rutaBase, prefijo + archivos.FileName);
+
+                 using (var stream = System.IO.File.Create(rutaDOC))
+                 {
+                     archivos.CopyTo(stream);
+                     stream.Flush();
+                 }
+
+                 var response = new
+                 {
+                     url = rutaDOC
+                 };
+
+                 return Ok(response);
+             }
+             catch (Exception error)
+             {
+                 return StatusCode(500, "Error al subir el archivo: " + error.Message);
+             }
+         }*/
 
 
 
