@@ -14,7 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentoController : ControllerBase
@@ -50,14 +50,14 @@ namespace SOLFM2K.Controllers
             try
             {
                 // Ruta a la carpeta en la unidad C:
-                string folderPath = @"C:\prueba";
+                string folderPath = @"\\192.168.1.75\Solicitudes\";
 
                 // Combina la ruta de la carpeta con el nombre de archivo
                 string filePath = Path.Combine(folderPath, fileName);
 
                 if (!System.IO.File.Exists(filePath))
                 {
-                    return NotFound("El archivo no existe en la carpeta de prueba");
+                    return NotFound("El archivo no existe en el directorio");
                 }
 
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
@@ -138,9 +138,77 @@ namespace SOLFM2K.Controllers
 
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
 
-        
+        //suube archivos al servidor en la carpeta de solicitudes de pago y crea una carpeta por cada solicitud que se suba
+        [HttpPost]
+        [Route("UploadSolPagoDocs")]
+        public ActionResult UploadSolPagoDocs(IFormFile archivos, string prefijo, string item)
+        {
+            try
+            {
+                string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
+
+                // Crear una carpeta con el nombre del prefijo si no existe
+                string carpetaNueva = Path.Combine(rutaBase, prefijo);
+                if (!Directory.Exists(carpetaNueva))
+                {
+                    Directory.CreateDirectory(carpetaNueva);
+                }
+
+                string rutaDOC = Path.Combine(carpetaNueva, item + "-"+ archivos.FileName);
+
+                using (var stream = System.IO.File.Create(rutaDOC))
+                {
+                    archivos.CopyTo(stream);
+                    stream.Flush();
+                }
+
+                var response = new
+                {
+                    url = rutaDOC
+                };
+
+                return Ok(response);
+            }
+            catch (Exception error)
+            {
+                return StatusCode(500, "Error al subir el archivo: " + error.Message);
+            }
+        }
+
+
+       /* [HttpPost]
+        [Route("UploadSolPagoDocs")]
+        public ActionResult UploadSolPagoDocs(IFormFile archivos, string prefijo)
+        {
+            
+            try
+            {
+                string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
+
+                string rutaDOC = Path.Combine(rutaBase, prefijo + archivos.FileName);
+
+                using (var stream = System.IO.File.Create(rutaDOC))
+                {
+                    archivos.CopyTo(stream);
+                    stream.Flush();
+                }
+
+                var response = new
+                {
+                    url = rutaDOC
+                };
+
+                return Ok(response);
+            }
+            catch (Exception error)
+            {
+                return StatusCode(500, "Error al subir el archivo: " + error.Message);
+            }
+        }*/
+
+
+
     }
 }
 
