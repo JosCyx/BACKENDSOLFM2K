@@ -20,6 +20,8 @@ public partial class DetSolCotizacion
 
     public int SolCotCantidadTotal { get; set; }
 
+    public string SolCotPresupuesto { get; set; } = null!;
+
     //public string? AudEvento { get; set; } = null!;
 
     //public DateTime? AudFecha { get; set; }

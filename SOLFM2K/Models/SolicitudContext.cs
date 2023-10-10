@@ -15,6 +15,7 @@ public partial class SolicitudContext : DbContext
     {
     }
 
+    public virtual DbSet<Presupuesto> Presupuestos { get; set; }
     public virtual DbSet<Aplicacione> Aplicaciones { get; set; }
 
     public virtual DbSet<Area> Areas { get; set; }
@@ -491,6 +492,10 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.SolCotCantidadTotal)
                 .HasColumnName("sol_cot_cantidad_total");
 
+            entity.Property(e => e.SolCotPresupuesto)
+                .HasMaxLength(100)
+                .HasColumnName("sol_cot_presupuesto");
+
             //entity.Property(e => e.AudEvento)
             //    .HasMaxLength(50)
             //    .HasColumnName("sol_cot_aud_evento");
@@ -509,8 +514,8 @@ public partial class SolicitudContext : DbContext
 
             //entity.Property(e => e.AudVeces)
             //    .HasColumnName("sol_cot_aud_veces");
-            
-       
+
+
 
             /*entity.HasOne(d => d.SolCotIdCabeceraNavigation).WithMany(p => p.SolCotizacions)
                 .HasForeignKey(d => d.SolCotIdCabecera)
@@ -1285,6 +1290,21 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("dest_pag_obervacion");
             entity.Property(e => e.DestPagSector).HasColumnName("dest_pag_sector");
             entity.Property(e => e.DestPagTipoSol).HasColumnName("dest_pag_tipo_sol");
+        });
+
+        modelBuilder.Entity<Presupuesto>(entity =>
+        {
+            entity
+                .ToTable("presupuesto");
+
+            entity.HasKey(e => e.PrespId).HasName("PK_presupuesto");
+
+            entity.Property(e => e.PrespId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("presp_id");
+            entity.Property(e => e.PrespNombre)
+                .HasMaxLength(100)
+                .HasColumnName("presp_nombre");
         });
 
         OnModelCreatingPartial(modelBuilder);

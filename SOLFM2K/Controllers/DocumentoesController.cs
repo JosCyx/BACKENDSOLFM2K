@@ -43,6 +43,50 @@ namespace SOLFM2K.Controllers
             return documentos;
         }
 
+        
+        [HttpGet("GetDestinoFiles")]
+        public async Task<ActionResult<IEnumerable<DestinoSolPago>>> GetDestinoFiles(int tipoSol, int noSol)
+        {
+            var destinoFiles = await _context.DestinoSolPagos.Where(c => c.DestPagTipoSol == tipoSol && c.DestPagNoSol == noSol).ToListAsync();
+            if (destinoFiles == null)
+            {
+                return NotFound();
+            }
+            return destinoFiles;
+        }
+
+
+        /*[HttpGet("DownloadDestinoFile")]
+        public async Task<IActionResult> DownloadDestinoFile()
+        {
+            var destinoFile = _context.DestinoSolPagos.FirstOrDefault(dt => dt.DestPagId == destinoFileId);
+
+            //return Ok(destinoFile);
+
+            if (destinoFile == null)
+            {
+                return NotFound();
+            }
+
+            // Supongamos que destinoFile.dest_pag_evidencia contiene la ruta del archivo en el servidor local
+            //var filePath = destinoFile.DestPagEvidencia;
+            var filePat = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago\SP PMC 3-0017\3-tipos-de-app-moviles.png";
+            var filePath = Path.Combine(filePat);
+            //return Ok(filePath);
+
+            // Asegúrate de que el archivo exista en la ruta especificada
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound("El archivo no existe en el directorio");
+            }
+
+            // Lee el contenido del archivo y devuelve como una respuesta
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return File(fileBytes, "application/octet-stream", Path.GetFileName(filePath));
+        }*/
+
+
+
         //Documentos  
         //MODIFICAR LA RUTA PARA QUE COINCIDA CON LA RUTA LOCAL DEL SERVIDOR
         [HttpGet("ViewFile")]
