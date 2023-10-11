@@ -80,6 +80,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<DestinoSolPago> DestinoSolPagos { get; set; }
 
+    public virtual DbSet<NivGerencium> NivGerencia { get; set; }
+
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -1305,6 +1307,22 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.PrespNombre)
                 .HasMaxLength(100)
                 .HasColumnName("presp_nombre");
+        });
+
+        modelBuilder.Entity<NivGerencium>(entity =>
+        {
+            entity.HasKey(e => e.GerNivId);
+
+            entity.ToTable("niv_gerencia");
+
+            entity.Property(e => e.GerNivId).HasColumnName("ger_niv_id");
+            entity.Property(e => e.GerNivArea).HasColumnName("ger_niv_area");
+            entity.Property(e => e.GerNivCorreo)
+                .HasMaxLength(50)
+                .HasColumnName("ger_niv_correo");
+            entity.Property(e => e.GerNivNombre)
+                .HasMaxLength(100)
+                .HasColumnName("ger_niv_nombre");
         });
 
         OnModelCreatingPartial(modelBuilder);
