@@ -95,7 +95,8 @@ namespace SOLFM2K.Controllers
             try
             {
                 // Ruta a la carpeta en la unidad C:
-                string folderPath = @"\\192.168.1.75\Solicitudes\";
+                //string folderPath = @"\\192.168.1.75\Solicitudes\";
+                string folderPath = @"C:\Solicitudes\";
 
                 // Combina la ruta de la carpeta con el nombre de archivo
                 string filePath = Path.Combine(folderPath, fileName);
@@ -130,7 +131,8 @@ namespace SOLFM2K.Controllers
 
             try
             {
-                string rutaBase = @"\\192.168.1.75\Solicitudes\";
+                //string rutaBase = @"\\192.168.1.75\Solicitudes\";
+                string rutaBase = @"C:\Solicitudes\";
                 string subdirectorio = "";
 
                 switch (tipoSol)
@@ -191,7 +193,8 @@ namespace SOLFM2K.Controllers
         {
             try
             {
-                string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
+                //string rutaBase = @"\\192.168.1.75\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
+                string rutaBase = @"C:\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
 
                 // Crear una carpeta con el nombre del prefijo si no existe
                 string carpetaNueva = Path.Combine(rutaBase, prefijo);

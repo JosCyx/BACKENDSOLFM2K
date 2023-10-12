@@ -9,14 +9,14 @@ using SOLFM2K.Services.WDAuthenticate;
 using System.Text;
 
 
-//var  secretKey = "RQ9aP&1BvXxZ$uFqGKsX5GmDwN8@Y3T!";
 var builder = WebApplication.CreateBuilder(args);
 
 //coregir acceso a configuracion de jwt
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var issuer = jwtSettings["Issuer"];
 var audience = jwtSettings["Audience"];
-var secretKey = jwtSettings["SecretKey"];
+var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+//var secretKey2 = Environment.GetEnvironmentVariable("SECRET_KEY");
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -25,10 +25,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//extraer cadena de conexion de las variables de entorno
+var conn = Environment.GetEnvironmentVariable("DB_CONN");
+
 //add context
 builder.Services.AddDbContext<SolicitudContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("conn"));
+    options.UseSqlServer(conn);
 });
 
 //add policy
@@ -57,8 +61,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+//obtiene el valor de la clave maestra de la variable de entorno
+var masterKey = Environment.GetEnvironmentVariable("MASTER_KEY");
+
 //Registra el servicio de encriptación
-builder.Services.AddSingleton(provider => "eb&zgVadt%Xis2T2");
+builder.Services.AddSingleton(provider => masterKey);
 builder.Services.AddScoped<ICryptoService, CryptoService>();
 
 // Registra el servicio ITokenService
