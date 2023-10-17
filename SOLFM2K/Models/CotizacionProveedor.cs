@@ -20,4 +20,6 @@ public partial class CotizacionProveedor
     public string CotProvCorreo { get; set; } = null!;
 
     public string? CotProvDireccion { get; set; }
+
+    public int CotProvVerify { get; set; }
 }

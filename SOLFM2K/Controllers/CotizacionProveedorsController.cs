@@ -97,6 +97,25 @@ namespace SOLFM2K.Controllers
             return NoContent();
         }
 
+        [HttpPut("UpdateVerifyProveedor")]
+        public IActionResult UpdateVerifyProveedor(int idProv)
+        {
+            var entityToUpdate = _context.CotizacionProveedors.FirstOrDefault(e => e.CotProvId == idProv);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.CotProvVerify = 1;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
         // POST: api/CotizacionProveedors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

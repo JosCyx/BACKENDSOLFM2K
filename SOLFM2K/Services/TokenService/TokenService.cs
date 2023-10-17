@@ -24,7 +24,8 @@ namespace SOLFM2K.Services
 
         public string GenerateToken(Usuario user, double expirationMinutes)
         {
-            var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+            //var secretKey = Environment.GetEnvironmentVariable("SECRET_KEY");
+            var secretKey = _configuration["JwtSettings:SecretKey"];
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

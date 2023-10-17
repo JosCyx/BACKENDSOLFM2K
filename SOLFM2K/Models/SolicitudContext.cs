@@ -87,7 +87,7 @@ public partial class SolicitudContext : DbContext
 
     //extraer cadena de conexion de las variables de entorno y usarla en el metodo OnConfiguring
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         // Obtén la cadena de conexión de la variable de entorno
         string connectionString = Environment.GetEnvironmentVariable("DB_CONN");
@@ -98,11 +98,11 @@ public partial class SolicitudContext : DbContext
             // Utiliza la cadena de conexión en la configuración del contexto
             optionsBuilder.UseSqlServer(connectionString);
         }
-    }
+    }*/
 
 
-    /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");*/
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseSqlServer("Name=ConnectionStrings:conn");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -1249,6 +1249,7 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("cot_prov_telefono");
             entity.Property(e => e.CotProvTipoSolicitud).HasColumnName("cot_prov_tipo_solicitud");
+            entity.Property(e => e.CotProvVerify).HasColumnName("cot_prov_verify");
         });
 
         modelBuilder.Entity<ParamsConf>(entity =>
