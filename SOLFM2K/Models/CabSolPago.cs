@@ -31,5 +31,8 @@ public partial class CabSolPago
     public string CabPagoEstado { get; set; }
     public int CabPagoEstadoTrack { get; set; }
     public int CabPagoIdEmisor { get; set; }
+    public int CabPagoApprovedBy { get; set; }
+
+    public int CabPagoFinancieroBy { get; set; }
 }
 

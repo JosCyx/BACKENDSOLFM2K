@@ -49,6 +49,11 @@ public partial class CabSolCotizacion
 
     public int CabSolCotIdEmisor { get; set; }
 
+    public int CabSolCotApprovedBy { get; set; }
+
+    public int CabSolCotFinancieroBy { get; set; }
+
+
     //public virtual TipoSolic CabSolCotIdCabeceraNavigation { get; set; } = null!;
 
     //public virtual ICollection<SolCotizacion> SolCotizacions { get; set; } = new List<SolCotizacion>();

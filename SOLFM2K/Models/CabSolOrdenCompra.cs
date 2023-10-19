@@ -48,6 +48,10 @@ public partial class CabSolOrdenCompra
 
     public int cabSolOCIdEmisor { get; set; }
 
+    public int cabSolOCApprovedBy { get; set; }
+
+    public int cabSolOCFinancieroBy { get; set; }
+
     //public virtual TipoSolic CabOrdcIdCabeceraNavigation { get; set; } = null!;
 
     //public virtual Proveedor CabOrdcProveedorNavigation { get; set; } = null!;

@@ -5,11 +5,13 @@ using SOLFM2K.Models;
 using SOLFM2K.Services;
 using SOLFM2K.Services.CryptoService;
 using SOLFM2K.Services.EmailService;
+using SOLFM2K.Services.ExtractService;
 using SOLFM2K.Services.WDAuthenticate;
 using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var bean = builder.Configuration.GetSection("Bean");
 
 //coregir acceso a configuracion de jwt
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -61,13 +63,22 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//obtiene el valor de la clave maestra de la variable de entorno
-//var masterKey = Environment.GetEnvironmentVariable("MASTER_KEY");
-var masterKey = "eb&zgVadt%Xis2T2";
 
-//Registra el servicio de encriptación
-builder.Services.AddSingleton(provider => masterKey);
-builder.Services.AddScoped<ICryptoService, CryptoService>();
+//Registra el servicio ExtractService
+builder.Services.AddScoped<IExtractService, ExtractService>();
+
+//crea una instancia del servicio ExtracService para registrar el CryptoService con la palabra clave
+using (var scope = builder.Services.BuildServiceProvider().CreateScope())
+{
+    
+    var beanService = scope.ServiceProvider.GetRequiredService<IExtractService>();
+    string masterKey = beanService.ExtractBean();
+
+    // Registra CryptoService con la palabra clave extraída
+    builder.Services.AddSingleton(provider => masterKey);
+    builder.Services.AddScoped<ICryptoService, CryptoService>();
+
+}
 
 // Registra el servicio ITokenService
 builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
@@ -82,10 +93,8 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<JwtAuthorizationFilter>();
 
 
-
 //contruye la app
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 

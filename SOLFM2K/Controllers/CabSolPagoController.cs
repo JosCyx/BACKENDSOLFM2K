@@ -130,6 +130,44 @@ namespace SOLFM2K.Controllers
             return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
         }
 
+        [HttpPut("UpdateAprobado")]
+        public IActionResult UpdateAprobado(int tipoSol, int noSol, int id)
+        {
+            var entityToUpdate = _context.CabSolPagos.FirstOrDefault(e => e.CabPagoTipoSolicitud == tipoSol && e.CabPagoNoSolicitud == noSol);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.CabPagoApprovedBy = id;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
+        [HttpPut("UpdateFinanciero")]
+        public IActionResult UpdateFinanciero(int tipoSol, int noSol, int id)
+        {
+            var entityToUpdate = _context.CabSolPagos.FirstOrDefault(e => e.CabPagoTipoSolicitud == tipoSol && e.CabPagoNoSolicitud == noSol);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.CabPagoFinancieroBy = id;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
         // PUT: api/CabSolPagoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

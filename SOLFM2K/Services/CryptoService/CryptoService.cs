@@ -11,6 +11,7 @@ namespace SOLFM2K.Services.CryptoService
         {
             this.encryptionKey = encryptionKey;
         }
+       
 
         public string EncryptPassword(string password)
         {
