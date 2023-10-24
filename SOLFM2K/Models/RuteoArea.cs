@@ -11,5 +11,7 @@ public partial class RuteoArea
 
     public int RutareaArea { get; set; }
 
+    public int RutareaDpto { get; set; }
+
     public int RutareaNivel { get; set; } 
 }

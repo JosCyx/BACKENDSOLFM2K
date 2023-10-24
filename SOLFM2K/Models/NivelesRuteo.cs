@@ -12,4 +12,6 @@ public partial class NivelesRuteo
     public string DescRuteo { get; set; } = null!;
 
     public string EstadoRuteo { get; set; } = null!;
+
+    public string ProcesoRuteo { get; set; } = null!;
 }

@@ -48,11 +48,11 @@ public partial class CabSolOrdenCompra
 
     public string? cabSolOCRUCProveedor { get; set; } = null!;
 
-    public int cabSolOCIdEmisor { get; set; }
+    public string cabSolOCIdEmisor { get; set; }
 
-    public int cabSolOCApprovedBy { get; set; }
+    public string cabSolOCApprovedBy { get; set; }
 
-    public int cabSolOCFinancieroBy { get; set; }
+    public string cabSolOCFinancieroBy { get; set; }
 
     //public virtual TipoSolic CabOrdcIdCabeceraNavigation { get; set; } = null!;
 

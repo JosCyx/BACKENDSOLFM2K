@@ -49,11 +49,11 @@ public partial class CabSolCotizacion
 
     public string? CabSolCotMtovioDev { get; set; } = null!;
 
-    public int CabSolCotIdEmisor { get; set; }
+    public string CabSolCotIdEmisor { get; set; }
 
-    public int CabSolCotApprovedBy { get; set; }
+    public string CabSolCotApprovedBy { get; set; }
 
-    public int CabSolCotFinancieroBy { get; set; }
+    public string CabSolCotFinancieroBy { get; set; }
 
 
     //public virtual TipoSolic CabSolCotIdCabeceraNavigation { get; set; } = null!;

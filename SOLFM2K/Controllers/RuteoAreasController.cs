@@ -34,10 +34,10 @@ namespace SOLFM2K.Controllers
 
         // GET: api/RuteoAreas/5
         //get que busca ruteos segun el area
-        [HttpGet("{RutareaArea}")]
-        public async Task<ActionResult<IEnumerable<RuteoArea>>> GetRuteoAreasByRutaArea(int RutareaArea)
+        [HttpGet("{RutareaDept}")]
+        public async Task<ActionResult<IEnumerable<RuteoArea>>> GetRuteoAreasByRutaArea(int RutareaDept)
         {
-            var ruteoAreas = await _context.RuteoAreas.Where(ra => ra.RutareaArea == RutareaArea).ToListAsync();
+            var ruteoAreas = await _context.RuteoAreas.Where(ra => ra.RutareaDpto == RutareaDept).ToListAsync();
 
             if (ruteoAreas == null || ruteoAreas.Count == 0)
             {

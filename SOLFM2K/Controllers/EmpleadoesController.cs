@@ -50,6 +50,19 @@ namespace SOLFM2K.Controllers
             return empleado;
         }
 
+        [HttpGet("GetEmpleadobyNomina")]
+        public async Task<ActionResult<IEnumerable<Empleado>>> getEmpleadobyNomina(string nomina)
+        {
+            // Llamada al procedimiento almacenado mediante Entity Framework Core
+            var empleado = await _context.Empleados.Where(emp => emp.EmpleadoIdNomina == nomina).ToListAsync();
+
+            if (empleado == null || empleado.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return empleado;
+        }
 
         
         [HttpGet("GetEmpleadobyArea")]

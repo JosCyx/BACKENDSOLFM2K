@@ -233,13 +233,13 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_sol_cot_motivo_devolucion");
 
             entity.Property(e => e.CabSolCotIdEmisor)
-                .HasColumnName("cab_sol_cot_generate_by");
+                .HasColumnName("cab_sol_cot_generate_by").HasMaxLength(6);
 
             entity.Property(e => e.CabSolCotApprovedBy)
-                .HasColumnName("cab_sol_cot_approvedBy");
+                .HasColumnName("cab_sol_cot_approvedBy").HasMaxLength(6);
 
             entity.Property(e => e.CabSolCotFinancieroBy)
-                .HasColumnName("cab_sol_cot__financieroBy");
+                .HasColumnName("cab_sol_cot_financieroBy").HasMaxLength(6);
 
 
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
@@ -330,13 +330,13 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_ruc_proveedor");
 
             entity.Property(e => e.cabSolOCIdEmisor)
-                .HasColumnName("cab_ordc_generate_by");
+                .HasColumnName("cab_ordc_generate_by").HasMaxLength(6);
 
             entity.Property(e => e.cabSolOCApprovedBy)
-                .HasColumnName("cab_ordc_approvedBy");
+                .HasColumnName("cab_ordc_approvedBy").HasMaxLength(6);
 
             entity.Property(e => e.cabSolOCFinancieroBy)
-                .HasColumnName("cab_ordc_financieroBy");
+                .HasColumnName("cab_ordc_financieroBy").HasMaxLength(6);
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -436,13 +436,11 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_estado_track");
 
             entity.Property(e => e.CabPagoIdEmisor)
-                .HasColumnName("cab_pago_generate_by");
+                .HasColumnName("cab_pago_generate_by").HasMaxLength(6);
 
             entity.Property(e => e.CabPagoApprovedBy)
-                .HasColumnName("cab_pago_approvedBy");
+                .HasColumnName("cab_pago_approvedBy").HasMaxLength(6);
 
-            entity.Property(e => e.CabPagoFinancieroBy)
-                .HasColumnName("cab_pago_financieroBy");
         });
 
         /* modelBuilder.Entity<CabSolPago>(entity =>
@@ -649,6 +647,9 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("emp_niv_dept_aut");
             entity.Property(e => e.EmpNivRuteo)
                 .HasColumnName("emp_niv_ruteo");
+            entity.Property(e => e.EmpNivImp)
+                .HasColumnName("emp_niv_imp")
+                .HasMaxLength(1);
         });
 
         modelBuilder.Entity<Empleado>(entity =>
@@ -947,6 +948,7 @@ public partial class SolicitudContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("ruteo_estado");
             entity.Property(e => e.Nivel).HasColumnName("ruteo_nivel");
+            entity.Property(e => e.ProcesoRuteo).HasColumnName("ruteo_proceso").HasMaxLength(1);
         });
 
         modelBuilder.Entity<Proveedor>(entity =>
@@ -1106,6 +1108,8 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("rutar_tipo_sol");
             entity.Property(e => e.RutareaArea)
                 .HasColumnName("rutar_area");
+            entity.Property(e => e.RutareaDpto)
+                .HasColumnName("rutar_dept");
             entity.Property(e => e.RutareaNivel)
                 .HasColumnName("rutar_nivel");
             

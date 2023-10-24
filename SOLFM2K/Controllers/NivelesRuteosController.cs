@@ -32,6 +32,19 @@ namespace SOLFM2K.Controllers
             return await _context.NivelesRuteos.ToListAsync();
         }
 
+        [HttpGet("GetNivelbyNivel")]
+        public async Task<ActionResult<IEnumerable<NivelesRuteo>>> GetNivelbyNivel(int nivel)
+        {
+            var nivelConsultado = await _context.NivelesRuteos.Where(niv => niv.Nivel == nivel).ToListAsync();
+
+            if (nivelConsultado == null)
+            {
+                return NotFound();
+            }
+
+            return nivelConsultado;
+        }
+
         //retorna los niveles segun el estado indicado en el parametro
         [HttpGet("GetNivelByEstado")]
         public async Task<ActionResult<IEnumerable<NivelesRuteo>>> getNivelByEstado(char estadoRuteo)
