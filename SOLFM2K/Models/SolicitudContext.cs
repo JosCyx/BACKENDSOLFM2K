@@ -360,10 +360,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_no_solicitud");
 
             entity.Property(e => e.CabPagoIdDeptSolicitante)
-               .HasColumnName("cab_pago_id_dep_solicitante");
+               .HasColumnName("cab_pago_dep_solicitante");
 
             entity.Property(e => e.CabPagoIdAreaSolicitante)
-                .HasColumnName("cab_pago_id_area_solicitante"); 
+                .HasColumnName("cab_pago_area_solicitante"); 
 
             entity.Property(e => e.CabPagoSolicitante)
                 .HasColumnName("cab_pago_solicitante").HasMaxLength(6);
