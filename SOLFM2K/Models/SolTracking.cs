@@ -13,6 +13,6 @@ public partial class SolTracking
 
     public int SolTrNivel { get; set; }
 
-    public int SolTrIdEmisor { get; set; }
+    public string SolTrIdEmisor { get; set; }
 
 }    

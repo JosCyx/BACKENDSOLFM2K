@@ -9,13 +9,15 @@ public partial class Empleado
 
     public int EmpleadoCompania { get; set; }
 
-    public int EmpleadoIdNomina { get; set; }
+    public string EmpleadoIdNomina { get; set; }
 
     public int EmpleadoIdDpto { get; set; }
 
     public int EmpleadoIdArea { get; set; }
 
-    public string EmpleadoTipoId { get; set; } = null!;
+    public string EmpleadoDpto { get; set; }
+
+    public string EmpleadoArea { get; set; }
 
     public string EmpleadoIdentificacion { get; set; } = null!;
 
@@ -23,11 +25,11 @@ public partial class Empleado
 
     public string EmpleadoApellidos { get; set; } = null!;
 
-    public string EmpleadoSexo { get; set; } = null!;
-
     public string? EmpleadoTelefono { get; set; }
 
     public string? EmpleadoCorreo { get; set; }
 
     public string EmpleadoEstado { get; set; } = null!;
+
+    public string EmpleadoCargo { get; set; } = null!;
 }

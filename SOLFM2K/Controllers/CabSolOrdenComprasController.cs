@@ -48,9 +48,9 @@ namespace SOLFM2K.Controllers
 
 
         [HttpGet("GetCabecerabyarea")]
-        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetCabecerabyArea(int area)
+        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetCabecerabyArea(int dep)
         {
-            var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c => c.cabSolOCArea == area).ToListAsync();
+            var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c =>c.cabSolOCIdDept == dep).ToListAsync();
 
             if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
             {

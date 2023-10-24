@@ -11,11 +11,13 @@ public partial class CabSolOrdenCompra
 
     public int cabSolOCTipoSolicitud { get; set; }
 
-    public int cabSolOCArea { get; set; }
+    public int cabSolOCIdDept { get; set; }
+
+    public int cabSolOCIdArea { get; set; } 
 
     public int cabSolOCNoSolicitud { get; set; }
 
-    public int cabSolOCSolicitante { get; set; }
+    public string cabSolOCSolicitante { get; set; }
 
     public DateTime cabSolOCFecha { get; set; }
 

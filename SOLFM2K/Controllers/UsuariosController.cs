@@ -65,7 +65,7 @@ namespace SOLFM2K.Controllers
 
         // GET: api/Usuarios/BuscarUsuariobyIdNomina
         [HttpGet("BuscarUsuariobyIdNomina")]
-        public async Task<ActionResult<Usuario>> BuscarUsuariobyIdNomina(int idNomina)
+        public async Task<ActionResult<Usuario>> BuscarUsuariobyIdNomina(string idNomina)
         {
             var usuario = await _context.Usuarios.Where(u => u.UsIdNomina == idNomina).ToListAsync();
 
@@ -99,9 +99,9 @@ namespace SOLFM2K.Controllers
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{UsIdNomina}")]
-        public async Task<IActionResult> PutUsuario(int UsIdNomina, Usuario usuario)
+        public async Task<IActionResult> PutUsuario(int UsId, Usuario usuario)
         {
-            if (UsIdNomina != usuario.UsIdNomina)
+            if (UsId!= usuario.UsId)
             {
                 return BadRequest();
             }
@@ -117,7 +117,7 @@ namespace SOLFM2K.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UsuarioExists(UsIdNomina))
+                if (!UsuarioExists(UsId))
                 {
                     return NotFound();
                 }

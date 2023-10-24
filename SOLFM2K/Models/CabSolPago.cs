@@ -11,8 +11,9 @@ public partial class CabSolPago
     public string CabPagoNumerico { get; set; }
     public int CabPagoTipoSolicitud { get; set; }
     public int CabPagoNoSolicitud { get; set; }
-    public int CabPagoAreaSolicitante { get; set; }
-    public int CabPagoSolicitante { get; set; }
+    public int CabPagoIdDeptSolicitante { get; set; }
+    public int CabPagoIdAreaSolicitante { get; set; }
+    public string CabPagoSolicitante { get; set; }
     public string CabPagoNoOrdenCompra { get; set; }
     public DateTime CabPagoFechaEmision { get; set; }
     public DateTime CabPagoFechaEnvio { get; set; }

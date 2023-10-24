@@ -5,11 +5,11 @@ namespace SOLFM2K.Models;
 
 public partial class EmplNivel
 {
-    public string? Empleado { get; set; }
+    public int EmpNivId { get; set; }
 
-    public int? Area { get; set; }
+    public string EmpNivEmpelado { get; set; }
 
-    public int? TipoDeDocumento { get; set; }
+    public int EmpNivDeptAutorizado { get; set; }
 
-    public int? Nivel { get; set; }
+    public int EmpNivRuteo { get; set; }
 }

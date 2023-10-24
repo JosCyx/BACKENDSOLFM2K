@@ -12,11 +12,13 @@ public partial class CabSolCotizacion
 
     public int CabSolCotTipoSolicitud { get; set; }
 
-    public int CabSolCotArea { get; set; }
+    public int CabSolCotIdDept { get; set; }
+
+    public int CabSolCotIdArea { get; set; }
 
     public int CabSolCotNoSolicitud { get; set; }
 
-    public int CabSolCotSolicitante { get; set; }
+    public string CabSolCotSolicitante { get; set; }
 
     public DateTime CabSolCotFecha { get; set; }
 

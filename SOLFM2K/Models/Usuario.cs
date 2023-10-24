@@ -13,7 +13,7 @@ public partial class Usuario
 
     public string UsContrasenia { get; set; } = null!;
 
-    public int UsIdNomina { get; set; } 
+    public string UsIdNomina { get; set; } 
 
     public string UsNombre { get; set; } = null!;
 

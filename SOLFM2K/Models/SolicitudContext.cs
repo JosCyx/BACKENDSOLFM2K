@@ -34,7 +34,7 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<Documento> Documentos { get; set; }
 
-    public virtual DbSet<EmplNivel> EmplNivels { get; set; }
+    public virtual DbSet<EmplNivel> EmpleadoNivel { get; set; }
 
     public virtual DbSet<Empleado> Empleados { get; set; }
 
@@ -80,7 +80,6 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<DestinoSolPago> DestinoSolPagos { get; set; }
 
-    public virtual DbSet<NivGerencium> NivGerencia { get; set; }
 
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
@@ -168,14 +167,17 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabSolCotTipoSolicitud)
                 .HasColumnName("cab_sol_cot_tipo_solicitud");
 
-            entity.Property(e => e.CabSolCotArea)
-                .HasColumnName("cab_sol_cot_area_solicitante");
+            entity.Property(e => e.CabSolCotIdDept)
+                .HasColumnName("cab_sol_cot_id_dep_solicitante");
+
+            entity.Property(e => e.CabSolCotIdArea)
+                .HasColumnName("cab_sol_cot_id_area_solicitante");
 
             entity.Property(e => e.CabSolCotNoSolicitud)
                 .HasColumnName("cab_sol_cot_no_solicitud");
 
             entity.Property(e => e.CabSolCotSolicitante)
-                .HasColumnName("cab_sol_cot_solicitante");
+                .HasColumnName("cab_sol_cot_solicitante").HasMaxLength(6);
 
             entity.Property(e => e.CabSolCotFecha)
                 .HasColumnType("date")
@@ -262,14 +264,17 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.cabSolOCTipoSolicitud)
                 .HasColumnName("cab_ordc_tipo_solicitud");
 
-            entity.Property(e => e.cabSolOCArea)
-                .HasColumnName("cab_ordc_area_solicitante");
+            entity.Property(e => e.cabSolOCIdDept)
+                .HasColumnName("cab_ordc_id_dep_solicitante");
+
+            entity.Property(e => e.cabSolOCIdArea)
+                .HasColumnName("cab_ordc_id_area_solicitante");
 
             entity.Property(e => e.cabSolOCNoSolicitud)
                 .HasColumnName("cab_ordc_no_solicitud");
 
             entity.Property(e => e.cabSolOCSolicitante)
-                .HasColumnName("cab_ordc_solicitante");
+                .HasColumnName("cab_ordc_solicitante").HasMaxLength(6);
 
             entity.Property(e => e.cabSolOCFecha)
                 .HasColumnType("date")
@@ -354,11 +359,14 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabPagoNoSolicitud)
                 .HasColumnName("cab_pago_no_solicitud");
 
-            entity.Property(e => e.CabPagoAreaSolicitante)
-                .HasColumnName("cab_pago_area_solicitante");
+            entity.Property(e => e.CabPagoIdDeptSolicitante)
+               .HasColumnName("cab_pago_id_dep_solicitante");
+
+            entity.Property(e => e.CabPagoIdAreaSolicitante)
+                .HasColumnName("cab_pago_id_area_solicitante"); 
 
             entity.Property(e => e.CabPagoSolicitante)
-                .HasColumnName("cab_pago_solicitante");
+                .HasColumnName("cab_pago_solicitante").HasMaxLength(6);
 
             entity.Property(e => e.CabPagoNoOrdenCompra)
                 .IsRequired()
@@ -629,59 +637,62 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<EmplNivel>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("empl_nivel");
+            entity.ToTable("empleado_nivel");
+            entity.HasKey(e => e.EmpNivId).HasName("PK_niv_gerencia");
 
-            entity.Property(e => e.Area).HasColumnName("area");
-            entity.Property(e => e.Empleado)
-                .HasMaxLength(10)
+            entity.Property(e => e.EmpNivId).HasColumnName("emp_niv_id");
+            entity.Property(e => e.EmpNivEmpelado)
+                .HasMaxLength(6)
                 .IsFixedLength()
-                .HasColumnName("empleado");
-            entity.Property(e => e.Nivel).HasColumnName("nivel");
-            entity.Property(e => e.TipoDeDocumento).HasColumnName("tipo_de_documento");
+                .HasColumnName("emp_niv_id_nomina");
+            entity.Property(e => e.EmpNivDeptAutorizado)
+                .HasColumnName("emp_niv_dept_aut");
+            entity.Property(e => e.EmpNivRuteo)
+                .HasColumnName("emp_niv_ruteo");
         });
 
         modelBuilder.Entity<Empleado>(entity =>
         {
             entity.ToTable("empleados");
 
+            entity.HasKey(e => e.EmpleadoId)
+                .HasName("PK_empleados");
+
             entity.Property(e => e.EmpleadoId).HasColumnName("empleado_id");
-            entity.Property(e => e.EmpleadoApellidos)
-                .HasMaxLength(250)
-                .HasColumnName("empleado_apellidos");
             entity.Property(e => e.EmpleadoCompania).HasColumnName("empleado_compania");
-            entity.Property(e => e.EmpleadoCorreo)
-                .HasMaxLength(100)
-                .HasColumnName("empleado_correo");
-            entity.Property(e => e.EmpleadoEstado)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength()
-                .HasColumnName("empleado_estado");
-            entity.Property(e => e.EmpleadoIdArea).HasColumnName("empleado_id_area");
+            entity.Property(e => e.EmpleadoIdNomina).HasColumnName("empleado_id_nomina").HasMaxLength(6);
             entity.Property(e => e.EmpleadoIdDpto).HasColumnName("empleado_id_dpto");
-            entity.Property(e => e.EmpleadoIdNomina).HasColumnName("empleado_id_NOMINA");
+            entity.Property(e => e.EmpleadoIdArea).HasColumnName("empleado_id_area");
+            entity.Property(e => e.EmpleadoDpto).HasColumnName("empleado_departamento").HasMaxLength(100);
+            entity.Property(e => e.EmpleadoArea).HasColumnName("empleado_area").HasMaxLength(100);
             entity.Property(e => e.EmpleadoIdentificacion)
                 .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("empleado_identificacion");
             entity.Property(e => e.EmpleadoNombres)
-                .HasMaxLength(250)
+                .HasMaxLength(100)
                 .HasColumnName("empleado_nombres");
-            entity.Property(e => e.EmpleadoSexo)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("empleado_sexo");
+            entity.Property(e => e.EmpleadoApellidos)
+                .HasMaxLength(100)
+                .HasColumnName("empleado_apellidos");
             entity.Property(e => e.EmpleadoTelefono)
-                .HasMaxLength(10)
+                .HasMaxLength(15)
                 .IsUnicode(false)
                 .HasColumnName("empleado_telefono");
-            entity.Property(e => e.EmpleadoTipoId)
+
+            entity.Property(e => e.EmpleadoCorreo)
+                .HasMaxLength(100)
+                .HasColumnName("empleado_correo");
+
+            entity.Property(e => e.EmpleadoEstado)
                 .HasMaxLength(1)
                 .IsUnicode(false)
                 .IsFixedLength()
-                .HasColumnName("empleado_tipo_id");
+                .HasColumnName("empleado_estado");
+
+            entity.Property(e => e.EmpleadoCargo).HasColumnName("empleado_cargo").HasMaxLength(100);
+
+            
         });
 
         modelBuilder.Entity<Empresa>(entity =>
@@ -1139,7 +1150,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("sol_trck_nivel");
 
             entity.Property(e => e.SolTrIdEmisor)
-                .HasColumnName("sol_trck_id_nomina_emisor");
+                .HasColumnName("sol_trck_id_nomina_emisor").HasMaxLength(6);
         });
 
 
@@ -1226,7 +1237,7 @@ public partial class SolicitudContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("us_login");
             entity.Property(e => e.UsIdNomina)
-                .HasColumnName("us_id_nomina");
+                .HasColumnName("us_id_nomina").HasMaxLength(6);
             entity.Property(e => e.UsNombre)
                 .HasMaxLength(100)
                 .HasColumnName("us_nombre");
@@ -1343,22 +1354,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.PrespNombre)
                 .HasMaxLength(100)
                 .HasColumnName("presp_nombre");
-        });
-
-        modelBuilder.Entity<NivGerencium>(entity =>
-        {
-            entity.HasKey(e => e.GerNivId);
-
-            entity.ToTable("niv_gerencia");
-
-            entity.Property(e => e.GerNivId).HasColumnName("ger_niv_id");
-            entity.Property(e => e.GerNivArea).HasColumnName("ger_niv_area");
-            entity.Property(e => e.GerNivCorreo)
-                .HasMaxLength(50)
-                .HasColumnName("ger_niv_correo");
-            entity.Property(e => e.GerNivNombre)
-                .HasMaxLength(100)
-                .HasColumnName("ger_niv_nombre");
         });
 
         OnModelCreatingPartial(modelBuilder);

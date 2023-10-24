@@ -43,7 +43,7 @@ namespace SOLFM2K.Controllers
             {
                 return BadRequest("La contraseña no coincide.");
             }
-
+             
             var token = _tokenService.GenerateToken(user, 720);
 
             var roles = _authorizeService.GetRoles(user.UsLogin);
