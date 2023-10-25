@@ -54,6 +54,10 @@ public partial class CabSolOrdenCompra
 
     public string cabSolOCFinancieroBy { get; set; }
 
+    public string cabSolOCAprobPresup { get; set; }
+
+    public string cabSolOCMotivoDev { get; set; }
+
     //public virtual TipoSolic CabOrdcIdCabeceraNavigation { get; set; } = null!;
 
     //public virtual Proveedor CabOrdcProveedorNavigation { get; set; } = null!;

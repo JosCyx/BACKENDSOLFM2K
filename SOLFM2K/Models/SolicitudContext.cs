@@ -146,7 +146,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("area_estado");
             entity.Property(e => e.AreaIdNomina).HasColumnName("area_id_nomina");
             entity.Property(e => e.AreaNemonico)
-                .HasMaxLength(4)
+                .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("area_nemonico");
         });
@@ -337,6 +337,12 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.cabSolOCFinancieroBy)
                 .HasColumnName("cab_ordc_financieroBy").HasMaxLength(6);
+
+            entity.Property(e => e.cabSolOCAprobPresup)
+                .HasColumnName("cab_ordc_aprob_presup").HasMaxLength(3);
+
+            entity.Property(e => e.cabSolOCMotivoDev)
+                .HasColumnName("cab_ordc_motivo_devolucion").HasMaxLength(500);
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>

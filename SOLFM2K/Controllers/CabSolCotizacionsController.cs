@@ -40,7 +40,7 @@ namespace SOLFM2K.Controllers
 
         // GET: api/CabSolCotizacions/5
         [HttpGet("GetCabecerabyNomina")]
-        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyNomina(int idNomina)
+        public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyNomina(string idNomina)
         {
             var cabSolCotizaciones = await _context.CabSolCotizacions.Where(c => c.CabSolCotIdEmisor == idNomina).ToListAsync();
 
@@ -163,7 +163,7 @@ namespace SOLFM2K.Controllers
 
 
         [HttpPut("UpdateAprobado")]
-        public IActionResult UpdateAprobado(int tipoSol, int noSol, int id)
+        public IActionResult UpdateAprobado(int tipoSol, int noSol, string id)
         {
             var entityToUpdate = _context.CabSolCotizacions.FirstOrDefault(e => e.CabSolCotTipoSolicitud == tipoSol && e.CabSolCotNoSolicitud == noSol);
 
@@ -182,7 +182,7 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpPut("UpdateFinanciero")]
-        public IActionResult UpdateFinanciero(int tipoSol, int noSol, int id)
+        public IActionResult UpdateFinanciero(int tipoSol, int noSol, string id)
         {
             var entityToUpdate = _context.CabSolCotizacions.FirstOrDefault(e => e.CabSolCotTipoSolicitud == tipoSol && e.CabSolCotNoSolicitud == noSol);
 
