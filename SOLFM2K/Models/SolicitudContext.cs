@@ -315,7 +315,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_fechamax_entrega");
 
             entity.Property(e => e.cabSolOCInspector)
-                .HasColumnName("cab_ordc_inspector");
+                .HasColumnName("cab_ordc_inspector").HasMaxLength(6);
 
             entity.Property(e => e.cabSolOCTelefInspector)
                 .HasMaxLength(15)
