@@ -41,7 +41,7 @@ public partial class CabSolCotizacion
 
     public DateTime CabSolCotFechaMaxentrega { get; set; }
 
-    public int? CabSolCotInspector { get; set; } 
+    public string? CabSolCotInspector { get; set; } 
 
     public string? CabSolCotTelefInspector { get; set; } = null!;
 

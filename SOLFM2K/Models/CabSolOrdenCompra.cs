@@ -40,7 +40,7 @@ public partial class CabSolOrdenCompra
 
     public DateTime cabSolOCFechaMaxentrega { get; set; }
 
-    public int? cabSolOCInspector { get; set; }
+    public string? cabSolOCInspector { get; set; }
 
     public string? cabSolOCTelefInspector { get; set; } = null!;
 
