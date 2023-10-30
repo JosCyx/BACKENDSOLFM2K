@@ -105,23 +105,32 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<RolUsuario>> PostRolUsuario(RolUsuario rolUsuario)
         {
-            var autorizacion = _context.RolUsuarios.FirstOrDefault(aut => aut.RuRol == rolUsuario.RuRol && aut.RuLogin == rolUsuario.RuLogin);
-            if (autorizacion != null)
+            if (rolUsuario == null)
             {
-                return BadRequest("El usuario ya tiene asignado el rol");
+                return BadRequest("La solicitud no contiene datos válidos");
+            }
+
+            // Verificar si ya existe un registro con la misma combinación de RtRol y RtTransaccion
+            var existeRegistro = _context.RolUsuarios.Any(aut => aut.RuRol == rolUsuario.RuRol && aut.RuLogin == rolUsuario.RuLogin);
+            if (existeRegistro)
+            {
+                return Conflict("El elemento ya existe");
             }
             else
             {
-                if (_context.RolUsuarios == null)
+                try
                 {
-                    return Problem("Entity set 'SolicitudContext.RolUsuarios'  is null.");
+                    _context.RolUsuarios.Add(rolUsuario);
+                    await _context.SaveChangesAsync();
+                    return CreatedAtAction(nameof(PostRolUsuario), new { id = rolUsuario.RuId }, rolUsuario);
                 }
-                _context.RolUsuarios.Add(rolUsuario);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(PostRolUsuario), new { id = rolUsuario.RuId }, rolUsuario);
+                catch (DbUpdateException)
+                {
+                    // Manejar error al guardar en la base de datos
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error al guardar en la base de datos");
+                }
             }
-            
+
         }
 
         // DELETE: api/RolUsuarios/5

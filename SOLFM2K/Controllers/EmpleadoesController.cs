@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class EmpleadoesController : ControllerBase
@@ -22,6 +24,7 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/Empleadoes
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleados()
         {
@@ -33,6 +36,7 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/Empleadoes/5
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("{EmpleadoId}")]
         public async Task<ActionResult<Empleado>> GetEmpleado(int EmpleadoId)
         {
@@ -50,6 +54,7 @@ namespace SOLFM2K.Controllers
             return empleado;
         }
 
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("GetEmpleadobyNomina")]
         public async Task<ActionResult<IEnumerable<Empleado>>> getEmpleadobyNomina(string nomina)
         {
@@ -64,7 +69,7 @@ namespace SOLFM2K.Controllers
             return empleado;
         }
 
-        
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet("GetEmpleadobyArea")]
         public async Task<ActionResult<IEnumerable<Empleado>>> getEmpleadobyArea(int area)
         {
@@ -82,6 +87,7 @@ namespace SOLFM2K.Controllers
 
         // PUT: api/Empleadoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPut("{EmpleadoId}")]
         public async Task<IActionResult> PutEmpleado(int EmpleadoId, Empleado empleado)
         {
@@ -110,9 +116,28 @@ namespace SOLFM2K.Controllers
 
             return NoContent();
         }
+        [AllowAnonymous]
+        [HttpPost("UpdateEmpleados")]
+        public ActionResult UpdateEmpleados(string nombreTabla)
+        {
+            try
+            {
+                var parameters = new[]
+                {
+                new SqlParameter("@nombreTabla", nombreTabla)};
+
+                _context.Database.ExecuteSqlRaw($"EXEC UpdateEmpleados @nombreTabla", parameters);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = ex.Message });
+            }
+        }
 
         // POST: api/Empleadoes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpPost]
         public async Task<ActionResult<Empleado>> PostEmpleado(Empleado empleado)
         {
@@ -141,6 +166,7 @@ namespace SOLFM2K.Controllers
         }
 
         // DELETE: api/Empleadoes/5
+        [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpDelete("{EmpleadoId}")]
         public async Task<IActionResult> DeleteEmpleado(int EmpleadoId)
         {

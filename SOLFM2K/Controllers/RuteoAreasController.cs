@@ -34,10 +34,24 @@ namespace SOLFM2K.Controllers
 
         // GET: api/RuteoAreas/5
         //get que busca ruteos segun el area
-        [HttpGet("{RutareaDept}")]
+        [HttpGet("GetRuteosbyDep")]
         public async Task<ActionResult<IEnumerable<RuteoArea>>> GetRuteoAreasByRutaArea(int RutareaDept)
         {
             var ruteoAreas = await _context.RuteoAreas.Where(ra => ra.RutareaDpto == RutareaDept).ToListAsync();
+
+            if (ruteoAreas == null || ruteoAreas.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return ruteoAreas;
+        }
+        
+
+        [HttpGet("GetRuteoByDepSol")]
+        public async Task<ActionResult<IEnumerable<RuteoArea>>> GetRuteoByDepSol(int dep, int sol)
+        {
+            var ruteoAreas = await _context.RuteoAreas.Where(ra => ra.RutareaDpto == dep && ra.RutareaTipoSol == sol).ToListAsync();
 
             if (ruteoAreas == null || ruteoAreas.Count == 0)
             {
@@ -124,7 +138,7 @@ namespace SOLFM2K.Controllers
             }
 
             var ruteoArea = await _context.RuteoAreas
-                .FirstOrDefaultAsync(ra => ra.RutareaTipoSol == RutareaTipoSol && ra.RutareaArea == RutareaArea && ra.RutareaNivel == RutareaNivel);
+                .FirstOrDefaultAsync(ra => ra.RutareaTipoSol == RutareaTipoSol && ra.RutareaDpto == RutareaArea && ra.RutareaNivel == RutareaNivel);
 
             if (ruteoArea == null)
             {
