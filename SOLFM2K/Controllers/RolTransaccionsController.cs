@@ -110,25 +110,33 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<RolTransaccion>> PostRolTransaccion(RolTransaccion rolTransaccion)
         {
-            //una consulta con el usua
-            var autorizacion = _context.RolTransaccions.FirstOrDefault( aut=>aut.RtRol == rolTransaccion.RtRol && aut.RtTransaccion == rolTransaccion.RtTransaccion );
-            if (autorizacion != null)
+            if (rolTransaccion == null)
             {
-                return Conflict("Elemento ya existe");
+                return BadRequest("La solicitud no contiene datos válidos");
+            }
+
+            // Verificar si ya existe un registro con la misma combinación de RtRol y RtTransaccion
+            var existeRegistro = _context.RolTransaccions.Any(aut => aut.RtRol == rolTransaccion.RtRol && aut.RtTransaccion == rolTransaccion.RtTransaccion);
+            if (existeRegistro)
+            {
+                return Conflict("El elemento ya existe");
             }
             else
             {
-                if (_context.RolTransaccions == null)
+                try
                 {
-                    return Problem("Entity set 'SolicitudContext.RolTransaccion'  is null.");
+                    _context.RolTransaccions.Add(rolTransaccion);
+                    await _context.SaveChangesAsync();
+                    return CreatedAtAction(nameof(PostRolTransaccion), new { id = rolTransaccion.RtId }, rolTransaccion);
                 }
-                _context.RolTransaccions.Add(rolTransaccion);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(PostRolTransaccion), new { id = rolTransaccion.RtId }, rolTransaccion);
+                catch (DbUpdateException)
+                {
+                    // Manejar error al guardar en la base de datos
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error al guardar en la base de datos");
+                }
             }
 
-            
+
         }
 
         // DELETE: api/RolTransaccions/5
