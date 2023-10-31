@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -135,28 +136,37 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
         {
-            if (_context.Usuarios == null)
-            {
-                return Problem("Entity set 'SolicitudContext.Usuarios'  is null.");
-            }
-
-            if (usuario == null)
-            {
-                return BadRequest("El objeto 'usuario' no puede ser nulo.");
-            }
-
             try
             {
-                // Cifra la contraseña antes de guardarla en la base de datos
-                string claveCifrada = _cryptoService.EncryptPassword(usuario.UsContrasenia);
+                //Validacion de usuario repetidos
+                var usuarioExistente =  _context.Usuarios.FirstOrDefault(u => u.UsIdNomina == usuario.UsIdNomina && u.UsLogin == usuario.UsLogin);
+            Console.WriteLine("este es mi metodo "+usuarioExistente);
+            if (usuarioExistente != null)
+            {
+                return BadRequest("El usuario ya tiene asignado el rol");
+            }
+            else {
+                    if (_context.Usuarios == null)
+                    {
+                        return Problem("Entity set 'SolicitudContext.Usuarios'  is null.");
+                    }
 
-                // Asigna la clave cifrada de vuelta a la propiedad 'UsContrasenia' de 'usuario'
-                usuario.UsContrasenia = claveCifrada;
+                    if (usuario == null)
+                    {
+                        return BadRequest("El objeto 'usuario' no puede ser nulo.");
+                    }
+                    // Cifra la contraseña antes de guardarla en la base de datos
+                    string claveCifrada = _cryptoService.EncryptPassword(usuario.UsContrasenia);
 
-                _context.Usuarios.Add(usuario);
-                await _context.SaveChangesAsync();
+                    // Asigna la clave cifrada de vuelta a la propiedad 'UsContrasenia' de 'usuario'
+                    usuario.UsContrasenia = claveCifrada;
 
-                return CreatedAtAction(nameof(PostUsuario), new { id = usuario.UsId }, usuario);
+                    _context.Usuarios.Add(usuario);
+                    await _context.SaveChangesAsync();
+
+                    return CreatedAtAction(nameof(PostUsuario), new { id = usuario.UsId }, usuario);
+                }
+     
             }
             catch (Exception ex)
             {
