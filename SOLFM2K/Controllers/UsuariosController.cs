@@ -134,27 +134,23 @@ namespace SOLFM2K.Controllers
         // POST: api/Usuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Usuario>> PostUsuario(Usuario usuario)
+        public async Task<ActionResult<RolUsuario>> PostUsuario(Usuario usuario)
         {
-            try
+            if (usuario == null)
             {
-                //Validacion de usuario repetidos
-                var usuarioExistente =  _context.Usuarios.FirstOrDefault(u => u.UsIdNomina == usuario.UsIdNomina && u.UsLogin == usuario.UsLogin);
-            Console.WriteLine("este es mi metodo "+usuarioExistente);
-            if (usuarioExistente != null)
-            {
-                return BadRequest("El usuario ya tiene asignado el rol");
+                return BadRequest("La solicitud no contiene datos válidos");
             }
-            else {
-                    if (_context.Usuarios == null)
-                    {
-                        return Problem("Entity set 'SolicitudContext.Usuarios'  is null.");
-                    }
 
-                    if (usuario == null)
-                    {
-                        return BadRequest("El objeto 'usuario' no puede ser nulo.");
-                    }
+            // Verificar si ya existe un registro con la misma combinación de RtRol y RtTransaccion
+            var existeRegistro = _context.Usuarios.Any(user => user.UsLogin == usuario.UsLogin && user.UsIdNomina == usuario.UsIdNomina);
+            if (existeRegistro)
+            {
+                return Conflict("El elemento ya existe");
+            }
+            else
+            {
+                try
+                {
                     // Cifra la contraseña antes de guardarla en la base de datos
                     string claveCifrada = _cryptoService.EncryptPassword(usuario.UsContrasenia);
 
@@ -163,18 +159,17 @@ namespace SOLFM2K.Controllers
 
                     _context.Usuarios.Add(usuario);
                     await _context.SaveChangesAsync();
-
                     return CreatedAtAction(nameof(PostUsuario), new { id = usuario.UsId }, usuario);
                 }
-     
+                catch (DbUpdateException)
+                {
+                    // Manejar error al guardar en la base de datos
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Error al guardar en la base de datos");
+                }
             }
-            catch (Exception ex)
-            {
-                var innerException = ex.InnerException;
-                // Manejo de errores
-                return BadRequest($"Error al guardar la configuración: {ex.Message}\nInner Exception: {innerException?.Message}");
-            }
+
         }
+
 
         // DELETE: api/Usuarios/5
         [HttpDelete("{UsId}")]
