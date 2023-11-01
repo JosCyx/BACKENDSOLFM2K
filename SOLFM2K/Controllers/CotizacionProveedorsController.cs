@@ -129,6 +129,8 @@ namespace SOLFM2K.Controllers
             // Verificar si ya existe un proveedor con la misma información
             var existingProveedor = await _context.CotizacionProveedors
                 .FirstOrDefaultAsync(cp =>
+                    cp.CotProvTipoSolicitud == cotizacionProveedor.CotProvTipoSolicitud &&
+                    cp.CotProvNoSolicitud == cotizacionProveedor.CotProvNoSolicitud &&
                     cp.CotProvRuc == cotizacionProveedor.CotProvRuc &&
                     cp.CotProvNombre == cotizacionProveedor.CotProvNombre &&
                     cp.CotProvTelefono == cotizacionProveedor.CotProvTelefono);

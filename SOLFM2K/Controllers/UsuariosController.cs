@@ -100,9 +100,9 @@ namespace SOLFM2K.Controllers
         // PUT: api/Usuarios/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{UsIdNomina}")]
-        public async Task<IActionResult> PutUsuario(int UsId, Usuario usuario)
+        public async Task<IActionResult> PutUsuario(string UsIdNomina, Usuario usuario)
         {
-            if (UsId!= usuario.UsId)
+            if (UsIdNomina != usuario.UsIdNomina)
             {
                 return BadRequest();
             }
@@ -118,7 +118,7 @@ namespace SOLFM2K.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UsuarioExists(UsId))
+                if (!UsuarioExists(UsIdNomina))
                 {
                     return NotFound();
                 }
@@ -191,9 +191,9 @@ namespace SOLFM2K.Controllers
             return NoContent();
         }
 
-        private bool UsuarioExists(int UsId)
+        private bool UsuarioExists(string UsId)
         {
-            return (_context.Usuarios?.Any(e => e.UsId == UsId)).GetValueOrDefault();
+            return (_context.Usuarios?.Any(e => e.UsIdNomina == UsId)).GetValueOrDefault();
         }
     }
 }
