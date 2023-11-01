@@ -423,7 +423,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_valor_total_aut");
 
             entity.Property(e => e.CabPagoReceptor)
-                .HasColumnName("cab_pago_receptor");
+                .HasColumnName("cab_pago_receptor").HasMaxLength(6);
 
             entity.Property(e => e.CabPagoFechaInspeccion)
                 .HasColumnName("cab_pago_fecha_inspeccion")

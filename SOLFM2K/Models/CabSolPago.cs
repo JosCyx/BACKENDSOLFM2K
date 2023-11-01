@@ -26,7 +26,7 @@ public partial class CabSolPago
     public string CabPagoAplicarMulta { get; set; } = null!;
     public double CabPagoValorMulta { get; set; }
     public double CabPagoValorTotalAut { get; set; }
-    public int CabPagoReceptor { get; set; }
+    public string CabPagoReceptor { get; set; }
     public DateTime CabPagoFechaInspeccion { get; set; }
     public string CabPagoCancelacionOrden { get; set; } = null!;
     public string CabPagoEstado { get; set; }
