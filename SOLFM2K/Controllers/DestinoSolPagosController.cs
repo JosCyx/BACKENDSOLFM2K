@@ -154,11 +154,11 @@ namespace SOLFM2K.Controllers
                 // Leer el archivo en bytes
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-                // Convertir el archivo a base64 (también puedes devolver los bytes directamente)
-                string base64String = Convert.ToBase64String(fileBytes);
+                // Devolver los bytes del archivo
+                return File(fileBytes, "image/jpeg");
 
-                // Devolver el archivo como base64 (o los bytes, según tu preferencia)
-                return Ok(new { fileData = base64String });
+                // Devolver el archivo como base64 con el Content-Type adecuado
+                //return Content(base64String, "image/jpeg");
             }
             catch (Exception ex)
             {
