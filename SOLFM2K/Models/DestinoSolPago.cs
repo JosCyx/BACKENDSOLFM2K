@@ -13,7 +13,7 @@ public partial class DestinoSolPago
 
     public int DestPagIdDetalle { get; set; }
 
-    public int DestPagEmpleado { get; set; }
+    public string DestPagEmpleado { get; set; }
 
     public int DestPagSector { get; set; }
 

@@ -1338,7 +1338,7 @@ public partial class SolicitudContext : DbContext
             entity.ToTable("destino_sol_pago");
 
             entity.Property(e => e.DestPagId).HasColumnName("dest_pag_id");
-            entity.Property(e => e.DestPagEmpleado).HasColumnName("dest_pag_empleado");
+            entity.Property(e => e.DestPagEmpleado).HasColumnName("dest_pag_empleado").HasMaxLength(6);
             entity.Property(e => e.DestPagEvidencia)
                 .HasMaxLength(200)
                 .HasColumnName("dest_pag_evidencia");

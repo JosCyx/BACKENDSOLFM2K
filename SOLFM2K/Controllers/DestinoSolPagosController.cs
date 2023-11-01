@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SOLFM2K.Models;
+using System.IO;
 
 namespace SOLFM2K.Controllers
 {
@@ -29,6 +30,25 @@ namespace SOLFM2K.Controllers
               return NotFound();
           }
             return await _context.DestinoSolPagos.ToListAsync();
+        }
+
+        // GET: api/DestinoSolPagoes/GetEvidenciasBySolicitud
+        [HttpGet("GetDestinoPagoBySolicitud")]
+        public async Task<ActionResult<IEnumerable<DestinoSolPago>>> GetDestinoPagoBySolicitud(int tiposol, int nosol)
+        {
+            if (_context.DestinoSolPagos == null)
+            {
+                return NotFound();
+            }
+
+            var destinoSolPago = await _context.DestinoSolPagos.Where(d => d.DestPagTipoSol == tiposol && d.DestPagNoSol == nosol).ToListAsync();
+
+            if (destinoSolPago == null || !destinoSolPago.Any())
+            {
+                return NotFound();
+            }
+
+            return destinoSolPago;
         }
 
         // GET: api/DestinoSolPagoes/5
@@ -118,6 +138,32 @@ namespace SOLFM2K.Controllers
         private bool DestinoSolPagoExists(int id)
         {
             return (_context.DestinoSolPagos?.Any(e => e.DestPagId == id)).GetValueOrDefault();
+        }
+
+        [HttpGet("GetImage")]
+        public IActionResult GetFile(string filePath)
+        {
+            try
+            {
+                // Verificar que la ruta sea válida (puedes agregar tus propias validaciones)
+                if (!System.IO.File.Exists(filePath))
+                {
+                    return NotFound();
+                }
+
+                // Leer el archivo en bytes
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+                // Convertir el archivo a base64 (también puedes devolver los bytes directamente)
+                string base64String = Convert.ToBase64String(fileBytes);
+
+                // Devolver el archivo como base64 (o los bytes, según tu preferencia)
+                return Ok(new { fileData = base64String });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error: " + ex.Message);
+            }
         }
     }
 }
