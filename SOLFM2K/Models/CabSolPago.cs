@@ -29,6 +29,7 @@ public partial class CabSolPago
     public string CabPagoReceptor { get; set; }
     public DateTime CabPagoFechaInspeccion { get; set; }
     public string CabPagoCancelacionOrden { get; set; } = null!;
+    public string CabPagoObservCancelacion { get; set; } = null!;
     public string CabPagoEstado { get; set; }
     public int CabPagoEstadoTrack { get; set; }
     public string CabPagoIdEmisor { get; set; }

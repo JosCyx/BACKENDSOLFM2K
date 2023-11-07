@@ -433,6 +433,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_cancelacion_orden")
                 .HasMaxLength(5);
 
+            entity.Property(e => e.CabPagoObservCancelacion)
+                .HasColumnName("cab_pago_observ_cancelacion")
+                .HasMaxLength(500);
+
             entity.Property(e => e.CabPagoEstado)
                 .IsRequired()
                 .HasColumnName("cab_pago_estado")
