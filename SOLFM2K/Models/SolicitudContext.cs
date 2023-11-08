@@ -438,8 +438,7 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(500);
 
             entity.Property(e => e.CabPagoEstado)
-                .IsRequired()
-                .HasColumnName("cab_pago_estado")
+                .IsRequired().HasColumnName("cab_pago_estado")
                 .HasMaxLength(5);
 
             entity.Property(e => e.CabPagoEstadoTrack)
