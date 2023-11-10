@@ -118,6 +118,32 @@ namespace SOLFM2K.Controllers
         }
 
 
+        [HttpGet("GetUserManual")]
+        public IActionResult GetUserManual()
+        {
+            try
+            {
+                // Ruta a la carpeta en la unidad C:
+                //string folderPath = @"\\192.168.1.75\Solicitudes\";
+                string path = @"C:\Solicitudes\user_manual\userManual.pdf";
+
+                if (!System.IO.File.Exists(path))
+                {
+                    return NotFound("El archivo no existe en el directorio");
+                }
+
+                byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+
+                // Devuelve el archivo como una respuesta HTTP
+                return File(fileBytes, "application/octet-stream", "userManual.pdf");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error en archivo: " + ex.Message);
+            }
+        }
+
+
         // Subir archivos  PDF 
         //MODIFICAR LA RUTA PARA QUE COINCIDA CON LA RUTA LOCAL DEL SERVIDOR
         [HttpPost]
@@ -223,6 +249,28 @@ namespace SOLFM2K.Controllers
                 return StatusCode(500, "Error al subir el archivo: " + error.Message);
             }
         }
+
+        //metodo que elimina la carpeta en la ruta @"C:\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago segun el parametro ingresado
+        [HttpDelete("DeleteFolder")]
+        public IActionResult DeleteFolder(string prefijo)
+        {
+            try
+            {
+                string rutaBase = @"C:\Solicitudes\Solicitud_Orden_Pago\Destino_Sol_Pago";
+                string carpetaNueva = Path.Combine(rutaBase, prefijo);
+                if (Directory.Exists(carpetaNueva))
+                {
+                    Directory.Delete(carpetaNueva, true);
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Error en archivo: " + ex.Message);
+            }
+        }
+
+
         //Se elimina desde servidor  y en la  base de datos
         [HttpDelete("DeleteFile")]
         public  IActionResult DeleteFile(string url)

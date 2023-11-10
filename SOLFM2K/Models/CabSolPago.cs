@@ -22,14 +22,14 @@ public partial class CabSolPago
     public string CabPagoProveedor { get; set; }
     public string CabPagoRucProveedor { get; set; }
     public double Cabpagototal { get; set; }
-    public string CabPagoObservaciones { get; set; } = null!;
-    public string CabPagoAplicarMulta { get; set; } = null!;
+    public string? CabPagoObservaciones { get; set; } = null!;
+    public string? CabPagoAplicarMulta { get; set; } = null!;
     public double CabPagoValorMulta { get; set; }
     public double CabPagoValorTotalAut { get; set; }
-    public string CabPagoReceptor { get; set; }
+    public string? CabPagoReceptor { get; set; }
     public DateTime CabPagoFechaInspeccion { get; set; }
-    public string CabPagoCancelacionOrden { get; set; } = null!;
-    public string CabPagoObservCancelacion { get; set; } = null!;
+    public string? CabPagoCancelacionOrden { get; set; } = null!;
+    public string? CabPagoObservCancelacion { get; set; } = null!;
     public string CabPagoEstado { get; set; }
     public int CabPagoEstadoTrack { get; set; }
     public string CabPagoIdEmisor { get; set; }

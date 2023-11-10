@@ -135,6 +135,25 @@ namespace SOLFM2K.Controllers
             return NoContent();
         }
 
+        [HttpDelete("DeleteDestinoSolPagoBySolicitud")]
+        public async Task<IActionResult> DeleteDestinoSolPagoBySolicitud(int tiposol, int nosol)
+        {
+            if (_context.DestinoSolPagos == null)
+            {
+                return NotFound();
+            }
+            var destinoSolPago = await _context.DestinoSolPagos.Where(d => d.DestPagTipoSol == tiposol && d.DestPagNoSol == nosol).ToListAsync();
+            if (destinoSolPago == null)
+            {
+                return NotFound();
+            }
+
+            _context.DestinoSolPagos.RemoveRange(destinoSolPago);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private bool DestinoSolPagoExists(int id)
         {
             return (_context.DestinoSolPagos?.Any(e => e.DestPagId == id)).GetValueOrDefault();

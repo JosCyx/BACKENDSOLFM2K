@@ -9,7 +9,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class CabSolOrdenComprasController : ControllerBase
@@ -48,9 +48,9 @@ namespace SOLFM2K.Controllers
 
 
         [HttpGet("GetCabecerabyarea")]
-        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetCabecerabyArea(int dep)
+        public async Task<ActionResult<IEnumerable<CabSolOrdenCompra>>> GetCabecerabyArea(int area)
         {
-            var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c =>c.cabSolOCIdDept == dep).ToListAsync();
+            var cabSolCotizaciones = await _context.CabSolOrdenCompras.Where(c =>c.cabSolOCIdArea == area).ToListAsync();
 
             if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
             {

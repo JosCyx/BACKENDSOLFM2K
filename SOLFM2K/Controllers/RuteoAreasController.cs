@@ -178,13 +178,13 @@ namespace SOLFM2K.Controllers
 
         // GET: api/RuteoAreas/checkRuteoExistence
         [HttpGet("checkRuteoExistence")]
-        public async Task<ActionResult<bool>> CheckRuteoExistence(int rutTipoSol, int rutArea, int rutNivel)
+        public async Task<ActionResult<bool>> CheckRuteoExistence(int rutTipoSol, int rutDept, int rutNivel)
         {
             try
             {
                 // Busca el ruteo en la base de datos que coincida con los parámetros proporcionados
                 var existingRuteo = await _context.RuteoAreas
-                    .FirstOrDefaultAsync(ra => ra.RutareaTipoSol == rutTipoSol && ra.RutareaArea == rutArea && ra.RutareaNivel == rutNivel);
+                    .FirstOrDefaultAsync(ra => ra.RutareaTipoSol == rutTipoSol && ra.RutareaDpto == rutDept && ra.RutareaNivel == rutNivel);
 
                 if (existingRuteo != null)
                 {
