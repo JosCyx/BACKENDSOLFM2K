@@ -650,7 +650,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.EmpNivId).HasColumnName("emp_niv_id");
             entity.Property(e => e.EmpNivEmpelado)
                 .HasMaxLength(6)
-                .IsFixedLength()
                 .HasColumnName("emp_niv_id_nomina");
             entity.Property(e => e.EmpNivDeptAutorizado)
                 .HasColumnName("emp_niv_dept_aut");

@@ -82,14 +82,14 @@ namespace SOLFM2K.Controllers
         [HttpPost]
         public async Task<ActionResult<EmplNivel>> PostEmplNivel(EmplNivel emplNivel)
         {
-          if (_context.EmpleadoNivel == null)
+          /*if (_context.EmpleadoNivel == null)
           {
               return Problem("Entity set 'SolicitudContext.EmpleadoNivel'  is null.");
-          }
+          }*/
             _context.EmpleadoNivel.Add(emplNivel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEmplNivel", new { id = emplNivel.EmpNivId }, emplNivel);
+            return CreatedAtAction(nameof(PostEmplNivel), new { id = emplNivel.EmpNivId }, emplNivel);
         }
 
         // DELETE: api/EmplNivels/5
