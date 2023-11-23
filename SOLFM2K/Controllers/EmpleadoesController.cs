@@ -24,7 +24,7 @@ namespace SOLFM2K.Controllers
         }
 
         // GET: api/Empleadoes
-        [ServiceFilter(typeof(JwtAuthorizationFilter))]
+       [ServiceFilter(typeof(JwtAuthorizationFilter))]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Empleado>>> GetEmpleados()
         {

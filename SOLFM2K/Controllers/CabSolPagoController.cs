@@ -9,7 +9,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class CabSolPagoController : ControllerBase
@@ -275,6 +275,36 @@ namespace SOLFM2K.Controllers
 
             return NoContent();
         }
+        [HttpDelete("DeletesSolOrdenPago")]
+        public async Task<IActionResult> DeletesSolOrdenPago(int tipoSol, int noSol)
+        {
+            if (_context.CabSolPagos == null)
+            {
+                return NotFound();
+            }
+            var cabSolOrdenPago = await _context.CabSolPagos.FirstOrDefaultAsync(c => c.CabPagoTipoSolicitud == tipoSol && c.CabPagoNoSolicitud == noSol);
+            if (cabSolOrdenPago == null)
+            {
+                return NotFound();
+            }
+            var detalles = await _context.DetSolPagos.Where(d => d.DetPagoTipoSol == tipoSol && d.DetPagoNoSol == noSol).ToListAsync();
+            if (detalles == null)
+            {
+                return NotFound();
+            }
+            var documentos = await _context.Documentos.Where(d => d.DocTipoSolicitud == tipoSol && d.DocNoSolicitud == noSol).ToListAsync();
+            if (documentos == null)
+            {
+                return NotFound();
+            }
+            _context.CabSolPagos.Remove(cabSolOrdenPago);
+            _context.DetSolPagos.RemoveRange(detalles);
+            _context.Documentos.RemoveRange(documentos);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
 
         private bool CabSolPagoExists(int id)
         {

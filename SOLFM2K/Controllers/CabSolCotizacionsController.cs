@@ -285,6 +285,41 @@ namespace SOLFM2K.Controllers
 
             return NoContent();
         }
+        [HttpDelete("DeleteCotizacion")]
+        public async Task<IActionResult> DeleteCotizacion(int tipoSol, int noSol)
+        {
+            if (_context.CabSolCotizacions == null)
+            {
+                return NotFound();
+            }
+            var cabSolCotizacion = await _context.CabSolCotizacions.FirstOrDefaultAsync(c => c.CabSolCotTipoSolicitud == tipoSol && c.CabSolCotNoSolicitud == noSol);
+            if (cabSolCotizacion == null)
+            {
+                return NotFound();
+            }
+            var detalles = await _context.DetSolCotizacions.Where(d => d.SolCotTipoSol == tipoSol && d.SolCotNoSol == noSol).ToListAsync();
+            if (detalles == null)
+            {
+                return NotFound();
+            }
+            var items = await _context.ItemSectores.Where(i => i.ItmTipoSol == tipoSol && i.ItmNumSol == noSol).ToListAsync();
+            if (items == null)
+            {
+                return NotFound();
+            }
+            var documentos = await _context.Documentos.Where(d => d.DocTipoSolicitud == tipoSol && d.DocNoSolicitud == noSol).ToListAsync();
+            if (documentos == null)
+            {
+                return NotFound();
+            }
+            _context.CabSolCotizacions.Remove(cabSolCotizacion);
+            _context.DetSolCotizacions.RemoveRange(detalles);
+            _context.ItemSectores.RemoveRange(items);
+            _context.Documentos.RemoveRange(documentos);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         private bool CabSolCotizacionExists(int id)
         {
