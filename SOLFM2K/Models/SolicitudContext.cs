@@ -184,15 +184,15 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_sol_cot_fecha");
 
             entity.Property(e => e.CabSolCotAsunto)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("cab_sol_cot_asunto");
 
             entity.Property(e => e.CabSolCotProcedimiento)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("cab_sol_cot_procedimiento");
 
             entity.Property(e => e.CabSolCotObervaciones)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("cab_sol_cot_observaciones");
 
             entity.Property(e => e.CabSolCotAdjCot)
@@ -281,15 +281,15 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_fecha");
 
             entity.Property(e => e.cabSolOCAsunto)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("cab_ordc_asunto");
 
             entity.Property(e => e.cabSolOCProcedimiento)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("cab_ordc_procedimiento");
 
             entity.Property(e => e.cabSolOCObervaciones)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("cab_ordc_observaciones");
 
             entity.Property(e => e.cabSolOCAdjCot)
@@ -342,7 +342,10 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_ordc_aprob_presup").HasMaxLength(3);
 
             entity.Property(e => e.cabSolOCMotivoDev)
-                .HasColumnName("cab_ordc_motivo_devolucion").HasMaxLength(500);
+                .HasColumnName("cab_ordc_motivo_devolucion").HasMaxLength(750);
+
+            entity.Property(e => e.cabSolOCValorAprobacion)
+                .HasColumnName("cab_ordc_valor_aprobacion");
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -410,11 +413,11 @@ public partial class SolicitudContext : DbContext
       
             entity.Property(e => e.CabPagoObservaciones)
                 .HasColumnName("cab_pago_observaciones")
-                .HasMaxLength(500);
+                .HasMaxLength(750);
 
             entity.Property(e => e.CabPagoAplicarMulta)
                 .HasColumnName("cab_pago_aplicar_multa")
-                .HasMaxLength(500);
+                .HasMaxLength(750);
 
             entity.Property(e => e.CabPagoValorMulta)
                 .HasColumnName("cab_pago_valor_multa");
@@ -435,7 +438,7 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.CabPagoObservCancelacion)
                 .HasColumnName("cab_pago_observ_cancelacion")
-                .HasMaxLength(500);
+                .HasMaxLength(750);
 
             entity.Property(e => e.CabPagoEstado)
                 .IsRequired().HasColumnName("cab_pago_estado")
@@ -449,6 +452,9 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.CabPagoApprovedBy)
                 .HasColumnName("cab_pago_approvedBy").HasMaxLength(6);
+
+            entity.Property(e => e.CabPagoNoSolOC)
+                .HasColumnName("cab_pago_no_sol_OC").HasMaxLength(15);
 
         });
 
@@ -533,7 +539,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("sol_cot_id_detalle");
 
             entity.Property(e => e.SolCotDescripcion)
-                .HasMaxLength(500)
+                .HasMaxLength(750)
                 .HasColumnName("sol_cot_descripcion");
 
             entity.Property(e => e.SolCotUnidad)

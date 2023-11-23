@@ -15,7 +15,7 @@ public partial class ItemSector
 
     public int ItmIdItem { get; set; }
 
-    public int ItmCantidad { get; set; }
+    public double ItmCantidad { get; set; }
 
     public int ItmSector { get; set; }
 

@@ -113,6 +113,25 @@ namespace SOLFM2K.Controllers
             return result;
         }
 
+        [HttpPut("UpdateMotivoDevolucion")]
+        public IActionResult UpdateMotivoDevolucion(int tipoSol, int noSol, string motivo)
+        {
+            var entityToUpdate = _context.CabSolOrdenCompras.FirstOrDefault(e => e.cabSolOCTipoSolicitud == tipoSol && e.cabSolOCNoSolicitud == noSol);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.cabSolOCMotivoDev = motivo;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
         [HttpPut("UpdateEstadoTracking")]
         public IActionResult UpdateEstadoTracking(int tipoSol, int noSol, int newEstado)
         {

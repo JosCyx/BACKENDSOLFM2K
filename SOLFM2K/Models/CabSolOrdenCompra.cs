@@ -44,7 +44,7 @@ public partial class CabSolOrdenCompra
 
     public string? cabSolOCTelefInspector { get; set; } = null!;
 
-    public string? cabSolOCProveedor { get; set; }
+    public string? cabSolOCProveedor { get; set; } = null!;
 
     public string? cabSolOCRUCProveedor { get; set; } = null!;
 
@@ -56,7 +56,9 @@ public partial class CabSolOrdenCompra
 
     public string cabSolOCAprobPresup { get; set; }
 
-    public string cabSolOCMotivoDev { get; set; }
+    public string? cabSolOCMotivoDev { get; set; } = null!;
+
+    public double cabSolOCValorAprobacion { get; set; }
 
     //public virtual TipoSolic CabOrdcIdCabeceraNavigation { get; set; } = null!;
 

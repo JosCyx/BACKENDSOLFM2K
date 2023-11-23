@@ -143,5 +143,24 @@ namespace SOLFM2K.Controllers
         {
             return (_context.SolTrackings?.Any(e => e.SolTrId == id)).GetValueOrDefault();
         }
+
+        [HttpDelete("DeleteSolTrackingBySolId")]
+        public async Task<IActionResult> DeleteSolTrackingBySolId(int tipoSol, int noSol, int idTracking)
+        {
+            if (_context.SolTrackings == null)
+            {
+                return NotFound();
+            }
+            var solTracking = await _context.SolTrackings.Where(x => x.SolTrId == idTracking && x.SolTrTipoSol == tipoSol && x.SolTrNumSol == noSol).ToListAsync();
+            if (solTracking == null)
+            {
+                return NotFound();
+            }
+
+            _context.SolTrackings.RemoveRange(solTracking);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
