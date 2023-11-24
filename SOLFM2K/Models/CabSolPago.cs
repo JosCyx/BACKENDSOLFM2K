@@ -19,12 +19,12 @@ public partial class CabSolPago
     public DateTime CabPagoFechaEnvio { get; set; }
     public string CabPagoNumFactura { get; set; }
     public DateTime CabPagoFechaFactura { get; set; }
-    public string CabPagoProveedor { get; set; }
-    public string CabPagoRucProveedor { get; set; }
+    public string? CabPagoProveedor { get; set; }
+    public string? CabPagoRucProveedor { get; set; }
     public double Cabpagototal { get; set; }
     public string? CabPagoObservaciones { get; set; } = null!;
     public string? CabPagoAplicarMulta { get; set; } = null!;
-    public double CabPagoValorMulta { get; set; }
+    public double? CabPagoValorMulta { get; set; }
     public double CabPagoValorTotalAut { get; set; }
     public string? CabPagoReceptor { get; set; }
     public DateTime CabPagoFechaInspeccion { get; set; }
