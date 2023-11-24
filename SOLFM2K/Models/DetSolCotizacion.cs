@@ -18,7 +18,7 @@ public partial class DetSolCotizacion
 
     public string SolCotUnidad { get; set; } = null!;
 
-    public int SolCotCantidadTotal { get; set; }
+    public double SolCotCantidadTotal { get; set; }
 
     public int SolCotPresupuesto { get; set; }
 

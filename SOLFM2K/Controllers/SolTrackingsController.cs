@@ -11,7 +11,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class SolTrackingsController : ControllerBase
@@ -145,13 +145,13 @@ namespace SOLFM2K.Controllers
         }
 
         [HttpDelete("DeleteSolTrackingBySolId")]
-        public async Task<IActionResult> DeleteSolTrackingBySolId(int tipoSol, int noSol, int idTracking)
+        public async Task<IActionResult> DeleteSolTrackingBySolId(int tipoSol, int noSol)
         {
             if (_context.SolTrackings == null)
             {
                 return NotFound();
             }
-            var solTracking = await _context.SolTrackings.Where(x => x.SolTrId == idTracking && x.SolTrTipoSol == tipoSol && x.SolTrNumSol == noSol).ToListAsync();
+            var solTracking = await _context.SolTrackings.Where(x => x.SolTrTipoSol == tipoSol && x.SolTrNumSol == noSol).ToListAsync();
             if (solTracking == null)
             {
                 return NotFound();
