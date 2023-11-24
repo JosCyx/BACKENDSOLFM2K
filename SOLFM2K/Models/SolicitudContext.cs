@@ -240,7 +240,8 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.CabSolCotFinancieroBy)
                 .HasColumnName("cab_sol_cot_financieroBy").HasMaxLength(6);
-
+            entity.Property(e => e.CabSolCotValido)
+                .HasColumnName("cab_sol_cot_valido");
 
             /*entity.HasOne(d => d.CabSolCotIdCabeceraNavigation).WithOne(p => p.CabSolCotizacion)
                 .HasForeignKey<CabSolCotizacion>(d => d.CabSolCotIdCabecera)
@@ -346,6 +347,8 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.cabSolOCValorAprobacion)
                 .HasColumnName("cab_ordc_valor_aprobacion");
+            entity.Property(e => e.cabSolOCValido)
+                .HasColumnName("cab_ordc_valido");
         });
 
         modelBuilder.Entity<CabSolPago>(entity =>
@@ -455,6 +458,8 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.CabPagoNoSolOC)
                 .HasColumnName("cab_pago_no_sol_OC").HasMaxLength(15);
+            entity.Property(e => e.CabPagoValido)
+                .HasColumnName("cab_pago_valido");
 
         });
 

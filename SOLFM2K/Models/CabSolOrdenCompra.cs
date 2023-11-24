@@ -59,6 +59,7 @@ public partial class CabSolOrdenCompra
     public string? cabSolOCMotivoDev { get; set; } = null!;
 
     public double cabSolOCValorAprobacion { get; set; }
+    public int cabSolOCValido { get; set; }
 
     //public virtual TipoSolic CabOrdcIdCabeceraNavigation { get; set; } = null!;
 

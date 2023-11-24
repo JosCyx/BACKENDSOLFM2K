@@ -287,19 +287,14 @@ namespace SOLFM2K.Controllers
             {
                 return NotFound();
             }
-            var detalles = await _context.DetSolPagos.Where(d => d.DetPagoTipoSol == tipoSol && d.DetPagoNoSol == noSol).ToListAsync();
-            if (detalles == null)
+            if (cabSolOrdenPago.CabPagoValido == 1)
             {
-                return NotFound();
+                cabSolOrdenPago.CabPagoValido = 0; // Cambiar el valor a 0
+                _context.Entry(cabSolOrdenPago).State = EntityState.Modified;
             }
-            var documentos = await _context.Documentos.Where(d => d.DocTipoSolicitud == tipoSol && d.DocNoSolicitud == noSol).ToListAsync();
-            if (documentos == null)
-            {
-                return NotFound();
-            }
-            _context.CabSolPagos.Remove(cabSolOrdenPago);
-            _context.DetSolPagos.RemoveRange(detalles);
-            _context.Documentos.RemoveRange(documentos);
+            //_context.CabSolPagos.Remove(cabSolOrdenPago);
+            //_context.DetSolPagos.RemoveRange(detalles);
+            //_context.Documentos.RemoveRange(documentos);
             await _context.SaveChangesAsync();
 
             return NoContent();

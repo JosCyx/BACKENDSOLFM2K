@@ -297,25 +297,15 @@ namespace SOLFM2K.Controllers
             {
                 return NotFound();
             }
-            var detalles = await _context.DetSolCotizacions.Where(d => d.SolCotTipoSol == tipoSol && d.SolCotNoSol == noSol).ToListAsync();
-            if (detalles == null)
+            if (cabSolCotizacion.CabSolCotValido == 1)
             {
-                return NotFound();
+                cabSolCotizacion.CabSolCotValido = 0; // Cambiar el valor a 0
+                _context.Entry(cabSolCotizacion).State = EntityState.Modified;
             }
-            var items = await _context.ItemSectores.Where(i => i.ItmTipoSol == tipoSol && i.ItmNumSol == noSol).ToListAsync();
-            if (items == null)
-            {
-                return NotFound();
-            }
-            var documentos = await _context.Documentos.Where(d => d.DocTipoSolicitud == tipoSol && d.DocNoSolicitud == noSol).ToListAsync();
-            if (documentos == null)
-            {
-                return NotFound();
-            }
-            _context.CabSolCotizacions.Remove(cabSolCotizacion);
-            _context.DetSolCotizacions.RemoveRange(detalles);
-            _context.ItemSectores.RemoveRange(items);
-            _context.Documentos.RemoveRange(documentos);
+            //_context.CabSolCotizacions.Remove(cabSolCotizacion);
+            //_context.DetSolCotizacions.RemoveRange(detalles);
+            //_context.ItemSectores.RemoveRange(items);
+            //_context.Documentos.RemoveRange(documentos);
             await _context.SaveChangesAsync();
 
             return NoContent();

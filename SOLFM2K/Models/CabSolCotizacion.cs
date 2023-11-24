@@ -55,6 +55,8 @@ public partial class CabSolCotizacion
 
     public string CabSolCotFinancieroBy { get; set; }
 
+    public int CabSolCotValido { get; set; }
+
 
     //public virtual TipoSolic CabSolCotIdCabeceraNavigation { get; set; } = null!;
 

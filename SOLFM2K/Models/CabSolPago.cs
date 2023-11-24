@@ -36,6 +36,7 @@ public partial class CabSolPago
     public string CabPagoApprovedBy { get; set; }
 
     public string? CabPagoNoSolOC { get; set; } = null!;
+    public int CabPagoValido { get; set; }
 
 }
 
