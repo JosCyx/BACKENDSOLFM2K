@@ -208,6 +208,25 @@ namespace SOLFM2K.Controllers
             return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
         }
 
+        [HttpPut("UpdateFecha")]
+        public IActionResult UpdateFecha(int tipoSol, int noSol, DateTime fecha)
+        {
+            var entityToUpdate = _context.CabSolOrdenCompras.FirstOrDefault(e => e.cabSolOCTipoSolicitud == tipoSol && e.cabSolOCNoSolicitud == noSol);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.cabSolOCFecha = fecha;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
+
         // PUT: api/CabSolOrdenCompras/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
