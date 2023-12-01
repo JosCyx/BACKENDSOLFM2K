@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using SOLFM2K.Pruebas;
 
 namespace SOLFM2K.Models;
 
@@ -80,6 +81,8 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<DestinoSolPago> DestinoSolPagos { get; set; }
 
+    public virtual DbSet<EmailContent> EmailContents { get; set; }
+
 
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
@@ -105,7 +108,23 @@ public partial class SolicitudContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        
+
+        modelBuilder.Entity<EmailContent>(entity =>
+        {
+            entity.HasKey(e => e.EmailContId);
+
+            entity.ToTable("email_content");
+
+            entity.Property(e => e.EmailContId).HasColumnName("email_cont_id");
+            entity.Property(e => e.EmailContAsunto)
+                .HasMaxLength(200)
+                .HasColumnName("email_cont_asunto");
+            entity.Property(e => e.EmailContContenido)
+                .HasMaxLength(1000)
+                .HasColumnName("email_cont_contenido");
+            entity.Property(e => e.EmailContTipoAccion).HasColumnName("email_cont_tipo_accion");
+        });
+
         modelBuilder.Entity<Aplicacione>(entity =>
         {
             entity.HasKey(e => e.ApCodigo);
@@ -460,6 +479,17 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("cab_pago_no_sol_OC").HasMaxLength(15);
             entity.Property(e => e.CabPagoValido)
                 .HasColumnName("cab_pago_valido");
+
+            entity.Property(e => e.CabPagoMotivoDev)
+            .HasColumnName("cab_pago_motivo_dev")
+            .HasMaxLength(750);
+
+            entity.Property(e => e.CabPagoFrom)
+                .HasColumnName("cab_pago_from")
+                .HasMaxLength(1);
+
+            entity.Property(e => e.CabPagoIfDestino)
+                .HasColumnName("cab_pago_if_destino").HasMaxLength(1);
 
         });
 

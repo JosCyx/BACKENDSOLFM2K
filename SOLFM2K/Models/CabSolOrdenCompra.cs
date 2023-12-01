@@ -36,9 +36,9 @@ public partial class CabSolOrdenCompra
     public int cabSolOCEstadoTracking { get; set; }
 
 
-    public DateTime cabSolOCPlazoEntrega { get; set; }
+    public DateTime? cabSolOCPlazoEntrega { get; set; } = null!;
 
-    public DateTime cabSolOCFechaMaxentrega { get; set; }
+    public DateTime? cabSolOCFechaMaxentrega { get; set; } = null!;
 
     public string? cabSolOCInspector { get; set; }
 
