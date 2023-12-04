@@ -27,16 +27,20 @@ public partial class CabSolPago
     public double? CabPagoValorMulta { get; set; }
     public double CabPagoValorTotalAut { get; set; }
     public string? CabPagoReceptor { get; set; }
-    public DateTime CabPagoFechaInspeccion { get; set; }
+    public DateTime? CabPagoFechaInspeccion { get; set; } = null!;
     public string? CabPagoCancelacionOrden { get; set; } = null!;
     public string? CabPagoObservCancelacion { get; set; } = null!;
     public string CabPagoEstado { get; set; }
     public int CabPagoEstadoTrack { get; set; }
     public string CabPagoIdEmisor { get; set; }
     public string CabPagoApprovedBy { get; set; }
-
     public string? CabPagoNoSolOC { get; set; } = null!;
     public int CabPagoValido { get; set; }
+    public string? CabPagoMotivoDev { get; set; } = null!;
+
+    public string? CabPagoFrom { get; set; } = null!;
+
+    public string? CabPagoIfDestino { get; set; } = null!;
 
 }
 

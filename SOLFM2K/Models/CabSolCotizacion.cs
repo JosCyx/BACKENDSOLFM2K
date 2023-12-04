@@ -37,9 +37,9 @@ public partial class CabSolCotizacion
     public int CabSolCotEstadoTracking { get; set; }
 
 
-    public DateTime? CabSolCotPlazoEntrega { get; set; } = null!;
+    public DateTime? CabSolCotPlazoEntrega { get; set; } 
 
-    public DateTime? CabSolCotFechaMaxentrega { get; set; } = null!;
+    public DateTime? CabSolCotFechaMaxentrega { get; set; }
 
     public string? CabSolCotInspector { get; set; } 
 
