@@ -32,6 +32,7 @@ public partial class SolicitudContext : DbContext
     public virtual DbSet<DetSolCotizacion> DetSolCotizacions { get; set; }
 
     public virtual DbSet<DetSolPago> DetSolPagos { get; set; }
+    public virtual DbSet<OCAXTemplate> OCAXTemplates { get; set; }
 
     public virtual DbSet<Documento> Documentos { get; set; }
 
@@ -656,6 +657,36 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.DetPagoIdDetalle)
                 .HasColumnName("det_pago_id_detalle");
+        });
+
+        modelBuilder.Entity<OCAXTemplate>(entity =>
+        {
+            entity.HasKey(e => e.DetId).HasName("PK_oc_template_AX");
+            entity.ToTable("oc_template_AX");
+
+             entity.Property(e => e.DetId ).HasColumnName("oc_tmp_id");
+            // Reemplaza "nombre_de_la_tabla" con el nombre real de tu tabla en la base de datos.
+
+            entity.Property(e => e.DetOrden)
+                .HasColumnName("oc_tmp_orden")
+                .HasMaxLength(50);
+
+
+            entity.Property(e => e.DetcodProducto)
+                .HasColumnName("oc_tmp_cod_producto")
+                .HasMaxLength(50); // Puedes ajustar el tamaño máximo según tus necesidades.
+
+            entity.Property(e => e.DetdesProducto)
+                .HasColumnName("oc_tmp_des_producto").HasMaxLength(750); 
+
+            entity.Property(e => e.Detcantidad)
+                .HasColumnName("oc_tmp_cantidad");
+
+            entity.Property(e => e.Detprecio)
+                .HasColumnName("oc_tmp_precio");
+
+            entity.Property(e => e.DetTotal)
+                .HasColumnName("oc_tmp_total");
         });
 
         modelBuilder.Entity<Documento>(entity =>

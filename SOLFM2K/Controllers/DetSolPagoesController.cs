@@ -5,11 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Any;
 using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class DetSolPagoesController : ControllerBase
@@ -48,6 +49,32 @@ namespace SOLFM2K.Controllers
             }
 
             return detSolPago;
+        }
+        //BUSCAR LA ORDEN COMPRA 
+        [HttpGet("DetOrdenCompra")]
+        public async Task<ActionResult<IEnumerable<OCAXTemplate>>> DetOrdenCompra(string codigo)
+        {
+            
+            try
+            {
+                var compras = await _context.OCAXTemplates.FromSqlRaw("EXEC sp_searchOCfromAXSERVER3 @p0", codigo).ToListAsync();
+                Console.WriteLine("Este es mi codigo +"+compras);
+
+
+                if (compras == null || compras.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return compras;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Este es mi error +"+ex.Message);
+                return StatusCode(500,"Error en el servidor") ;
+            }
+           
         }
 
         // PUT: api/DetSolPagoes/5
