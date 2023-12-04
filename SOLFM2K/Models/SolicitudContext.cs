@@ -661,10 +661,10 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<OCAXTemplate>(entity =>
         {
-            entity.HasKey(e => e.DetId).HasName("PK_oc_template_AX");
+            entity.HasNoKey();
             entity.ToTable("oc_template_AX");
 
-             entity.Property(e => e.DetId ).HasColumnName("oc_tmp_id");
+             
             // Reemplaza "nombre_de_la_tabla" con el nombre real de tu tabla en la base de datos.
 
             entity.Property(e => e.DetOrden)

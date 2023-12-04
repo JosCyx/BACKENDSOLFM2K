@@ -59,8 +59,6 @@ namespace SOLFM2K.Controllers
             {
                 var compras = await _context.OCAXTemplates.FromSqlRaw("EXEC sp_searchOCfromAXSERVER3 @p0", codigo).ToListAsync();
                 Console.WriteLine("Este es mi codigo +"+compras);
-
-
                 if (compras == null || compras.Count == 0)
                 {
                     return NotFound();
