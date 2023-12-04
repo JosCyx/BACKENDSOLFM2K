@@ -11,6 +11,8 @@ using Microsoft.OpenApi.Any;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Xml;
+using System.Linq.Expressions;
+using System.Data.Common;
 
 namespace SOLFM2K.Controllers
 {
@@ -31,25 +33,43 @@ namespace SOLFM2K.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabSolCotizacions()
         {
-            if (_context.CabSolCotizacions == null)
+            try
             {
-                return NotFound();
+                if (_context.CabSolCotizacions == null)
+                {
+                    return NotFound();
+                }
+                return await _context.CabSolCotizacions.ToListAsync();
             }
-            return await _context.CabSolCotizacions.ToListAsync();
+            catch(DbException ex)
+            {
+                Console.WriteLine("Mensaje de error "+ex.Message);
+                return StatusCode(500, "Error interno del servidor");
+            } 
         }
 
         // GET: api/CabSolCotizacions/5
         [HttpGet("GetCabecerabyNomina")]
         public async Task<ActionResult<IEnumerable<CabSolCotizacion>>> GetCabecerabyNomina(string idNomina)
         {
-            var cabSolCotizaciones = await _context.CabSolCotizacions.Where(c => c.CabSolCotIdEmisor == idNomina).ToListAsync();
 
-            if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+            try
             {
-                return NotFound();
-            }
+                var cabSolCotizaciones = await _context.CabSolCotizacions.Where(c => c.CabSolCotIdEmisor == idNomina).ToListAsync();
 
-            return cabSolCotizaciones;
+                if (cabSolCotizaciones == null || cabSolCotizaciones.Count == 0)
+                {
+                    return NotFound();
+                }
+
+                return cabSolCotizaciones;
+            }
+            catch(DbException ex)
+            {
+                Console.WriteLine($"Mensaje de error {ex.Message}");
+                return StatusCode(500, "Error interno del servidor");
+            }
+            
         }
 
 
