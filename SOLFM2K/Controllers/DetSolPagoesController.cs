@@ -10,7 +10,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
+    [ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class DetSolPagoesController : ControllerBase
@@ -69,6 +69,7 @@ namespace SOLFM2K.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine("Este es mi mensaje  completo +"+ex);
                 Console.WriteLine("Este es mi error +"+ex.Message);
                 return StatusCode(500,"Error en el servidor") ;
             }
