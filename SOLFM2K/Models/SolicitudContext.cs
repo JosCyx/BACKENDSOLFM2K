@@ -84,6 +84,10 @@ public partial class SolicitudContext : DbContext
 
     public virtual DbSet<EmailContent> EmailContents { get; set; }
 
+    public virtual DbSet<DetalleFacturaPago> DetalleFacturaPagos { get; set; }
+
+    public virtual DbSet<FacturaSolPago> FacturaSolPagos { get; set; }
+
 
     //public virtual DbSet<SolicitudTemplate> SolicitudTemplates { get; set; }
 
@@ -400,10 +404,6 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabPagoSolicitante)
                 .HasColumnName("cab_pago_solicitante").HasMaxLength(6);
 
-            entity.Property(e => e.CabPagoNoOrdenCompra)
-                .IsRequired()
-                .HasColumnName("cab_pago_no_orden_compra")
-                .HasMaxLength(15);
 
             entity.Property(e => e.CabPagoFechaEmision)
                 .HasColumnName("cab_pago_fecha_emision")
@@ -416,7 +416,7 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabPagoNumFactura)
                 .IsRequired()
                 .HasColumnName("cab_pago_num_factura")
-                .HasMaxLength(25);
+                .HasMaxLength(100);
 
             entity.Property(e => e.CabPagoFechaFactura)
                 .HasColumnName("cab_pago_fecha_factura")
@@ -687,6 +687,9 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.DetTotal)
                 .HasColumnName("oc_tmp_total");
+
+            entity.Property(e => e.DetEstadoOC)
+                .HasColumnName("oc_tmp_estado_OC");
         });
 
         modelBuilder.Entity<Documento>(entity =>
@@ -1438,6 +1441,57 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.PrespNombre)
                 .HasMaxLength(100)
                 .HasColumnName("presp_nombre");
+        });
+
+        modelBuilder.Entity<DetalleFacturaPago>(entity =>
+        {
+            entity.HasKey(e => e.DetFactId);
+
+            entity.ToTable("detalle_factura_pago");
+
+            entity.Property(e => e.DetFactId).HasColumnName("det_fact_ID");
+            entity.Property(e => e.DetFactCantProducto).HasColumnName("det_fact_cant_producto");
+            entity.Property(e => e.DetFactDescpProducto)
+                .HasMaxLength(750)
+                .HasColumnName("det_fact_descp_producto");
+            entity.Property(e => e.DetFactDescuento).HasColumnName("det_fact_descuento");
+            entity.Property(e => e.DetFactIdFactura).HasColumnName("det_fact_id_factura");
+            entity.Property(e => e.DetFactIdProducto)
+                .HasMaxLength(20)
+                .HasColumnName("det_fact_id_producto");
+            entity.Property(e => e.DetFactNumOrdenCompra)
+                .HasMaxLength(15)
+                .HasColumnName("det_fact_num_orden_compra");
+            entity.Property(e => e.DetFactTotal).HasColumnName("det_fact_total");
+            entity.Property(e => e.DetFactValorUnit).HasColumnName("det_fact_valor_unit");
+
+        });
+
+        modelBuilder.Entity<FacturaSolPago>(entity =>
+        {
+            entity.HasKey(e => e.FactSpId);
+
+            entity.ToTable("factura_sol_pago");
+
+            entity.Property(e => e.FactSpId).HasColumnName("fact_sp_ID");
+            entity.Property(e => e.FactSpFechaFactura)
+                .HasColumnType("date")
+                .HasColumnName("fact_sp_fecha_factura");
+            entity.Property(e => e.FactSpMontoFactura).HasColumnName("fact_sp_monto_factura");
+            entity.Property(e => e.FactSpNoSol).HasColumnName("fact_sp_no_sol");
+            entity.Property(e => e.FactSpNumFactura)
+                .HasMaxLength(20)
+                .HasColumnName("fact_sp_num_factura");
+            entity.Property(e => e.FactSpNumOrdenCompra)
+                .HasMaxLength(15)
+                .HasColumnName("fact_sp_num_orden_compra");
+            entity.Property(e => e.FactSpProvFactura)
+                .HasMaxLength(250)
+                .HasColumnName("fact_sp_prov_factura");
+            entity.Property(e => e.FactSpRucProvFactura)
+                .HasMaxLength(15)
+                .HasColumnName("fact_sp_ruc_prov_factura");
+            entity.Property(e => e.FactSpTipoSol).HasColumnName("fact_sp_tipo_sol");
         });
 
         OnModelCreatingPartial(modelBuilder);

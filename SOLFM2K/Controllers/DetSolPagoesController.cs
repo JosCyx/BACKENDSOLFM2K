@@ -70,7 +70,7 @@ namespace SOLFM2K.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine("Este es mi error +"+ex.Message);
-                return StatusCode(500,"Error en el servidor") ;
+                return StatusCode(500,"Error en el servidor:" + ex) ;
             }
            
         }
