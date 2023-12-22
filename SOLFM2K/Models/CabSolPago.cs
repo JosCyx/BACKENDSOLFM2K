@@ -16,11 +16,11 @@ public partial class CabSolPago
     public string CabPagoSolicitante { get; set; }
     public DateTime CabPagoFechaEmision { get; set; }
     public DateTime CabPagoFechaEnvio { get; set; }
-    public string CabPagoNumFactura { get; set; }
-    public DateTime CabPagoFechaFactura { get; set; }
-    public string? CabPagoProveedor { get; set; }
-    public string? CabPagoRucProveedor { get; set; }
-    public double Cabpagototal { get; set; }
+    public string? CabPagoNumFactura { get; set; } = null!;
+    public DateTime? CabPagoFechaFactura { get; set; } = null!;
+    public string? CabPagoProveedor { get; set; } = null!;
+    public string? CabPagoRucProveedor { get; set; } = null!;
+    public double? Cabpagototal { get; set; } = null!;
     public string? CabPagoObservaciones { get; set; } = null!;
     public string? CabPagoAplicarMulta { get; set; } = null!;
     public double? CabPagoValorMulta { get; set; }

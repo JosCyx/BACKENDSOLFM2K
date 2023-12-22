@@ -9,6 +9,8 @@ public partial class DetalleFacturaPago
 
     public int DetFactIdFactura { get; set; }
 
+    public int DetFactNoDetalle { get; set; }
+
     public string DetFactNumOrdenCompra { get; set; } = null!;
 
     public string DetFactIdProducto { get; set; } = null!;

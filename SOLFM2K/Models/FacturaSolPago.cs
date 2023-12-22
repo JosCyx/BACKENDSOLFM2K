@@ -11,6 +11,8 @@ public partial class FacturaSolPago
 
     public int FactSpNoSol { get; set; }
 
+    public int FactSpNoFactura { get; set; }
+
     public string FactSpNumFactura { get; set; } = null!;
 
     public DateTime FactSpFechaFactura { get; set; }

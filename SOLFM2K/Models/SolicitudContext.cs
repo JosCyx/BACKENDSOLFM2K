@@ -1456,6 +1456,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("det_fact_descp_producto");
             entity.Property(e => e.DetFactDescuento).HasColumnName("det_fact_descuento");
             entity.Property(e => e.DetFactIdFactura).HasColumnName("det_fact_id_factura");
+            entity.Property(e => e.DetFactNoDetalle).HasColumnName("det_fact_no_detalle");
             entity.Property(e => e.DetFactIdProducto)
                 .HasMaxLength(20)
                 .HasColumnName("det_fact_id_producto");
@@ -1479,6 +1480,7 @@ public partial class SolicitudContext : DbContext
                 .HasColumnName("fact_sp_fecha_factura");
             entity.Property(e => e.FactSpMontoFactura).HasColumnName("fact_sp_monto_factura");
             entity.Property(e => e.FactSpNoSol).HasColumnName("fact_sp_no_sol");
+            entity.Property(e => e.FactSpNoFactura).HasColumnName("fact_sp_no_factura");
             entity.Property(e => e.FactSpNumFactura)
                 .HasMaxLength(20)
                 .HasColumnName("fact_sp_num_factura");

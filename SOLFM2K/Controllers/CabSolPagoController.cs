@@ -9,7 +9,7 @@ using SOLFM2K.Models;
 
 namespace SOLFM2K.Controllers
 {
-    [ServiceFilter(typeof(JwtAuthorizationFilter))]
+    //[ServiceFilter(typeof(JwtAuthorizationFilter))]
     [Route("api/[controller]")]
     [ApiController]
     public class CabSolPagoController : ControllerBase
@@ -269,14 +269,28 @@ namespace SOLFM2K.Controllers
             }
 
             // Obtener detalles e items de la solicitud
-            var detalles = await _context.DetSolPagos
-                .Where(d => d.DetPagoTipoSol == cabecera.CabPagoTipoSolicitud && d.DetPagoNoSol == cabecera.CabPagoNoSolicitud)
+            var facturas = await _context.FacturaSolPagos
+                .Where(d => d.FactSpTipoSol == cabecera.CabPagoTipoSolicitud && d.FactSpNoSol == cabecera.CabPagoNoSolicitud)
                 .ToListAsync();
+
+            //iterar las facturas y obtener los detalles de cada factura
+            List<DetalleFacturaPago> detalles = new List<DetalleFacturaPago>();
+            foreach (var factura in facturas)
+            {
+                var detalle = await _context.DetalleFacturaPagos
+                    .Where(d => d.DetFactIdFactura == factura.FactSpId)
+                    .ToListAsync();
+                detalles.AddRange(detalle);
+            }
+
+
+            //var detalles = await _context.DetalleFacturaPagos.Where().ToListAsync();
 
             var solicitudCompleta = new PagoTemplate
             {
                 cabecera = cabecera,
-                detalles = detalles
+                facturas = facturas,
+                detalleFacturas = detalles
             };
 
 
