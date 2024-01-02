@@ -7,7 +7,6 @@ namespace SOLFM2K.Models;
 public partial class CabSolPago
 {
     public int CabPagoID { get; set; }
-
     public string CabPagoNumerico { get; set; }
     public int CabPagoTipoSolicitud { get; set; }
     public int CabPagoNoSolicitud { get; set; }
@@ -40,6 +39,8 @@ public partial class CabSolPago
     public string? CabPagoFrom { get; set; } = null!;
 
     public string? CabPagoIfDestino { get; set; } = null!;
+
+    public string CabPagoType { get; set; } = null!;
 
 }
 

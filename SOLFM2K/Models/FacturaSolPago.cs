@@ -25,4 +25,6 @@ public partial class FacturaSolPago
 
     public string FactSpNumOrdenCompra { get; set; } = null!;
 
+    public int FactSpEstado { get; set; }
+
 }

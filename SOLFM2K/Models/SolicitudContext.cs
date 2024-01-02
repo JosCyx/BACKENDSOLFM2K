@@ -492,6 +492,8 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.CabPagoIfDestino)
                 .HasColumnName("cab_pago_if_destino").HasMaxLength(1);
 
+            entity.Property(e => e.CabPagoType).HasColumnName("cab_pago_type").HasMaxLength(10);
+
         });
 
         /* modelBuilder.Entity<CabSolPago>(entity =>
@@ -661,11 +663,8 @@ public partial class SolicitudContext : DbContext
 
         modelBuilder.Entity<OCAXTemplate>(entity =>
         {
-            entity.HasNoKey();
+            entity.HasKey(e => e.Id).HasName("PK__oc_templ__3213E83FD8E47239");
             entity.ToTable("oc_template_AX");
-
-             
-            // Reemplaza "nombre_de_la_tabla" con el nombre real de tu tabla en la base de datos.
 
             entity.Property(e => e.DetOrden)
                 .HasColumnName("oc_tmp_orden")
@@ -690,6 +689,9 @@ public partial class SolicitudContext : DbContext
 
             entity.Property(e => e.DetEstadoOC)
                 .HasColumnName("oc_tmp_estado_OC");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("id");
         });
 
         modelBuilder.Entity<Documento>(entity =>
@@ -1466,6 +1468,8 @@ public partial class SolicitudContext : DbContext
             entity.Property(e => e.DetFactTotal).HasColumnName("det_fact_total");
             entity.Property(e => e.DetFactValorUnit).HasColumnName("det_fact_valor_unit");
 
+            entity.Property(e => e.DetFactEstado).HasColumnName("det_fact_estado");
+
         });
 
         modelBuilder.Entity<FacturaSolPago>(entity =>
@@ -1494,6 +1498,8 @@ public partial class SolicitudContext : DbContext
                 .HasMaxLength(15)
                 .HasColumnName("fact_sp_ruc_prov_factura");
             entity.Property(e => e.FactSpTipoSol).HasColumnName("fact_sp_tipo_sol");
+
+            entity.Property(e => e.FactSpEstado).HasColumnName("fact_sp_estado");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -143,7 +143,7 @@ namespace SOLFM2K.Controllers
         }
 
 
-        [HttpPut("UpdateMotivoDevolucion")]
+        [HttpPut("UpdateMotivoDevolucion")]//
         public IActionResult UpdateMotivoDevolucion(int tipoSol, int noSol, string motivo)
         {
             var entityToUpdate = _context.CabSolCotizacions.FirstOrDefault(e => e.CabSolCotTipoSolicitud == tipoSol && e.CabSolCotNoSolicitud == noSol);

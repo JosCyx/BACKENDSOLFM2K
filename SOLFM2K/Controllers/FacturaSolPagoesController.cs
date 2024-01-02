@@ -69,12 +69,13 @@ namespace SOLFM2K.Controllers
 
         // PUT: api/FacturaSolPagoes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFacturaSolPago(int id, FacturaSolPago facturaSolPago)
+        [HttpPut("UpdateFactura")]
+        public async Task<IActionResult> UpdateFactura(int noSol, int noFact, FacturaSolPago facturaSolPago)
         {
-            if (id != facturaSolPago.FactSpId)
+            var factura = await _context.FacturaSolPagos.AsNoTracking().Where(x => x.FactSpNoSol == noSol && x.FactSpNoFactura == noFact).ToListAsync();  
+            if (factura == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
             _context.Entry(facturaSolPago).State = EntityState.Modified;
@@ -85,17 +86,12 @@ namespace SOLFM2K.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FacturaSolPagoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
+
+            
         }
 
         // POST: api/FacturaSolPagoes
@@ -138,6 +134,26 @@ namespace SOLFM2K.Controllers
             return (_context.FacturaSolPagos?.Any(e => e.FactSpId == id)).GetValueOrDefault();
         }
 
+
+        //CAMBIAR EL ESTADO DE LAS FACTURAS, 1 = ACTIVO, 0 = INACTIVO
+        [HttpPut("ChangeEstadoFactura")]
+        public IActionResult ChangeEstadoFactura(int noSol, int noFact, int estado)
+        {
+            var entityToUpdate = _context.FacturaSolPagos.FirstOrDefault(e => e.FactSpNoSol == noSol && e.FactSpNoFactura == noFact);
+
+            if (entityToUpdate == null)
+            {
+                return NotFound(); // Devuelve un código 404 si el registro no existe.
+            }
+
+            // Actualiza el valor del campo deseado en el objeto entityToUpdate.
+            entityToUpdate.FactSpEstado = estado;
+
+            // Guarda los cambios en la base de datos.
+            _context.SaveChanges();
+
+            return NoContent(); // Devuelve un código 204 No Content para indicar éxito.
+        }
         ////////////////////////////////////////////METODOS PARA EL MODELO DetalleFacturaPago////////////////////////////////////////////
         ///
 
@@ -172,6 +188,91 @@ namespace SOLFM2K.Controllers
 
             return detalleFacturaPago;
         }
+
+        [HttpPut("UpdateDetalleFactura")]
+        public async Task<IActionResult> UpdateDetalleFactura(int idFacDet, int noDet, DetalleFacturaPago facturaSolPago)
+        {
+            var factura = await _context.DetalleFacturaPagos.AsNoTracking().Where(x => x.DetFactIdFactura == idFacDet && x.DetFactNoDetalle == noDet).ToListAsync();
+           
+            if (factura == null)
+            {
+                return NotFound();
+            }
+
+            _context.Entry(facturaSolPago).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return NoContent();
+
+
+        }
+
+        ////////////////////////////////////////////METODOS PARA EL MODELO OCtemplateAX////////////////////////////////////////////
+
+        // GET: api/FacturaSolPagoes/5
+        [HttpPost("OCTemplateAX")]
+        public async Task<ActionResult<OCAXTemplate>> PostOCTemplateAX(OCAXTemplate contentOC)
+        {
+            try
+            {
+                if (_context.OCAXTemplates == null)
+                {
+                    return Problem("Entity set 'SolicitudContext.OCAXTemplates' is null.");
+                }
+
+                var existingDetalle = await _context.OCAXTemplates
+                    .FirstOrDefaultAsync(oc => oc.DetOrden == contentOC.DetOrden &&
+                                                 oc.DetcodProducto == contentOC.DetcodProducto &&
+                                                 oc.DetdesProducto == contentOC.DetdesProducto);
+
+                if (existingDetalle != null)
+                {
+                    /*// Copiar propiedades excepto la clave primaria
+                    _context.Entry(existingDetalle).CurrentValues.SetValues(contentOC);
+
+                    // Guardar cambios
+                    await _context.SaveChangesAsync();*/
+
+
+                    // Eliminar el registro existente
+                    _context.Remove(existingDetalle);
+                    await _context.SaveChangesAsync();
+
+                    // Agregar un nuevo registro con los cambios
+                    _context.OCAXTemplates.Add(contentOC);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    // Si no existe, agregar un nuevo registro
+                    _context.OCAXTemplates.Add(contentOC);
+                    await _context.SaveChangesAsync();
+                }
+
+                return CreatedAtAction(nameof(PostOCTemplateAX), new
+                {
+                    detOrden = contentOC.DetOrden,
+                    detCodProducto = contentOC.DetcodProducto,
+                    detDesProducto = contentOC.DetdesProducto
+                }, contentOC);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Ocurrió un error al procesar la solicitud: {ex.Message}");
+            }
+        }
+
+
+
+
 
     }
 }

@@ -2,6 +2,7 @@
 {
     public partial class OCAXTemplate
     {
+        public long Id { get; set; }
         public string DetOrden { get; set; }
         public string DetcodProducto { get; set; }
         public string DetdesProducto { get; set; }

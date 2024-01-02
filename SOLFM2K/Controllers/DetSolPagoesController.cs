@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Any;
 using SOLFM2K.Models;
+using Microsoft.Data.SqlClient;
+using System.Configuration;
 
 namespace SOLFM2K.Controllers
 {
@@ -16,11 +18,19 @@ namespace SOLFM2K.Controllers
     public class DetSolPagoesController : ControllerBase
     {
         private readonly SolicitudContext _context;
+        private readonly IConfiguration _configuration;
 
-        public DetSolPagoesController(SolicitudContext context)
+        public DetSolPagoesController(SolicitudContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
+
+        private SqlConnection GetConnection()
+        {
+            return new SqlConnection(_configuration.GetConnectionString("conn"));
+        }
+
 
         // GET: api/DetSolPagoes
         [HttpGet]
@@ -50,29 +60,25 @@ namespace SOLFM2K.Controllers
 
             return detSolPago;
         }
-        //BUSCAR LA ORDEN COMPRA 
+
+
+     
+        //////////////////////////////////////////////BUSCAR LA ORDEN COMPRA //////////////////////////// 
+
         [HttpGet("DetOrdenCompra")]
         public async Task<ActionResult<IEnumerable<OCAXTemplate>>> DetOrdenCompra(string codigo)
         {
-            
-            try
-            {
-                var compras = await _context.OCAXTemplates.FromSqlRaw("EXEC sp_searchOCfromAXSERVER3 @p0", codigo).ToListAsync();
-                Console.WriteLine("Este es mi codigo +"+compras);
-                if (compras == null || compras.Count == 0)
-                {
-                    return NotFound();
-                }
 
-                return compras;
 
-            }
-            catch (Exception ex)
+            var compras = await _context.OCAXTemplates.FromSqlRaw("EXEC sp_searchOCfromAXSERVER3 @p0", codigo).ToListAsync();
+
+            if (compras == null || compras.Count == 0)
             {
-                Console.WriteLine("Este es mi error +"+ex.Message);
-                return StatusCode(500,"Error en el servidor:" + ex) ;
+                return NotFound();
             }
-           
+
+            return compras;
+
         }
 
         // PUT: api/DetSolPagoes/5

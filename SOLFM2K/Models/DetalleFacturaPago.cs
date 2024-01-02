@@ -25,4 +25,5 @@ public partial class DetalleFacturaPago
 
     public double DetFactTotal { get; set; }
 
+    public int DetFactEstado { get; set; }
 }

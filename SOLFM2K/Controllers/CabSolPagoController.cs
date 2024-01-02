@@ -268,9 +268,11 @@ namespace SOLFM2K.Controllers
                 return NotFound();
             }
 
+            
+
             // Obtener detalles e items de la solicitud
             var facturas = await _context.FacturaSolPagos
-                .Where(d => d.FactSpTipoSol == cabecera.CabPagoTipoSolicitud && d.FactSpNoSol == cabecera.CabPagoNoSolicitud)
+                .Where(d => d.FactSpTipoSol == cabecera.CabPagoTipoSolicitud && d.FactSpNoSol == cabecera.CabPagoNoSolicitud && d.FactSpEstado == 1)
                 .ToListAsync();
 
             //iterar las facturas y obtener los detalles de cada factura
@@ -278,19 +280,20 @@ namespace SOLFM2K.Controllers
             foreach (var factura in facturas)
             {
                 var detalle = await _context.DetalleFacturaPagos
-                    .Where(d => d.DetFactIdFactura == factura.FactSpId)
+                    .Where(d => d.DetFactIdFactura == factura.FactSpId && d.DetFactEstado == 1)
                     .ToListAsync();
                 detalles.AddRange(detalle);
             }
 
-
-            //var detalles = await _context.DetalleFacturaPagos.Where().ToListAsync();
+            //devuelve los detalles de la solicitud de version anterior
+            var detallesLegacy = await _context.DetSolPagos.Where(d => d.DetPagoTipoSol == cabecera.CabPagoTipoSolicitud && d.DetPagoNoSol == cabecera.CabPagoNoSolicitud).ToListAsync();
 
             var solicitudCompleta = new PagoTemplate
             {
                 cabecera = cabecera,
                 facturas = facturas,
-                detalleFacturas = detalles
+                detalleFacturas = detalles,
+                detalles = detallesLegacy
             };
 
 
